@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\Bank as ContractsBank;
 use Hanafalah\ModulePayment\Data\BankData;
-use Hanafalah\ModulePayment\Resources\Bank\{ViewBank, ShowBank};
 
 class Bank extends PackageManagement implements ContractsBank
 {

@@ -2,6 +2,7 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Schemas;
 
+use Hanafalah\ModuleTransaction\Contracts\Schemas\Transaction;
 use Illuminate\Database\Eloquent\Model;
 
 interface POSTransaction extends Transaction
