@@ -7,7 +7,7 @@ use Hanafalah\LaravelSupport\Supports\PackageManagement;
 class BaseModulePayment extends PackageManagement
 {
     /** @var array */
-    protected $__module_transaction_config = [];
+    protected $__module_payment_config = [];
 
     /**
      * A description of the entire PHP function.
@@ -18,6 +18,6 @@ class BaseModulePayment extends PackageManagement
      */
     public function __construct()
     {
-        $this->setConfig('module-payment', $this->__module_transaction_config);
+        $this->setConfig('module-payment', $this->__module_payment_config);
     }
 }
