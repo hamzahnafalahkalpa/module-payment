@@ -4,85 +4,57 @@ namespace Hanafalah\ModulePayment\Schemas;
 
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\PaymentDetail as ContractsPaymentDetail;
+use Hanafalah\ModulePayment\Data\PaymentDetailData;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Hanafalah\ModulePayment\Resources\PaymentDetail\{
-    ShowPaymentDetail,
-    ViewPaymentDetail
-};
 
 class PaymentDetail extends PackageManagement implements ContractsPaymentDetail
 {
-    protected array $__guard   = ['id', 'payment_summary_id'];
-    protected array $__add     = ['amount', 'debt', 'tax', 'discount', 'additional'];
     protected string $__entity = 'PaymentDetail';
     public static $payment_detail_model;
 
-    protected array $__resources = [
-        'view' => ViewPaymentDetail::class,
-        'show' => ShowPaymentDetail::class
-    ];
-
-    public function prepareStorePaymentDetail(?array $attributes = null): Model
-    {
-        $attributes ??= request()->all();
-
-        if (isset($attributes['id'])) {
-            $guard = ['id' => $attributes['id']];
-        } else {
-            $guard = [
-                'parent_id'           => $attributes['parent_id'] ?? null,
-                'payment_summary_id'  => $attributes['payment_summary_id'],
-                'transaction_item_id' => $attributes['transaction_item_id']
-            ];
-        }
-
-        $price      = $attributes['price'] ?? 0;
-        $qty        = $attributes['qty'] ?? 1;
-        $additional = $attributes['additional'] ?? 0;
-        $tax        = $attributes['tax'] ?? 0;
-        $amount     = $attributes['amount'] ?? (($price * $qty) + $additional + $tax);
-        $debt       = $attributes['debt'] ?? $amount;
-        $payment_detail = $this->PaymentDetailModel()->firstOrCreate($guard, [
-            'is_loan'    => $attributes['is_loan'] ?? null,
-            'qty'        => $attributes['qty'] ?? 1,
-            'amount'     => $amount,
-            'debt'       => $debt,
-            'price'      => $price,
-            'paid'       => $attributes['paid'] ?? 0,
-            'cogs'       => $attributes['cogs'] ?? 0,
-            'tax'        => $tax,
-            'additional' => $additional
-        ]);
-        return static::$payment_detail_model = $payment_detail;
+    protected function viewUsingRelation(): array{
+        return [];
     }
 
-    public function storePaymentDetail(): array
-    {
-        return $this->transaction(function () {
-            return $this->ShowPaymentDetail($this->prepareStorePaymentDetail());
-        });
+    protected function showUsingRelation(): array{
+        return [];
     }
 
-    public function getPaymentDetail(): mixed
-    {
+    public function getPaymentDetail(): mixed{
         return static::$payment_detail_model;
     }
 
-    public function addOrChange(?array $attributes = []): self
-    {
-        $this->updateOrCreate($attributes);
-        return $this;
+    public function prepareStorePaymentDetail(PaymentDetailData $payment_detail_dto): Model{
+        if (isset($payment_detail_dto->id)) {
+            $guard = ['id' => $payment_detail_dto->id];
+        } else {
+            $guard = [
+                'parent_id'           => $payment_detail_dto->parent_id ?? null,
+                'payment_summary_id'  => $payment_detail_dto->payment_summary_id,
+                'transaction_item_id' => $payment_detail_dto->transaction_item_id
+            ];
+        }
+
+        $payment_detail = $this->PaymentDetailModel()->firstOrCreate($guard,\call_user_func(function() use ($payment_detail_dto){
+            $add  = [];
+            $keys = ['is_loan','qty','amount','debt','price','paid','cogs','tax','additional'];
+            foreach ($keys as $key) $add[$key] = $payment_detail_dto->{$key};
+            return $add;
+        }));
+
+        return static::$payment_detail_model = $payment_detail;
     }
 
-    public function paymentDetail(mixed $conditionals = null): Builder
-    {
-        return $this->PaymentDetailModel()->conditionals($conditionals);
+    public function storePaymentDetail(?PaymentDetailData $payment_detail_dto = null): array{
+        return $this->transaction(function() use ($payment_detail_dto){
+            return $this->ShowPaymentDetail($this->prepareStorePaymentDetail($payment_detail_dto ?? $this->requestDTO(PaymentDetailData::class)));
+        });
     }
 
-    public function get(mixed $conditionals = null): Collection
-    {
-        return $this->paymentDetail($conditionals)->get();
+    public function paymentDetail(mixed $conditionals = null): Builder{
+        return $this->PaymentDetailModel()->withParameters()
+                    ->conditionals($this->mergeCondition($conditionals ?? []))
+                    ->orderBy('created_at','desc');
     }
 }

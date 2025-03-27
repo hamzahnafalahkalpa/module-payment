@@ -17,9 +17,7 @@ class ModulePaymentServiceProvider extends BaseServiceProvider
     {
         $this->registerMainClass(ModulePayment::class)
             ->registerCommandService(Providers\CommandServiceProvider::class)
-            ->registers([
-                '*'
-            ]);
+            ->registers(['*']);
     }
 
     /**

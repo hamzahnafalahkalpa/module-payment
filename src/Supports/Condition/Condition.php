@@ -34,7 +34,6 @@ class Condition extends PackageManagement implements ConditionInterface
             $split_bill                   = &static::$__split_bill_model;
             static::$__payment_history    = $split_bill->paymentHistory;
             $payment_history              = &static::$__payment_history;
-            // $attributes['transaction_id'] = $split_bill->transaction->getKey();
         } else {
             static::$__payment_history = $this->PaymentHistoryModel();
             $payment_history = &static::$__payment_history;
