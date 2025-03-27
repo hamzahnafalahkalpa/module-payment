@@ -36,6 +36,6 @@ class ReportTransaction extends Transaction implements ContractsReportTransactio
     public function viewTransactionReportPaginate(mixed $cache_reference_type = null, ?array $morphs = null, ?PaginateData $paginate_dto = null): array{
         return $this->viewEntityResource(function() use ($cache_reference_type, $morphs, $paginate_dto){
             return $this->prepareViewTransactionReportPaginate($cache_reference_type, $morphs, $paginate_dto ?? $this->requestDTO(PaginateData::class));
-        })
+        });
     }
 }
