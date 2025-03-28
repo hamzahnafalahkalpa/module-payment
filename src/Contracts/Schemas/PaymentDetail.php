@@ -2,17 +2,15 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Schemas;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
+use Hanafalah\ModulePayment\Data\PaymentDetailData;
 
 interface PaymentDetail extends DataManagement
 {
-    public function prepareStorePaymentDetail(?array $attributes = null): Model;
-    public function storePaymentDetail(): array;
     public function getPaymentDetail(): mixed;
-    public function addOrChange(?array $attributes = []): self;
+    public function prepareStorePaymentDetail(PaymentDetailData $payment_detail_dto): Model;
+    public function storePaymentDetail(?PaymentDetailData $payment_detail_dto = null): array;
     public function paymentDetail(mixed $conditionals = null): Builder;
-    public function get(mixed $conditionals = null): Collection;
 }
