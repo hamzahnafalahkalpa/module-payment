@@ -2,7 +2,7 @@
 
 namespace Hanafalah\ModulePayment\Schemas;
 
-use Hanafalah\LaravelSupport\Data\PaginateData;
+use Hanafalah\LaravelSupport\Contracts\Data\PaginateData;
 use Hanafalah\ModulePayment\Contracts\Schemas\ReportTransaction as ContractsReportTransaction;
 use Hanafalah\ModuleTransaction\Schemas\Transaction;
 use Illuminate\Pagination\LengthAwarePaginator;
