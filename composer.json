@@ -19,11 +19,11 @@
         }
     },
     "require": {
-        "hanafalah/module-item": "dev-main",
-        "hanafalah/module-service": "dev-main",
-        "hanafalah/laravel-has-props": "dev-main",
-        "hanafalah/laravel-support": "dev-main",
-        "hanafalah/module-transaction": "dev-main"
+        "hanafalah/module-item": "@dev",
+        "hanafalah/module-service": "@dev",
+        "hanafalah/laravel-has-props": "@dev",
+        "hanafalah/laravel-support": "@dev",
+        "hanafalah/module-transaction": "@dev"
     },
     "minimum-stability": "dev",
     "prefer-stable": false
