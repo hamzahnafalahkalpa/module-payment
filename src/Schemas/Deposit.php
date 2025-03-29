@@ -2,7 +2,7 @@
 
 namespace Hanafalah\ModulePayment\Schemas;
 
-use Hanafalah\LaravelSupport\Data\PaginateData;
+use Hanafalah\LaravelSupport\Contracts\Data\PaginateData;
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\Deposit as ContractsDeposit;
 use Illuminate\Database\Eloquent\Builder;
