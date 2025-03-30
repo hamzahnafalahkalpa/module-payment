@@ -15,14 +15,14 @@ class TariffComponent extends BaseModel
         'name' => 'string'
     ];
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewTariffComponent($this);
+        return ViewTariffComponent::class;
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowTariffComponent($this);
+        return ShowTariffComponent::class;
     }
 
     public function getFlags()

@@ -33,8 +33,8 @@ class ViewBilling extends ApiResource
             'transaction_billing' => $this->relationValidation('transaction', function () {
                 return $this->transaction->toShowApi();
             }),
-            'total_debt'     => $this->total_debt ?? 0,
-            'total_amount'   => $this->total_amount ?? 0,
+            'debt'     => $this->debt ?? 0,
+            'amount'   => $this->amount ?? 0,
             'reported_at'    => $this->reported_at,
             'created_at'     => $this->created_at,
             'updated_at'     => $this->updated_at

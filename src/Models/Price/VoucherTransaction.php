@@ -5,7 +5,7 @@ namespace Hanafalah\ModulePayment\Models\Price;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
-use Hanafalah\ModulePayment\Concerns\HasTransaction;
+use Hanafalah\ModuleTransaction\Concerns\HasTransaction;
 use Hanafalah\ModulePayment\Resources\VoucherTransaction\{
     ViewVoucherTransaction,
     ShowVoucherTransaction
@@ -45,14 +45,14 @@ class VoucherTransaction extends BaseModel
         });
     }
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewVoucherTransaction($this);
+        return ViewVoucherTransaction::class;
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowVoucherTransaction($this);
+        return ShowVoucherTransaction::class;
     }
 
     public function consument()

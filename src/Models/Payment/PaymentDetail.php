@@ -21,7 +21,7 @@ class PaymentDetail extends BaseModel
     protected $keyType    = "string";
     protected $primaryKey = 'id';
     protected $list       = ['id', 'payment_summary_id', 'qty', 'payment_history_id', 'transaction_item_id', 'is_loan'];
-    protected $show       = ['parent_id', 'cogs', 'amount', 'debt', 'price', 'discount', 'paid', 'tax', 'additional', 'refund_item_id'];
+    protected $show       = ['parent_id', 'cogs', 'amount', 'debt', 'price', 'discount', 'refund', 'paid', 'tax', 'additional', 'refund_item_id'];
 
     protected static function booted(): void
     {
@@ -72,14 +72,11 @@ class PaymentDetail extends BaseModel
         return ($value ?? 0) - ($original_value ?? 0);
     }
 
-    protected static function recalculating($query, $is_deleting = false, $to_debt = true)
-    {
-        $prefix = '';
+    protected static function recalculating($query, $is_deleting = false, $to_debt = true){
         $update_transaction_total_debt = false;
         if (!$to_debt) {
             $query->load('paymentHistory');
             $model = $query->paymentHistory;
-            $prefix = 'total_';
         } else {
             $query->load('parent');
             $parent_payment_detail = $query->parent;
@@ -88,7 +85,6 @@ class PaymentDetail extends BaseModel
             } else {
                 $query->load('paymentSummary');
                 $model = $query->paymentSummary;
-                $prefix = 'total_';
                 $update_transaction_total_debt = true;
             }
         }
@@ -99,7 +95,7 @@ class PaymentDetail extends BaseModel
             } else {
                 $value = static::calculateCurrent($query, $rate_name, $is_deleting);
             }
-            $model->{$prefix . $rate_name} += $value;
+            $model->{$rate_name} += $value;
         }
         $model->save();
         if ($update_transaction_total_debt) {
@@ -108,9 +104,9 @@ class PaymentDetail extends BaseModel
             ]);
             $transaction_item          = $query->transactionItem;
             $transaction               = $transaction_item->transaction;
-            $transaction->total_debt ??= 0;
-            $transaction->total_debt  += static::calculateCurrent($query, 'debt', $is_deleting);
-            $transaction->is_settled   = $transaction->total_debt == 0;
+            $transaction->debt ??= 0;
+            $transaction->debt  += static::calculateCurrent($query, 'debt', $is_deleting);
+            $transaction->is_settled   = $transaction->debt == 0;
             $transaction->save();
         }
         if ($to_debt && $query->isDirty('payment_history_id')) {
@@ -118,14 +114,12 @@ class PaymentDetail extends BaseModel
         }
     }
 
-    public function toShowApi()
-    {
-        return new ShowPaymentDetail($this);
+    public function getShowResource(){
+        return ShowPaymentDetail::class;
     }
 
-    public function toViewApi()
-    {
-        return new ViewPaymentDetail($this);
+    public function getViewResource(){
+        return ViewPaymentDetail::class;
     }
 
     public function scopeDebtNotZero($builder)
@@ -133,24 +127,9 @@ class PaymentDetail extends BaseModel
         return $builder->gt('debt', 0);
     }
 
-    public function paymentSummary()
-    {
-        return $this->belongsToModel('PaymentSummary');
-    }
-    public function transactionItem()
-    {
-        return $this->belongsToModel('TransactionItem');
-    }
-    public function paymentHistory()
-    {
-        return $this->belongsToModel('PaymentHistory');
-    }
-    public function recursiveParent()
-    {
-        return $this->parent()->with('recursiveParent');
-    }
-    public function refundItem()
-    {
-        return $this->hasOneModel('RefundItem');
-    }
+    public function paymentSummary(){return $this->belongsToModel('PaymentSummary');}
+    public function transactionItem(){return $this->belongsToModel('TransactionItem');}
+    public function paymentHistory(){return $this->belongsToModel('PaymentHistory');}
+    public function recursiveParent(){return $this->parent()->with('recursiveParent');}
+    public function refundItem(){return $this->hasOneModel('RefundItem');}
 }

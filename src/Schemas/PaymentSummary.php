@@ -23,11 +23,11 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
         'payment_history_id'
     ];
     protected array $__add     = [
-        'total_amount',
-        'total_debt',
-        'total_discount',
-        'total_tax',
-        'total_additional'
+        'amount',
+        'debt',
+        'discount',
+        'tax',
+        'additional'
     ];
     protected string $__entity = 'PaymentSummary';
     public static $payment_summary_model;

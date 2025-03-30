@@ -4,13 +4,14 @@ namespace Hanafalah\ModulePayment\Data;
 
 use Carbon\Carbon;
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePayment\Contracts\Data\BillingData as DataBillingData;
 use Hanafalah\ModulePayment\Enums\Billing\Status;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\DataCollection;
 
-class BillingData extends Data
+class BillingData extends Data implements DataBillingData
 {
     public function __construct(
         #[MapInputName('id')]
@@ -48,7 +49,7 @@ class BillingData extends Data
         #[MapInputName('split_bills')]
         #[MapName('split_bills')]      
         #[DataCollectionOf(SplitBillData::class)]
-        public DataCollection $split_bills = [],
+        public ?DataCollection $split_bills = null,
 
         #[MapInputName('reported_at')]
         #[MapName('reported_at')]

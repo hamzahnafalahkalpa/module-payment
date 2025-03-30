@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\Bank as ContractsBank;
-use Hanafalah\ModulePayment\Data\BankData;
+use Hanafalah\ModulePayment\Contracts\Data\BankData;
 
 class Bank extends PackageManagement implements ContractsBank
 {
-    protected string $__entity = 'bank';
+    protected string $__entity = 'Bank';
     public static $bank_model;
 
     protected function viewUsingRelation(): array{
@@ -28,18 +28,21 @@ class Bank extends PackageManagement implements ContractsBank
 
     public function prepareStoreBank(BankData $bank_dto): Model{
         if (isset($bank_dto->id)) {
-            $guard = ['id' => $bank_dto->id];
-        }else{
-            $guard = [
+            $model = $this->BankModel()->updateOrCreate(['id' => $bank_dto->id],[
+                'status'         => $bank_dto->status,
                 'name'           => $bank_dto->name,
                 'account_number' => $bank_dto->account_number,
                 'account_name'   => $bank_dto->account_name
-            ];
+            ]);
+        }else{
+            $model = $this->BankModel()->updateOrCreate([
+                'name'           => $bank_dto->name,
+                'account_number' => $bank_dto->account_number,
+                'account_name'   => $bank_dto->account_name
+            ],[
+                'status' => $bank_dto->status
+            ]);
         }
-
-        $model = $this->BankModel()->updateOrCreate($guard,[
-            'status' => $bank_dto->status
-        ]);
 
         return static::$bank_model = $model;
     }

@@ -35,8 +35,8 @@ class ViewInvoice extends ApiResource
                     'name'  => $consument->name,
                 ];
             }),
-            'total_debt' => $this->total_debt ?? 0,
-            'total_paid' => $this->total_paid ?? 0
+            'debt' => $this->debt ?? 0,
+            'paid' => $this->paid ?? 0
         ];
 
         return $arr;

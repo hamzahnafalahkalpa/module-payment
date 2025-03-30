@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Hanafalah\ModulePayment\Concerns\PaymentCalculation;
 use Hanafalah\ModulePayment\Concerns\PaymentHistoryMapper;
 use Hanafalah\ModulePayment\Contracts\Schemas\PaymentHistory as ContractsPaymentHistory;
+use Hanafalah\ModulePayment\Data\PaymentHistoryData;
 use Hanafalah\ModulePayment\Data\PaymentHistoryDTO;
 use Hanafalah\ModulePayment\Schemas\PaymentSummary;
 
@@ -20,10 +21,10 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
     private $__billing_model;
     private $__split_transaction_model;
     private $__payment_summary_history_model;
-    private $__history_total_debt = 0;
+    private $__history_debt = 0;
     private $__history_omzet = 0;
     private $__history_net = 0;
-    private $__history_total_cogs = 0;
+    private $__history_cogs = 0;
     private $__history_gross = 0;
     private $__history_paid_summaries;
 
@@ -39,7 +40,7 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
         return static::$payment_history_model;
     }
 
-    protected function createPaymentHistory(PaymentHistoryDTO $payment_history_dto): Model
+    protected function createPaymentHistory(PaymentHistoryData $payment_history_dto): Model
     {
         if (isset($payment_history_dto->id)) {
             $guard = ['id' => $payment_history_dto->id];
@@ -54,12 +55,13 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
             ];
         }
         return $this->PaymentHistoryModel()->updateOrCreate($guard, [
-            'total_amount'     => $payment_history_dto->total_amount,
-            'total_cogs'       => $payment_history_dto->total_cogs,
-            'total_discount'   => $payment_history_dto->total_discount,
-            'total_debt'       => $payment_history_dto->total_debt,
-            'total_tax'        => $payment_history_dto->total_tax,
-            'total_additional' => $payment_history_dto->total_additional
+            'amount'     => $payment_history_dto->amount,
+            'cogs'       => $payment_history_dto->cogs,
+            'discount'   => $payment_history_dto->discount,
+            'debt'       => $payment_history_dto->debt,
+            'tax'        => $payment_history_dto->tax,
+            'refund'     => $payment_history_dto->refund,
+            'additional' => $payment_history_dto->additional
         ]);
     }
 
@@ -86,11 +88,11 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
         $attributes['reported_at']   = now();
         $this->voucherProcessing($attributes);
         $payment_history->refresh();
-        $payment_history->note         = $attributes['note'] ?? null;
-        $payment_history->total_amount = 0;
-        $payment_history->total_debt   = 0;
-        $payment_history->total_discount ??= 0;
-        $payment_history->total_discount += $discount = $attributes['discount'] ??= 0;
+        $payment_history->note            = $attributes['note'] ?? null;
+        $payment_history->amount          = 0;
+        $payment_history->debt            = 0;
+        $payment_history->discount      ??= 0;
+        $payment_history->discount       += $discount = $attributes['discount'] ??= 0;
         $payment_history->paid_money      = $attributes['paid_money'] ??= 0;
         $payment_history->cash_over       = $cash_over  = $attributes['cash_over'] ??= 0;
         $payment_history->omzet           = 0;
@@ -98,13 +100,13 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
         $attributes['paid_money'] += $discount;
         $this->processUsingPaymentSummaries($payment_history, $attributes);
         $payment_history->refresh();
-        $payment_history->total_debt += $this->__history_total_debt;
-        $payment_history->omzet      += $this->__history_omzet;
-        $payment_history->total_cogs += $this->__history_total_cogs;
-        $payment_history->gross       = $this->__history_gross;
-        $payment_history->total_net   = $this->__history_net - $discount;
-        $payment_history->total_paid  = $payment_history->omzet + $cash_over - $discount; //total bayar
-        $payment_history->charge      = $payment_history->paid_money - $payment_history->total_paid;
+        $payment_history->debt          += $this->__history_debt;
+        $payment_history->omzet         += $this->__history_omzet;
+        $payment_history->cogs          += $this->__history_cogs;
+        $payment_history->gross          = $this->__history_gross;
+        $payment_history->net            = $this->__history_net - $discount;
+        $payment_history->paid           = $payment_history->omzet + $cash_over - $discount; //total bayar
+        $payment_history->charge         = $payment_history->paid_money - $payment_history->paid;
         // $payment_history->setAttribute('paid_summaries',$this->__history_paid_summaries);
         $payment_history->save();
         $payment_history->load('childs.paymentDetails');
@@ -170,7 +172,7 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
                     $payment_detail = $this->PaymentDetailModel()->findOrFail($attr_payment_detail['id']);
                     $this->__history_gross += $payment_detail->debt;
                     if (!$is_deferred) {
-                        $this->__history_total_cogs += $payment_detail->cogs * $attr_payment_detail['qty'] ??= 1;
+                        $this->__history_cogs += $payment_detail->cogs * $attr_payment_detail['qty'] ??= 1;
                         $this->paymentWithoutDeferred($payment_history, $payment_summary, $payment_detail, $paid_money);
                         if ($paid_money == 0) break;
                     } else {
@@ -189,15 +191,11 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
 
     protected function paymentWithoutDeferred(Model &$payment_history, Model &$payment_summary, Model $payment_detail, int &$paid_money)
     {
-        // $payment_history->total_tax        += $payment_detail->tax;
-        // $payment_history->total_additional += $payment_detail->additional;
-        // $payment_history->total_amount     += $payment_detail->amount;
-
         $this->__history_net               += $payment_detail->debt;
         $debt                               = $payment_detail->debt - $paid_money;
         $debt                               = $debt < 0 ? 0 : $debt;
         $this->__history_omzet             += $payment_detail->debt - $debt;
-        $this->__history_total_debt        += $debt;
+        $this->__history_debt        += $debt;
         $payment_detail->paid              += $paid = $payment_detail->debt - $debt;
         $payment_detail->debt               = $debt;
         if ($debt == 0) {
@@ -225,8 +223,8 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
     protected function paymentWithDeferred(Model $payment_summary, Model $payment_detail): void
     {
         $previous_payment_summary                = $payment_detail->paymentSummary;
-        $previous_payment_summary->total_amount -= $payment_detail->debt;
-        $previous_payment_summary->total_debt   -= $payment_detail->debt;
+        $previous_payment_summary->amount       -= $payment_detail->debt;
+        $previous_payment_summary->debt         -= $payment_detail->debt;
         $previous_payment_summary->save();
 
         $payment_detail->payment_summary_id = $payment_summary->getKey();

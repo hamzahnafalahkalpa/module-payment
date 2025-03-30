@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
-use Hanafalah\ModulePayment\Concerns\HasTransaction;
+use Hanafalah\ModuleTransaction\Concerns\HasTransaction;
 use Hanafalah\ModulePayment\Resources\Refund\ShowRefund;
 use Hanafalah\ModulePayment\Resources\Refund\ViewRefund;
 
@@ -28,13 +28,13 @@ class Refund extends BaseModel
             }
         });
     }
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowRefund($this);
+        return ShowRefund::class;
     }
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewRefund($this);
+        return ViewRefund::class;
     }
     public function refundItem()
     {

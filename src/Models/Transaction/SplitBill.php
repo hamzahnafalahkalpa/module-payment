@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\ModulePayment\Concerns\HasInvoice;
-use Hanafalah\ModulePayment\Concerns\HasTransaction;
+use Hanafalah\ModuleTransaction\Concerns\HasTransaction;
 use Hanafalah\ModulePayment\Resources\SplitBill\{
     ViewSplitBill
 };
@@ -23,7 +23,7 @@ class SplitBill extends BaseModel
         'id',
         'payment_method',
         'billing_id',
-        'total_paid',
+        'paid',
         'invoice_id',
         'payer_id',
         'payer_type'
@@ -40,14 +40,14 @@ class SplitBill extends BaseModel
         });
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ViewSplitBill($this);
+        return ViewSplitBill::class;
     }
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewSplitBill($this);
+        return ViewSplitBill::class;
     }
 
     public function getPaymentDetails()

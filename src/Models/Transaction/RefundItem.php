@@ -23,14 +23,14 @@ class RefundItem extends BaseModel
     ];
     protected $show      = [];
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowRefundItem($this);
+        return ShowRefundItem::class;
     }
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewRefundItem($this);
+        return ViewRefundItem::class;
     }
 
     public function item()

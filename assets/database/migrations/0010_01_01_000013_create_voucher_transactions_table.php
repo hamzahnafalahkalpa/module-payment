@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Hanafalah\ModulePayment\Models\Payment\PaymentHistory;
 use Hanafalah\ModulePayment\Models\Price\Voucher;
 use Hanafalah\ModulePayment\Models\Price\VoucherTransaction;
-use Hanafalah\ModulePayment\Models\Transaction\Transaction;
+use Hanafalah\ModuleTransaction\Models\Transaction\Transaction;
 
 return new class extends Migration
 {
@@ -44,7 +44,7 @@ return new class extends Migration
                     ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->foreignIdFor($transaction::class, 'ref_transaction_id')
                     ->nullable()->index()
-                    ->constrained($transaction->getTable(), 'ref_transaction_id')
+                    ->constrained($transaction->getTable(), 'id')
                     ->cascadeOnUpdate()->nullOnDelete();
                 $table->string('status', 50)->nullable();
                 $table->timestamp('reported_at')->nullable();

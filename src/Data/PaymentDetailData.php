@@ -3,11 +3,12 @@
 namespace Hanafalah\ModulePayment\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePayment\Contracts\Data\PaymentDetailData as DataPaymentDetailData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Attributes\Validation\BooleanType;
 
-class PaymentDetailData extends Data
+class PaymentDetailData extends Data implements DataPaymentDetailData
 {
     public function __construct(
         #[MapInputName('id')]

@@ -31,8 +31,8 @@ class Benefit extends Condition implements ContractBenefit
         $is_payment_summary = false;
 
         if (in_array($model->getMorphClass(), [$this->PaymentSummaryModelMorph(), $this->PaymentHistoryModelMorph()])) {
-            $payment_summary_prefix = 'total_';
-            $prefix .= 'total_';
+            $payment_summary_prefix = '';
+            $prefix .= '';
             $is_payment_summary = true;
         }
         $model->{$prefix . 'amount'}           ??= $model->{$payment_summary_prefix . 'amount'} ?? 0;
@@ -119,20 +119,20 @@ class Benefit extends Condition implements ContractBenefit
         // $search_payment_summary   = $this->searchArray($attr_payment_summary_ids,$payment_summary->getKey());
         // if (\is_numeric($search_payment_summary)){
         //     if ($this->PaymentSummaryModelMorph() == $payment_summary->getMorphClass()){
-        //         $attributes['payment_summaries'][$search_payment_summary]['total_discount'] = $payment_summary->total_discount;
+        //         $attributes['payment_summaries'][$search_payment_summary]['discount'] = $payment_summary->discount;
         //     }else{
         //         $attr_payment_summary = &$attributes['payment_summaries'][$search_payment_summary];
         //         $attr_payment_details_ids = $this->pluckColumn($attr_payment_summary['payment_details'],'id');
         //         $search_payment_detail    = $this->searchArray($attr_payment_details_ids, $model->getKey());
         //         if (\is_numeric($search_payment_detail)){
-        //             $attr_payment_summary['payment_details'][$search_payment_detail]['total_discount'] = $model->total_discount;
+        //             $attr_payment_summary['payment_details'][$search_payment_detail]['discount'] = $model->discount;
         //         }
         //     }
         // }
         // }else{
         if (!isset($attributes['reported_at'])) {
             $rate_names = ['amount', 'debt', 'additional', 'discount'];
-            $add_prefix = ($is_payment_summary = $model->getMorphClass() == $this->PaymentSummaryModelMorph()) ? 'total_' : '';
+            $add_prefix = ($is_payment_summary = $model->getMorphClass() == $this->PaymentSummaryModelMorph()) ? '' : '';
             foreach ($rate_names as $rate_name) {
                 //CALCULATE BETWEEN ORIGINAL AND PRE VALUE
                 $sub_result = ($model->{$model->prefix . $rate_name} ?? 0) - $model->{$model->prefix . 'current_' . $rate_name};
@@ -140,8 +140,8 @@ class Benefit extends Condition implements ContractBenefit
                     //REPLACE REAL VALUE USING PRE VALUE
                     $model->{$add_prefix . $rate_name} = $model->{$model->prefix . $rate_name};
 
-                    if (!$is_payment_summary) $payment_summary->{'total_' . $rate_name} += $sub_result;
-                    $payment_history->{'total_' . $rate_name} += $sub_result;
+                    if (!$is_payment_summary) $payment_summary->{'' . $rate_name} += $sub_result;
+                    $payment_history->{'' . $rate_name} += $sub_result;
                     unset($model->{$model->prefix . $rate_name});
                 } else {
                     if ($rate_name == 'amount') {
@@ -149,10 +149,10 @@ class Benefit extends Condition implements ContractBenefit
                         continue;
                     }
                     if (!$is_payment_summary) {
-                        $payment_summary->{'pre_total_' . $rate_name} ??= $payment_summary->{'total_' . $rate_name};
+                        $payment_summary->{'pre_total_' . $rate_name} ??= $payment_summary->{'' . $rate_name};
                         $payment_summary->{'pre_total_' . $rate_name}  += $sub_result;
                     }
-                    $payment_history->{'pre_total_' . $rate_name} ??= $payment_history->{'total_' . $rate_name};
+                    $payment_history->{'pre_total_' . $rate_name} ??= $payment_history->{'' . $rate_name};
                     $payment_history->{'pre_total_' . $rate_name} += $sub_result;
                 }
                 unset($model->{$model->prefix . 'current_' . $rate_name});

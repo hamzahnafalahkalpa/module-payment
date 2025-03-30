@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Resources\Billing\{
     ViewBilling
 };
 use Illuminate\Support\Str;
-use Hanafalah\ModulePayment\Concerns\HasTransaction;
+use Hanafalah\ModuleTransaction\Concerns\HasTransaction;
 use Hanafalah\ModulePayment\Enums\Billing\Status;
 
 class Billing extends BaseModel
