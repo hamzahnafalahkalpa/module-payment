@@ -10,8 +10,6 @@ use Hanafalah\ModulePayment\Data\BankData;
 
 interface Bank extends DataManagement
 {
-    public function viewUsingRelation(): array;
-    public function showUsingRelation(): array;
     public function getBank(): mixed;
     public function prepareStoreBank(BankData $bank_dto): Model;
     public function storeBank(?BankData $bank_dto = null): array;

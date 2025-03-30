@@ -14,11 +14,11 @@ class Bank extends PackageManagement implements ContractsBank
     protected string $__entity = 'bank';
     public static $bank_model;
 
-    public function viewUsingRelation(): array{
+    protected function viewUsingRelation(): array{
         return [];
     }
 
-    public function showUsingRelation(): array{
+    protected function showUsingRelation(): array{
         return [];
     }
 
