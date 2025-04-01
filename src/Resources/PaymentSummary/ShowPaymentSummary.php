@@ -2,9 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Resources\PaymentSummary;
 
-use Hanafalah\ModulePayment\Resources\PaymentDetail\ShowPaymentDetail;
-use Hanafalah\ModulePayment\Resources\Transaction\ShowTransaction;
-
 class ShowPaymentSummary extends ViewPaymentSummary
 {
 
@@ -22,10 +19,10 @@ class ShowPaymentSummary extends ViewPaymentSummary
             'transaction'      => $this->relationValidation('transaction', function () {
                 return $this->transaction->toShowApi();
             }),
-            'total_amount'     => $this->total_amount,
-            'total_debt'       => $this->total_debt,
-            'total_tax'        => $this->total_tax,
-            'total_additional' => $this->total_additional,
+            'refund'           => $this->refund,
+            'additional'       => $this->additional,
+            'tax'              => $this->tax,
+            'note'             => $this->note,
             'payment_details'  => $this->relationValidation('paymentDetails', function () {
                 $paymentDetails = $this->paymentDetails;
                 return $paymentDetails->transform(function ($paymentDetail) {
@@ -63,14 +60,6 @@ class ShowPaymentSummary extends ViewPaymentSummary
                 });
             });
         }
-
-
-        $props = $this->getPropsData() ?? [];
-        foreach ($props as $key => $prop) {
-            $arr[$key] = $prop;
-        }
-        $arr = $this->mergeArray(parent::toArray($request), $arr);
-
         return $arr;
     }
 }

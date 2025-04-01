@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\ModulePayment\Concerns\HasPaymentSummary;
-use Hanafalah\ModulePayment\Concerns\HasTransaction;
+use Hanafalah\ModuleTransaction\Concerns\HasTransaction;
 use Hanafalah\ModulePayment\Resources\Invoice\ShowInvoice;
 use Hanafalah\ModulePayment\Resources\Invoice\ViewInvoice;
 
@@ -68,14 +68,14 @@ class Invoice extends BaseModel
         });
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowInvoice($this);
+        return ShowInvoice::class;
     }
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewInvoice($this);
+        return ViewInvoice::class;
     }
 
     public function scopeDraft($builder)

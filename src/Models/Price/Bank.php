@@ -2,13 +2,16 @@
 
 namespace Hanafalah\ModulePayment\Models\Price;
 
+use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\ModulePayment\Enums\Bank\Status;
 use Hanafalah\ModulePayment\Resources\Bank\{ViewBank, ShowBank};
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bank extends BaseModel
 {
-    protected $list = ['id', 'name', 'account_number', 'account_name', 'status'];
+    use SoftDeletes, HasProps;
+    protected $list = ['id', 'name', 'account_number', 'account_name', 'status', 'props'];
 
     protected $casts = [
         'name'            => 'string',
@@ -16,8 +19,7 @@ class Bank extends BaseModel
         'account_number'  => 'string'
     ];
 
-    protected static function booted(): void
-    {
+    protected static function booted(): void{
         parent::booted();
         static::addGlobalScope('bank-status', function ($query) {
             $query->where('status', Status::ACTIVE->value);
@@ -27,13 +29,11 @@ class Bank extends BaseModel
         });
     }
 
-    public function toViewApi()
-    {
-        return new ViewBank($this);
+    public function getViewResource(){
+        return ViewBank::class;
     }
 
-    public function toShowApi()
-    {
-        return new ShowBank($this);
+    public function getShowResource(){
+        return ShowBank::class;
     }
 }

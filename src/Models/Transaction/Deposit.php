@@ -33,14 +33,14 @@ class Deposit extends BaseModel
         });
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowDeposit($this);
+        return ShowDeposit::class;
     }
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewDeposit($this);
+        return ViewDeposit::class;
     }
 
     public function reference()

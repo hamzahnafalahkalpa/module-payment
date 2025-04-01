@@ -16,17 +16,17 @@ class PaymentSummary extends BaseModel
     public $incrementing  = false;
     protected $keyType    = "string";
     protected $primaryKey = 'id';
-    protected $list       = ['id', 'transaction_id', 'reference_type', 'total_amount', 'total_cogs', 'total_discount', 'total_debt', 'props'];
-    protected $show       = ['parent_id', 'reference_id', 'total_tax', 'total_paid', 'total_additional'];
+    protected $list       = ['id', 'transaction_id', 'reference_type', 'amount', 'cogs', 'discount', 'debt', 'props'];
+    protected $show       = ['parent_id', 'reference_id', 'refund', 'tax', 'paid', 'additional'];
 
     protected $casts = [
-        'generated_at'     => 'datetime',
+        'generated_at' => 'datetime',
     ];
 
     public function getPropsQuery(): array
     {
         return [
-            'generated_at'     => 'created_at',
+            'generated_at' => 'created_at',
         ];
     }
 
@@ -37,7 +37,7 @@ class PaymentSummary extends BaseModel
             static::recalculating($query);
         });
         static::updated(function ($query) {
-            if ($query->isDirty('total_debt') || $query->isDirty('total_amount') || $query->isDirty('parent_id')) {
+            if ($query->isDirty('debt') || $query->isDirty('amount') || $query->isDirty('parent_id')) {
                 static::recalculating($query);
             }
         });
@@ -69,13 +69,11 @@ class PaymentSummary extends BaseModel
         }
         $parent_payment_summary = $query->parent;
         if (isset($parent_payment_summary)) {
-            $rate_names = ['total_debt', 'total_amount', 'total_tax', 'total_additional', 'total_discount', 'total_cogs'];
+            $rate_names = ['debt', 'amount', 'tax', 'additional', 'discount', 'cogs' , 'refund'];
             foreach ($rate_names as $rate_name) {
-                if (!$is_update_parent) {
-                    $parent_payment_summary->{$rate_name} += $query->{$rate_name};
-                } else {
-                    $parent_payment_summary->{$rate_name} += static::calculateCurrent($query, $rate_name, $is_deleting);
-                }
+                $parent_payment_summary->{$rate_name} += (!$is_update_parent) 
+                    ? $query->{$rate_name} 
+                    : static::calculateCurrent($query, $rate_name, $is_deleting);
             }
             $parent_payment_summary->save();
         }
@@ -85,47 +83,26 @@ class PaymentSummary extends BaseModel
         }
     }
 
-    public function toShowApi()
-    {
-        return new ShowPaymentSummary($this);
+    public function getShowResource(){
+        return ShowPaymentSummary::class;
     }
 
-    public function toViewApi()
-    {
-        return new ViewPaymentSummary($this);
+    public function getViewResource(){
+        return ViewPaymentSummary::class;
     }
 
-    public function scopeDebtNotZero($builder)
-    {
-        return $builder->gt('total_debt', 0);
-    }
+    public function scopeDebtNotZero($builder){return $builder->gt('debt', 0);}
 
-    public function reference()
-    {
-        return $this->morphTo();
+    public function reference(){return $this->morphTo();}
+    public function tariffComponent(){return $this->belongsToModel('TariffComponent');}
+    public function paymentDetail(){return $this->hasOneModel('PaymentDetail');}
+    public function paymentDetails(){return $this->hasManyModel('PaymentDetail');}
+    public function transaction(){return $this->belongsToModel('Transaction');}
+    public function recursiveInvoiceChilds(){
+        return $this->hasManyModel('PaymentSummary', 'parent_id')
+                    ->with(['paymentDetails.transactionItem', 'recursiveInvoiceChilds'])->where('amount', '>', 0);
     }
-    public function tariffComponent()
-    {
-        return $this->belongsToModel('TariffComponent');
-    }
-    public function paymentDetail()
-    {
-        return $this->hasOneModel('PaymentDetail');
-    }
-    public function paymentDetails()
-    {
-        return $this->hasManyModel('PaymentDetail');
-    }
-    public function transaction()
-    {
-        return $this->belongsToModel('Transaction');
-    }
-    public function recursiveInvoiceChilds()
-    {
-        return $this->hasManyModel('PaymentSummary', 'parent_id')->with(['paymentDetails.transactionItem', 'recursiveInvoiceChilds'])->where('total_amount', '>', 0);
-    }
-    public function recursiveChilds()
-    {
+    public function recursiveChilds(){
         return $this->hasManyModel('PaymentSummary', 'parent_id')->debtNotZero()
             ->with([
                 'paymentDetails' => function ($query) {
@@ -134,16 +111,7 @@ class PaymentSummary extends BaseModel
                 'recursiveChilds'
             ]);
     }
-    public function recursiveParent()
-    {
-        return $this->belongsToModel('PaymentSummary', 'parent_id')->with('recursiveParent');
-    }
-    public function paymentHistoryHasModel()
-    {
-        return $this->morphOneModel('PaymentHistoryHasModel', 'model');
-    }
-    public function transactionItem()
-    {
-        return $this->morphOneModel('TransactionItem', 'item');
-    }
+    public function recursiveParent(){return $this->belongsToModel('PaymentSummary', 'parent_id')->with('recursiveParent');}
+    public function paymentHistoryHasModel(){return $this->morphOneModel('PaymentHistoryHasModel', 'model');}
+    public function transactionItem(){return $this->morphOneModel('TransactionItem', 'item');}
 }

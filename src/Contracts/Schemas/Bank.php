@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
-use Hanafalah\ModulePayment\Data\BankData;
+use Hanafalah\ModulePayment\Contracts\Data\BankData;
 
 interface Bank extends DataManagement
 {
-    public function viewUsingRelation(): array;
-    public function showUsingRelation(): array;
     public function getBank(): mixed;
     public function prepareStoreBank(BankData $bank_dto): Model;
     public function storeBank(?BankData $bank_dto = null): array;

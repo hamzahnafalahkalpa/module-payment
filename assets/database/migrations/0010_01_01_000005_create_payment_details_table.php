@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -50,15 +49,16 @@ return new class extends Migration
                 $table->foreignIdFor($payment_detail::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
 
-                $table->integer('amount')->nullable()->default(0);
-                $table->integer('qty')->nullable()->default(0);
-                $table->integer('cogs')->nullable()->default(0);
-                $table->integer('debt')->nullable()->default(0);
-                $table->integer('price')->nullable()->default(0);
-                $table->integer('paid')->nullable()->default(0);
-                $table->integer('discount')->nullable()->default(0);
-                $table->integer('tax')->nullable()->default(0);
-                $table->integer('additional')->nullable()->default(0);
+                $table->unsignedInteger('amount')->nullable()->default(0);
+                $table->unsignedInteger('qty')->nullable()->default(0);
+                $table->unsignedInteger('cogs')->nullable()->default(0);
+                $table->unsignedInteger('debt')->nullable()->default(0);
+                $table->unsignedInteger('price')->nullable()->default(0);
+                $table->unsignedInteger('paid')->nullable()->default(0);
+                $table->unsignedInteger('refund')->nullable()->default(0);
+                $table->unsignedInteger('discount')->nullable()->default(0);
+                $table->unsignedTinyInteger('tax')->nullable()->default(0);
+                $table->unsignedInteger('additional')->nullable()->default(0);
                 $table->boolean('is_loan')->nullable()->default(0);
 
                 $table->json('props')->nullable();

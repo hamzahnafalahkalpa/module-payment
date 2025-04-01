@@ -40,7 +40,7 @@ class SplitBill extends PackageManagement implements ContractsSplitBill
         $add = [
             'billing_id'     => $attributes['billing_id'],
             'payment_method' => $attributes['payment_method'],
-            'total_paid'     => $attributes['total_paid'] ?? 0,
+            'paid'     => $attributes['paid'] ?? 0,
             'payer_type'     => $attributes['payer_type'] ?? null,
             'payer_id'       => $attributes['payer_id']   ?? null,
             'invoice_id'     => $attributes['invoice_id'] ?? null
@@ -93,16 +93,16 @@ class SplitBill extends PackageManagement implements ContractsSplitBill
                 'note'              => $attributes['note'] ?? null,
                 'vouchers'          => $attributes['vouchers'] ?? []
             ]);
-            if (!isset($attributes['total_paid'])) {
-                $split_bill->total_paid   = $payment_history->total_paid;
-                $billing->total_paid    ??= 0;
-                $billing->total_debt    ??= 0;
-                $billing->total_gross   ??= 0;
-                $billing->total_net     ??= 0;
-                $billing->total_paid     += $split_bill->total_paid;
-                $billing->total_debt     += $payment_history->total_debt;
-                $billing->total_gross    += $payment_history->gross;
-                $billing->total_net      += $payment_history->total_net;
+            if (!isset($attributes['paid'])) {
+                $split_bill->paid         = $payment_history->paid;
+                $billing->paid          ??= 0;
+                $billing->debt          ??= 0;
+                $billing->gross         ??= 0;
+                $billing->net           ??= 0;
+                $billing->paid           += $split_bill->paid;
+                $billing->debt           += $payment_history->debt;
+                $billing->gross          += $payment_history->gross;
+                $billing->net            += $payment_history->net;
             }
         } else {
             throw new \Exception('payment_summaries are required');

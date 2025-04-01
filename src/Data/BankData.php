@@ -3,15 +3,18 @@
 namespace Hanafalah\ModulePayment\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePayment\Contracts\Data\BankData as DataBankData;
 use Hanafalah\ModulePayment\Enums\Bank\Status;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\Validation\Exists;
 
-class BankData extends Data
+class BankData extends Data implements DataBankData
 {
     public function __construct(
         #[MapInputName('id')]
         #[MapName('id')]
+        #[Exists('banks', 'id')]
         public mixed $id = null,
 
         #[MapInputName('name')]

@@ -29,14 +29,14 @@ class PriceComponent extends BaseModel
         });
     }
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewPriceComponent($this);
+        return ViewPriceComponent::class;
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowPriceComponent($this);
+        return ShowPriceComponent::class;
     }
 
     public function model()

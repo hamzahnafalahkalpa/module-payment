@@ -19,7 +19,7 @@ class ViewSplitBill extends ApiResource
             'id'                => $this->id,
             'split_bill_code'   => $this->split_bill_code,
             'payment_method'    => $this->payment_method,
-            'total_paid'        => $this->total_paid,
+            'paid'        => $this->paid,
             'note'              => $this->note,
             'payer'             => $this->relationValidation('payer', function () {
                 return $this->payer->toViewApi();

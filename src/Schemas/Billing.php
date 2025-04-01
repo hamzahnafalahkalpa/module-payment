@@ -8,7 +8,6 @@ use Hanafalah\ModulePayment\Contracts\Schemas\Billing as ContractsBilling;
 use Hanafalah\ModulePayment\Data\BillingData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Hanafalah\ModulePayment\Resources\Billing\{
     ShowBilling,

@@ -33,7 +33,8 @@ return new class extends Migration
                 $table->string('account_number', 36)->nullable();
                 $table->string('account_name', 50)->nullable();
                 $table->string('status', 10)->nullable(false)
-                    ->default(Status::ACTIVE->value);
+                      ->default(Status::ACTIVE->value);
+                $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
             });

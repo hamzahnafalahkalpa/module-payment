@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -37,13 +36,14 @@ return new class extends Migration
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
                 $table->string('reference_type', 50)->nullable(false);
                 $table->string('reference_id', 36)->nullable(false);
-                $table->integer('total_amount')->nullable()->default(0);
-                $table->integer('total_discount')->nullable()->default(0);
-                $table->integer('total_cogs')->nullable()->default(0);
-                $table->integer('total_debt')->nullable()->default(0);
-                $table->integer('total_tax')->nullable()->default(0);
-                $table->integer('total_additional')->nullable()->default(0);
-                $table->integer('total_paid')->nullable()->default(0);
+                $table->unsignedBigInteger('amount')->nullable()->default(0);
+                $table->unsignedBigInteger('debt')->nullable()->default(0);
+                $table->unsignedBigInteger('cogs')->nullable()->default(0);
+                $table->unsignedBigInteger('discount')->nullable()->default(0);
+                $table->unsignedTinyInteger('tax')->nullable()->default(0);
+                $table->unsignedBigInteger('additional')->nullable()->default(0);
+                $table->unsignedBigInteger('paid')->nullable()->default(0);
+                $table->unsignedBigInteger('refund')->nullable()->default(0);
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

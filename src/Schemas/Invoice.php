@@ -73,12 +73,12 @@ class Invoice extends PackageManagement implements ContractsInvoice
                         'payment_summary_id'  => $payment_summary_billing->getKey(),
                         'transaction_item_id' => $transaction_item->getKey()
                     ], [
-                        'cogs'                => $payment_summary->total_cogs ?? 0,
-                        'tax'                 => $payment_summary->total_tax ?? 0,
-                        'additional'          => $payment_summary->total_additional,
-                        'amount'              => $payment_summary->total_amount,
-                        'debt'                => $payment_summary->total_debt,
-                        'price'               => $payment_summary->total_amount
+                        'cogs'                => $payment_summary->cogs ?? 0,
+                        'tax'                 => $payment_summary->tax ?? 0,
+                        'additional'          => $payment_summary->additional,
+                        'amount'              => $payment_summary->amount,
+                        'debt'                => $payment_summary->debt,
+                        'price'               => $payment_summary->amount
                     ]);
                 }
             }

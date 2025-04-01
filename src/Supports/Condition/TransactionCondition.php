@@ -10,7 +10,7 @@ class TransactionCondition extends Condition implements TransactionConditionInte
 {
     public function check(Model $voucher_rule, array $attributes): bool
     {
-        $total = static::$__payment_history->total_debt;
+        $total = static::$__payment_history->debt;
         switch (Str::snake($voucher_rule->condition)) {
             case 'minimum_transaction':
                 return $total >= $voucher_rule->rule['value'];

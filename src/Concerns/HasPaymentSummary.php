@@ -2,6 +2,8 @@
 
 namespace Hanafalah\ModulePayment\Concerns;
 
+use Hanafalah\ModuleTransaction\Concerns\HasTransaction;
+
 trait HasPaymentSummary
 {
     use HasTransaction;

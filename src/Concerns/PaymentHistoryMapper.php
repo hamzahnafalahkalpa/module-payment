@@ -19,12 +19,12 @@ trait PaymentHistoryMapper
             $attributes['transaction_id'] ?? null,
             $attributes['reference_type'] ?? null,
             $attributes['reference_id'] ?? null,
-            $attributes['total_amount'] ?? 0,
-            $attributes['total_cogs'] ?? 0,
-            $attributes['total_discount'] ?? 0,
-            $attributes['total_debt'] ?? 0,
-            $attributes['total_tax'] ?? 0,
-            $attributes['total_additional'] ?? 0
+            $attributes['amount'] ?? 0,
+            $attributes['cogs'] ?? 0,
+            $attributes['discount'] ?? 0,
+            $attributes['debt'] ?? 0,
+            $attributes['tax'] ?? 0,
+            $attributes['additional'] ?? 0
         );
     }
 }
