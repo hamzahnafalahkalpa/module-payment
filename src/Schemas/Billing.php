@@ -50,7 +50,7 @@ class Billing extends PackageManagement implements ContractsBilling
 
     public function viewBillingPaginate(?PaginateData $paginate_dto = null): array{
         return $this->viewEntityResource(function() use ($paginate_dto){
-            return $this->prepareViewBillingPaginate($paginate_dto ?? PaginateData::from(request()->all()));
+            return $this->prepareViewBillingPaginate($paginate_dto ?? $this->requestDTO(request()->all()));
         });
     }
 
