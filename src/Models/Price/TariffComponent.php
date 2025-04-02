@@ -6,32 +6,33 @@ use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\ModulePayment\Enums\TariffComponent\Flag;
 use Hanafalah\ModulePayment\Resources\TariffComponent\ShowTariffComponent;
 use Hanafalah\ModulePayment\Resources\TariffComponent\ViewTariffComponent;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class TariffComponent extends BaseModel
 {
-    protected $fillable = ['id', 'name'];
+    use HasUlids;
 
+    public $incrementing  = false;
+    protected $keyType    = 'string';
+    protected $primaryKey = 'id';
+    protected $fillable   = ['id', 'name'];
     protected $casts = [
         'name' => 'string'
     ];
 
-    public function getViewResource()
-    {
+    public function getViewResource(){
         return ViewTariffComponent::class;
     }
 
-    public function getShowResource()
-    {
+    public function getShowResource(){
         return ShowTariffComponent::class;
     }
 
-    public function getFlags()
-    {
+    public function getFlags(){
         return array_column(Flag::cases(), 'value');
     }
 
-    public function componentDetails()
-    {
+    public function componentDetails(){
         return $this->morphManyModel('ComponentDetail', 'reference');
     }
 }
