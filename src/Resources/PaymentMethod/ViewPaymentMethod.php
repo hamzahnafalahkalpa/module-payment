@@ -19,12 +19,6 @@ class ViewPaymentMethod extends ApiResource
             'id'                => $this->id,
             'name'              => $this->name,
         ];
-        $props = $this->getPropsData();
-        if (isset($props) && count($props) > 0) {
-            foreach ($props as $key => $prop) {
-                $arr[$key] = $prop;
-            }
-        }
 
         return $arr;
     }
