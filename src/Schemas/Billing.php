@@ -9,10 +9,6 @@ use Hanafalah\ModulePayment\Data\BillingData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Hanafalah\ModulePayment\Resources\Billing\{
-    ShowBilling,
-    ViewBilling
-};
 
 class Billing extends PackageManagement implements ContractsBilling
 {
