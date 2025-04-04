@@ -28,7 +28,8 @@ class Coa extends PackageManagement implements ContractsCoa
 
     public function prepareStoreCoa(CoaData $coa_dto): Model{
         $model = $this->CoaModel()->updateOrCreate([
-            'name'   => $coa_dto->name
+            'name'   => $coa_dto->name,
+            'code'   => $coa_dto->code
         ],[
             'status' => $coa_dto->status
         ]);

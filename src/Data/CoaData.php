@@ -19,6 +19,10 @@ class CoaData extends Data implements DataCoaData
         #[MapName('name')]
         public string $name,
 
+        #[MapInputName('code')]
+        #[MapName('code')]
+        public string $code,
+
         #[MapInputName('status')]
         #[MapName('status')]
         public ?string $status = Status::ACTIVE->value
