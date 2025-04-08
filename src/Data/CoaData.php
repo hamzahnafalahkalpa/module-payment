@@ -10,21 +10,19 @@ use Spatie\LaravelData\Attributes\MapName;
 
 class CoaData extends Data implements DataCoaData
 {
-    public function __construct(
-        #[MapInputName('id')]
-        #[MapName('id')]
-        public mixed $id = null,
+    #[MapInputName('id')]
+    #[MapName('id')]
+    public mixed $id = null;
 
-        #[MapInputName('name')]
-        #[MapName('name')]
-        public string $name,
+    #[MapInputName('name')]
+    #[MapName('name')]
+    public string $name;
 
-        #[MapInputName('code')]
-        #[MapName('code')]
-        public string $code,
+    #[MapInputName('code')]
+    #[MapName('code')]
+    public string $code;
 
-        #[MapInputName('status')]
-        #[MapName('status')]
-        public ?string $status = Status::ACTIVE->value
-    ) {}
+    #[MapInputName('status')]
+    #[MapName('status')]
+    public ?string $status = Status::ACTIVE->value;
 }

@@ -11,26 +11,24 @@ use Spatie\LaravelData\Attributes\Validation\Exists;
 
 class BankData extends Data implements DataBankData
 {
-    public function __construct(
-        #[MapInputName('id')]
-        #[MapName('id')]
-        #[Exists('banks', 'id')]
-        public mixed $id = null,
+    #[MapInputName('id')]
+    #[MapName('id')]
+    #[Exists('banks', 'id')]
+    public mixed $id = null;
 
-        #[MapInputName('name')]
-        #[MapName('name')]
-        public string $name,
+    #[MapInputName('name')]
+    #[MapName('name')]
+    public string $name;
 
-        #[MapInputName('account_number')]
-        #[MapName('account_number')]
-        public string $account_number,
+    #[MapInputName('account_number')]
+    #[MapName('account_number')]
+    public string $account_number;
 
-        #[MapInputName('account_name')]
-        #[MapName('account_name')]
-        public string $account_name,
+    #[MapInputName('account_name')]
+    #[MapName('account_name')]
+    public string $account_name;
 
-        #[MapInputName('status')]
-        #[MapName('status')]
-        public ?string $status = Status::ACTIVE->value
-    ) {}
+    #[MapInputName('status')]
+    #[MapName('status')]
+    public ?string $status = Status::ACTIVE->value;
 }
