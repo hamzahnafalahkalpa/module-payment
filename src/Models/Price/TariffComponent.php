@@ -20,6 +20,10 @@ class TariffComponent extends BaseModel
         'name' => 'string'
     ];
 
+    public function showUsingRelation(): array{
+        return ['componentDetails'];
+    }
+
     public function getViewResource(){
         return ViewTariffComponent::class;
     }

@@ -2,18 +2,23 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Schemas;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
 
+/**
+ * @see \Hanafalah\ModulePayment\Schemas\PaymentSummary
+ * @method self conditionals(mixed $conditionals)
+ * @method array storePaymentSummary(?PaymentSummaryData $rab_work_list_dto = null)
+ * @method bool deletePaymentSummary()
+ * @method bool prepareDeletePaymentSummary(? array $attributes = null)
+ * @method mixed getPaymentSummary()
+ * @method ?Model prepareShowPaymentSummary(?Model $model = null, ?array $attributes = null)
+ * @method array showPaymentSummary(?Model $model = null)
+ * @method array viewPaymentSummaryList()
+ * @method Collection prepareViewPaymentSummaryList(? array $attributes = null)
+ * @method LengthAwarePaginator prepareViewPaymentSummaryPaginate(PaginateData $paginate_dto)
+ * @method array viewPaymentSummaryPaginate(?PaginateData $paginate_dto = null)
+ * @method Builder function paymentSummary(mixed $conditionals = null)
+ */
 interface PaymentSummary extends DataManagement
 {
-    public function prepareViewPaymentSummaryList(mixed $flags = null): Collection;
-    public function preparePaymentSummary(mixed $flags = null);
-    public function prepareViewPaymentSummaryPaginate(mixed $flags = null, int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): LengthAwarePaginator;
-    public function viewPaymentSummaryPaginate(mixed $flags = null, int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): array;
-    public function viewPaymentSummaryList(mixed $flags = null): array;
-    public function getPaymentSummary(): mixed;
-    public function addOrChange(?array $attributes = []): self;
-    public function get(mixed $conditionals = null): Collection;
 }

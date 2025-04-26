@@ -4,18 +4,14 @@ namespace Hanafalah\ModulePayment\Schemas;
 
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\Invoice as ContractsInvoice;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends PackageManagement implements ContractsInvoice
 {
-    protected array $__guard   = ['id', 'author_id', 'author_type', 'consument_id', 'consument_type'];
-    protected array $__add     = ['invoice_code'];
     protected string $__entity = 'Invoice';
+    public static $invoice_model;
 
-    public function prepareStoreInvoice(?array $attributes = null): Model
-    {
+    public function prepareStoreInvoice(?array $attributes = null): Model{
         $attributes ??= request()->all();
 
         if (isset($attributes['id'])) {
@@ -92,22 +88,4 @@ class Invoice extends PackageManagement implements ContractsInvoice
 
         return $invoice;
     }
-
-
-    public function storeInvoice(): array
-    {
-        return $this->transaction(function () {
-            return $this->prepareStoreInvoice();
-        });
-    }
-
-    protected function invoice(mixed $conditionals = null): Builder
-    {
-        return $this->InvoiceModel()->conditionals($conditionals);
-    }
-
-    // public function get(mixed $conditionals = null): Collection{
-    //     return $this->invoice($conditionals)->get();
-    // }
-
 }
