@@ -7,10 +7,14 @@ return [
     'commands' => [
         ModulePaymentCommands\InstallMakeCommand::class
     ],
-    'libs' => [
+    'libs'       => [
         'model' => 'Models',
         'contract' => 'Contracts',
-        'schema' => 'Schemas'
+        'schema' => 'Schemas',
+        'database' => 'Database',
+        'data' => 'Data',
+        'resource' => 'Resources',
+        'migration' => '../assets/database/migrations'
     ],
     'app' => [
         'contracts'  => [
