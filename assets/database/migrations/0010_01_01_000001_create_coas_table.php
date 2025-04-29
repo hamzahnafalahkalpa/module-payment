@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -30,6 +29,7 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 100)->nullable();
+                $table->string('code', 60)->nullable(false);
                 $table->string('status', 10)->nullable(false)
                       ->default(Status::ACTIVE->value);
                 $table->json('props')->nullable();

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Coa extends BaseModel
 {
     use SoftDeletes, HasProps;
-    protected $list = ['id', 'name', 'status', 'props'];
+    protected $list = ['id', 'name', 'code','status', 'props'];
 
     protected $casts = [
         'name' => 'string'
