@@ -18,6 +18,7 @@ class ViewCoa extends ApiResource
         $arr = [
             'id'             => $this->id,
             'name'           => $this->name,
+            'code'           => $this->code,
             'status'         => $this->status,
             'created_at'     => $this->created_at,
             'updated_at'     => $this->updated_at
