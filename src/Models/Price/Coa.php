@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Coa extends BaseModel
 {
     use SoftDeletes, HasProps;
-    protected $list = ['id', 'name', 'code','status', 'props'];
+    protected $list = ['id', 'flag', 'name', 'code','status', 'props'];
 
     protected $casts = [
         'name' => 'string'
@@ -27,6 +27,14 @@ class Coa extends BaseModel
         });
     }
 
+    public function viewUsingRelation(): array{
+        return [];
+    }
+
+    public function showUsingRelation(): array{
+        return [];
+    }
+
     public function getViewResource(){
         return ViewCoa::class;
     }
@@ -34,4 +42,6 @@ class Coa extends BaseModel
     public function getShowResource(){
         return ShowCoa::class;
     }
+
+    public function childs(){return $this->hasManyModel('Coa', 'parent_id')->with('childs');}
 }
