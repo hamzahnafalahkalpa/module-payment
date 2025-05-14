@@ -1,11 +1,9 @@
 <?php
 
-use App\Models\User;
+use Hanafalah\ModulePayment\Models\Payment\PaymentMethod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Hanafalah\ModulePayment\Models\Transaction\Refund;
-use Hanafalah\ModulePayment\Models\Transaction\RefundItem;
 
 return new class extends Migration
 {

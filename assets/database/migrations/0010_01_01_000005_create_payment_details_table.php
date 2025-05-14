@@ -8,7 +8,7 @@ use Hanafalah\ModulePayment\{
 };
 use Hanafalah\ModulePayment\Models\Payment\PaymentHistory;
 use Hanafalah\ModulePayment\Models\Payment\PaymentSummary;
-use Hanafalah\ModulePayment\Models\Transaction\TransactionItem;
+use Hanafalah\ModuleTransaction\Models\Transaction\TransactionItem;
 
 return new class extends Migration
 {
@@ -34,7 +34,6 @@ return new class extends Migration
                 $payment_summary        = app(config('database.models.PaymentSummary', PaymentSummary::class));
                 $transaction_item       = app(config('database.models.TransactionItem', TransactionItem::class));
                 $payment_history        = app(config('database.models.PaymentHistory', PaymentHistory::class));
-                $payment_detail         = app(config('database.models.PaymentDetail', PaymentDetail::class));
 
                 $table->ulid('id')->primary();
                 $table->foreignIdFor($payment_summary::class)->nullable()->index()
@@ -44,9 +43,6 @@ return new class extends Migration
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
 
                 $table->foreignIdFor($transaction_item::class)->nullable()->index()
-                    ->constrained()->cascadeOnUpdate()->restrictOnDelete();
-
-                $table->foreignIdFor($payment_detail::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
 
                 $table->unsignedInteger('amount')->nullable()->default(0);
