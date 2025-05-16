@@ -2,4 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Data;
 
-interface CoaData {}
+use Spatie\LaravelData\Contracts\BaseData;
+
+interface CoaData extends BaseData {}

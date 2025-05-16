@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Coa extends BaseModel
 {
     use SoftDeletes, HasProps;
-    protected $list = ['id', 'flag', 'name', 'code','status', 'props'];
+    protected $list = ['id', 'parent_id', 'flag', 'name', 'code','status', 'props'];
 
     protected $casts = [
-        'name' => 'string'
+        'name' => 'string',
+        'code' => 'string'
     ];
 
     protected static function booted(): void{
@@ -23,6 +24,7 @@ class Coa extends BaseModel
             $query->where('status', Status::ACTIVE->value);
         });
         static::creating(function ($query) {
+            $query->flag = 'Coa';
             if (!isset($query->status)) $query->status = Status::ACTIVE->value;
         });
     }
@@ -32,7 +34,9 @@ class Coa extends BaseModel
     }
 
     public function showUsingRelation(): array{
-        return [];
+        return [
+            'childs'
+        ];
     }
 
     public function getViewResource(){
@@ -44,4 +48,5 @@ class Coa extends BaseModel
     }
 
     public function childs(){return $this->hasManyModel('Coa', 'parent_id')->with('childs');}
+    public function accountGroup(){return $this->belongsToModel('AccountGroup', 'parent_id');}
 }

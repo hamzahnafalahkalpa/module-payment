@@ -29,12 +29,21 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 100)->nullable();
-                $table->string('code', 60)->nullable(false);
+                $table->string('code', 60)->nullable();
+                $table->string('flag', 100)->nullable(false);
                 $table->string('status', 10)->nullable(false)
                       ->default(Status::ACTIVE->value);
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
+            });
+
+            
+            Schema::table($table_name,function (Blueprint $table) use ($table_name){
+                $table->foreignIdFor($this->__table, 'parent_id')
+                    ->nullable()->after('id')
+                    ->index()->constrained($table_name)
+                    ->onUpdate('cascade')->onDelete('restrict');
             });
         }
     }
