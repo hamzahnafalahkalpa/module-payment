@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Hanafalah\ModulePayment\Enums\Coa\Status;
 use Hanafalah\ModulePayment\Models\Price\Coa;
+use Hanafalah\ModulePayment\Models\Price\CoaType;
 
 return new class extends Migration
 {
@@ -27,12 +28,16 @@ return new class extends Migration
         $table_name = $this->__table->getTable();
         if (!$this->isTableExists()) {
             Schema::create($table_name, function (Blueprint $table) {
+                $coa_type = app(config('database.models.CoaType', CoaType::class));
+
                 $table->id();
                 $table->string('name', 100)->nullable();
                 $table->string('code', 60)->nullable();
                 $table->string('flag', 100)->nullable(false);
                 $table->string('status', 10)->nullable(false)
                       ->default(Status::ACTIVE->value);
+                $table->foreignIdFor($coa_type::class)->nullable()->index()
+                    ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

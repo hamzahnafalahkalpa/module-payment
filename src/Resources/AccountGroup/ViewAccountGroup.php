@@ -2,9 +2,9 @@
 
 namespace Hanafalah\ModulePayment\Resources\AccountGroup;
 
-use Hanafalah\LaravelSupport\Resources\ApiResource;
+use Hanafalah\ModulePayment\Resources\Coa\ViewCoa;
 
-class ViewAccountGroup extends ApiResource
+class ViewAccountGroup extends ViewCoa
 {
   /**
    * Transform the resource into an array.

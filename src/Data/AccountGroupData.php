@@ -14,7 +14,8 @@ class AccountGroupData extends CoaData implements DataAccountGroupData
     #[DataCollectionOf(CoaData::class)]
     public ?array $coas = [];
 
-    protected function after(mixed $data): AccountGroupData{
+    public static function after(mixed $data): AccountGroupData{
+        $data = parent::after($data);
         $data->flag = 'AccountGroup';
         return $data;
     }

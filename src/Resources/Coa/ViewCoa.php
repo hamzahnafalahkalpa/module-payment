@@ -18,6 +18,8 @@ class ViewCoa extends ApiResource
         $arr = [
             'id'             => $this->id,
             'parent_id'      => $this->parent_id,
+            'parent'         => $this->prop_parent,
+            'coa_type'       => $this->prop_coa_type,
             'name'           => $this->name,
             'code'           => $this->code,
             'status'         => $this->status,

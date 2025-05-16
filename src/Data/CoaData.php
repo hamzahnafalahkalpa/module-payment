@@ -31,6 +31,10 @@ class CoaData extends Data implements DataCoaData
     #[MapName('code')]
     public ?string $code = null;
 
+    #[MapInputName('coa_type_id')]
+    #[MapName('coa_type_id')]
+    public ?string $coa_type_id = null;
+
     #[MapInputName('status')]
     #[MapName('status')]
     public ?string $status = Status::ACTIVE->value;
@@ -40,8 +44,32 @@ class CoaData extends Data implements DataCoaData
     #[DataCollectionOf(CoaData::class)]
     public ?array $childs = [];
 
-    protected function after(CoaData $data): CoaData{
+    #[MapInputName('props')]
+    #[MapName('props')]
+    public ?array $props = null;
+
+    public static function after(CoaData $data): CoaData{
         $data->flag = 'Coa';
+
+        $data->props['prop_coa_type'] = [
+            'id'   => $data->coa_type_id ?? null,
+            'name' => null
+        ];
+        $new = static::new();
+        if (!isset($data->props['prop_coa_type']['name']) && isset($data->coa_type_id)){
+            $coa_type = $new->CoaTypeModel()->findOrFail($data->coa_type_id);
+            $data->props['prop_coa_type']['name'] = $coa_type->name;
+        }
+
+        $data->props['prop_parent'] = [
+            'id'   => $data->parent_id ?? null,
+            'name' => null
+        ];
+
+        if (!isset($data->props['prop_parent']['name']) && isset($data->parent_id)){
+            $parent = $new->CoaModel()->findOrFail($data->parent_id);
+            $data->props['prop_parent']['name'] = $parent->name;
+        }
         return $data;
     }
 }
