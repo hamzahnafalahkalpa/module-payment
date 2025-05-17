@@ -14,7 +14,13 @@ class ViewAccountGroup extends ViewCoa
    */
   public function toArray(\Illuminate\Http\Request $request): array
   {
-    $arr = [];
+    $arr = [
+      'coas' => $this->relationValidation('coas', function(){
+          return $this->coas->transform(function($coa){
+              return $coa->toShowApi();
+          });
+      })
+    ];
     $arr = $this->mergeArray(parent::toArray($request),$arr);
     return $arr;
   }

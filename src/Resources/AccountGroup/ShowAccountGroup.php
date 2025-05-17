@@ -15,11 +15,7 @@ class ShowAccountGroup extends ViewAccountGroup
   public function toArray(\Illuminate\Http\Request $request): array
   {
     $arr = [
-      'coas' => $this->relationValidation('coas', function(){
-          return $this->coas->transform(function($coa){
-              return $coa->toShowApi();
-          });
-      })
+
     ];
     $show = $this->resolveNow(new ShowCoa($this));
     $arr = $this->mergeArray($show,parent::toArray($request),$arr);
