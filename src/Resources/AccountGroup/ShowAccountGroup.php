@@ -18,7 +18,7 @@ class ShowAccountGroup extends ViewAccountGroup
 
     ];
     $show = $this->resolveNow(new ShowCoa($this));
-    $arr = $this->mergeArray($show,parent::toArray($request),$arr);
+    $arr = $this->mergeArray(parent::toArray($request),$show,$arr);
     return $arr;
   }
 }
