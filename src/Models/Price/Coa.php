@@ -21,7 +21,8 @@ class Coa extends BaseModel
     protected static function booted(): void{
         parent::booted();
         static::addGlobalScope('coa-status', function ($query) {
-            $query->where('status', Status::ACTIVE->value);
+            $query->flagIn(['Coa'])
+                  ->where('status', Status::ACTIVE->value);
         });
         static::creating(function ($query) {
             $query->flag = 'Coa';

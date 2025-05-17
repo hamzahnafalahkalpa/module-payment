@@ -31,7 +31,7 @@ class Coa extends PackageManagement implements ContractsCoa
         if ($coa_dto->flag == 'Coa'){
             $model = $this->CoaModel()->updateOrCreate(...$create);
             if (!isset($coa_dto->props['prop_parent']['name']) && isset($coa_dto->parent_id)){
-                $parent = $this->CoaModel()->findOrFail($coa_dto->parent_id);
+                $parent = $this->usingEntity()->findOrFail($coa_dto->parent_id);
                 $coa_dto->props['prop_parent']['id'] = $parent->getKey();
                 $coa_dto->props['prop_parent']['name'] = $parent->name;
             }

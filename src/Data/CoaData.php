@@ -19,6 +19,10 @@ class CoaData extends Data implements DataCoaData
     #[MapName('parent_id')]
     public mixed $parent_id = null;
 
+    #[MapInputName('account_group_id')]
+    #[MapName('account_group_id')]
+    public mixed $account_group_id = null;
+
     #[MapInputName('name')]
     #[MapName('name')]
     public string $name;
@@ -50,6 +54,10 @@ class CoaData extends Data implements DataCoaData
 
     public static function after(CoaData $data): CoaData{
         $data->flag = 'Coa';
+
+        if (isset($data->account_group_id)){
+            $data->parent_id = $data->account_group_id;
+        }
 
         $data->props['prop_coa_type'] = [
             'id'   => $data->coa_type_id ?? null,
