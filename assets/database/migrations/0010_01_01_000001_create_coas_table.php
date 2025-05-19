@@ -36,6 +36,7 @@ return new class extends Migration
                 $table->string('flag', 100)->nullable(false);
                 $table->string('status', 10)->nullable(false)
                       ->default(Status::ACTIVE->value);
+                $table->string('balance_type', 10)->nullable(true)->comment('DEBIT, CREDIT');
                 $table->foreignIdFor($coa_type::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->json('props')->nullable();

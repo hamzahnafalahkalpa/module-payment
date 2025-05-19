@@ -5,9 +5,11 @@ namespace Hanafalah\ModulePayment\Data;
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePayment\Contracts\Data\CoaData as DataCoaData;
 use Hanafalah\ModulePayment\Enums\Bank\Status;
+use Hanafalah\ModulePayment\Enums\Coa\BalanceType;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\Validation\Enum;
 
 class CoaData extends Data implements DataCoaData
 {
@@ -26,6 +28,11 @@ class CoaData extends Data implements DataCoaData
     #[MapInputName('name')]
     #[MapName('name')]
     public string $name;
+
+    #[MapInputName('balance_type')]
+    #[MapName('balance_type')]
+    #[Enum(BalanceType::class)]
+    public string $balance_type;
 
     #[MapInputName('flag')]
     #[MapName('flag')]

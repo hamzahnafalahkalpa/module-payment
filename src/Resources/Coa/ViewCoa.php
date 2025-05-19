@@ -21,6 +21,7 @@ class ViewCoa extends ApiResource
             'parent'         => $this->prop_parent,
             'coa_type'       => $this->prop_coa_type,
             'name'           => $this->name,
+            'balance_type'   => $this->balance_type,
             'code'           => $this->code,
             'status'         => $this->status,
             'created_at'     => $this->created_at,

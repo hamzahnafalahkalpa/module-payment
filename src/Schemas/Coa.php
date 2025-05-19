@@ -14,12 +14,13 @@ class Coa extends PackageManagement implements ContractsCoa
 
     public function prepareStoreCoa(CoaData $coa_dto): Model{
         $add = [
-            'parent_id'   => $coa_dto->parent_id,
-            'name'        => $coa_dto->name,
-            'flag'        => $coa_dto->flag,
-            'code'        => $coa_dto->code ?? null,
-            'coa_type_id' => $coa_dto->coa_type_id ?? null,
-            'status'      => $coa_dto->status
+            'parent_id'     => $coa_dto->parent_id,
+            'name'          => $coa_dto->name,
+            'flag'          => $coa_dto->flag,
+            'code'          => $coa_dto->code ?? null,
+            'coa_type_id'   => $coa_dto->coa_type_id ?? null,
+            'status'        => $coa_dto->status,
+            'balance_type'  => $coa_dto->balance_type
         ];
         if (isset($coa_dto->id)){
             $group  = ['id' => $coa_dto->id];
