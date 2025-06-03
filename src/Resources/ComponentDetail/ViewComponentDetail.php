@@ -16,7 +16,8 @@ class ViewComponentDetail extends ApiResource
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
-            'name' => $this->flag,
+            'id'   => $this->id,
+            'name' => $this->flag
         ];
 
         return $arr;
