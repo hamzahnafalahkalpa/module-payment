@@ -8,12 +8,7 @@ use Hanafalah\ModulePayment\Contracts\Schemas\Billing as ContractsBilling;
 use Hanafalah\ModulePayment\Data\BillingData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Hanafalah\ModulePayment\Resources\Billing\{
-    ShowBilling,
-    ViewBilling
-};
 
 class Billing extends PackageManagement implements ContractsBilling
 {
@@ -51,7 +46,7 @@ class Billing extends PackageManagement implements ContractsBilling
 
     public function viewBillingPaginate(?PaginateData $paginate_dto = null): array{
         return $this->viewEntityResource(function() use ($paginate_dto){
-            return $this->prepareViewBillingPaginate($paginate_dto ?? PaginateData::from(request()->all()));
+            return $this->prepareViewBillingPaginate($paginate_dto ?? $this->requestDTO(request()->all()));
         });
     }
 

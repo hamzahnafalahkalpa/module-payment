@@ -3,31 +3,32 @@
 namespace Hanafalah\ModulePayment\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePayment\Contracts\Data\BankData as DataBankData;
 use Hanafalah\ModulePayment\Enums\Bank\Status;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\Validation\Exists;
 
-class BankData extends Data
+class BankData extends Data implements DataBankData
 {
-    public function __construct(
-        #[MapInputName('id')]
-        #[MapName('id')]
-        public mixed $id = null,
+    #[MapInputName('id')]
+    #[MapName('id')]
+    #[Exists('banks', 'id')]
+    public mixed $id = null;
 
-        #[MapInputName('name')]
-        #[MapName('name')]
-        public string $name,
+    #[MapInputName('name')]
+    #[MapName('name')]
+    public string $name;
 
-        #[MapInputName('account_number')]
-        #[MapName('account_number')]
-        public string $account_number,
+    #[MapInputName('account_number')]
+    #[MapName('account_number')]
+    public string $account_number;
 
-        #[MapInputName('account_name')]
-        #[MapName('account_name')]
-        public string $account_name,
+    #[MapInputName('account_name')]
+    #[MapName('account_name')]
+    public string $account_name;
 
-        #[MapInputName('status')]
-        #[MapName('status')]
-        public ?string $status = Status::ACTIVE->value
-    ) {}
+    #[MapInputName('status')]
+    #[MapName('status')]
+    public ?string $status = Status::ACTIVE->value;
 }

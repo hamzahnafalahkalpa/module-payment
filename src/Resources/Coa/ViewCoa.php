@@ -1,0 +1,32 @@
+<?php
+
+namespace Hanafalah\ModulePayment\Resources\Coa;
+
+use Hanafalah\LaravelSupport\Resources\ApiResource;
+
+class ViewCoa extends ApiResource
+{
+
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray(\Illuminate\Http\Request $request): array
+    {
+        $arr = [
+            'id'             => $this->id,
+            'parent_id'      => $this->parent_id,
+            'parent'         => $this->prop_parent,
+            'coa_type'       => $this->prop_coa_type,
+            'name'           => $this->name,
+            'balance_type'   => $this->balance_type,
+            'code'           => $this->code,
+            'status'         => $this->status,
+            'created_at'     => $this->created_at,
+            'updated_at'     => $this->updated_at
+        ];
+        return $arr;
+    }
+}

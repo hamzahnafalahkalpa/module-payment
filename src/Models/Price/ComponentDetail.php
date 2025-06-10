@@ -24,14 +24,14 @@ class ComponentDetail extends BaseModel
         'name' => 'string'
     ];
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewComponentDetail($this);
+        return ViewComponentDetail::class;
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowComponentDetail($this);
+        return ShowComponentDetail::class;
     }
 
     public function reference()

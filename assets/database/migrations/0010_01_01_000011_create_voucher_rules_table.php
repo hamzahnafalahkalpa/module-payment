@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Hanafalah\ModulePayment\Models\Price\Voucher;
 
 return new class extends Migration
 {
@@ -25,7 +26,7 @@ return new class extends Migration
         $table_name = $this->__table->getTable();
         if (!$this->isTableExists()) {
             Schema::create($table_name, function (Blueprint $table) {
-                $voucher = app(config('database.models.Voucher', \Projects\Klinik\Models\Transaction\Voucher::class));
+                $voucher = app(config('database.models.Voucher', Voucher::class));
 
                 $table->ulid('id')->primary();
                 $table->string('name')->nullable(false);

@@ -4,18 +4,14 @@ namespace Hanafalah\ModulePayment\Schemas;
 
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\Invoice as ContractsInvoice;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends PackageManagement implements ContractsInvoice
 {
-    protected array $__guard   = ['id', 'author_id', 'author_type', 'consument_id', 'consument_type'];
-    protected array $__add     = ['invoice_code'];
     protected string $__entity = 'Invoice';
+    public static $invoice_model;
 
-    public function prepareStoreInvoice(?array $attributes = null): Model
-    {
+    public function prepareStoreInvoice(?array $attributes = null): Model{
         $attributes ??= request()->all();
 
         if (isset($attributes['id'])) {
@@ -73,12 +69,12 @@ class Invoice extends PackageManagement implements ContractsInvoice
                         'payment_summary_id'  => $payment_summary_billing->getKey(),
                         'transaction_item_id' => $transaction_item->getKey()
                     ], [
-                        'cogs'                => $payment_summary->total_cogs ?? 0,
-                        'tax'                 => $payment_summary->total_tax ?? 0,
-                        'additional'          => $payment_summary->total_additional,
-                        'amount'              => $payment_summary->total_amount,
-                        'debt'                => $payment_summary->total_debt,
-                        'price'               => $payment_summary->total_amount
+                        'cogs'                => $payment_summary->cogs ?? 0,
+                        'tax'                 => $payment_summary->tax ?? 0,
+                        'additional'          => $payment_summary->additional,
+                        'amount'              => $payment_summary->amount,
+                        'debt'                => $payment_summary->debt,
+                        'price'               => $payment_summary->amount
                     ]);
                 }
             }
@@ -92,22 +88,4 @@ class Invoice extends PackageManagement implements ContractsInvoice
 
         return $invoice;
     }
-
-
-    public function storeInvoice(): array
-    {
-        return $this->transaction(function () {
-            return $this->prepareStoreInvoice();
-        });
-    }
-
-    protected function invoice(mixed $conditionals = null): Builder
-    {
-        return $this->InvoiceModel()->conditionals($conditionals);
-    }
-
-    // public function get(mixed $conditionals = null): Collection{
-    //     return $this->invoice($conditionals)->get();
-    // }
-
 }

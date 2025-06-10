@@ -126,8 +126,8 @@ class Voucher extends PackageManagement implements ContractsVoucher
                 list($voucher, $payment_history) = $condition_schema->validation($voucher, $attributes);
             }
             $payment_history = $condition_schema->getPaymentHistory();
-            $payment_history->total_debt   = $this->rounding($payment_history->total_debt);
-            $payment_history->total_amount = $this->rounding($payment_history->total_amount);
+            $payment_history->debt   = $this->rounding($payment_history->debt);
+            $payment_history->amount = $this->rounding($payment_history->amount);
         }
         return [$vouchers, $payment_history ?? null];
     }

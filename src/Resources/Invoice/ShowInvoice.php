@@ -18,7 +18,7 @@ class ShowInvoice extends ViewInvoice
         $arr = [
             'payment_summary'   => $this->relationValidation('paymentSummary', function () {
                 $paymentSummary = $this->paymentSummary;
-                return new ShowPaymentSummary($paymentSummary);
+                return ShowPaymentSummary($paymentSummary);
             })
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);

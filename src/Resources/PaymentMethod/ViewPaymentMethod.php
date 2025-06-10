@@ -16,15 +16,12 @@ class ViewPaymentMethod extends ApiResource
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
-            'id'                => $this->id,
-            'name'              => $this->name,
+            'id'   => $this->id,
+            'name' => $this->name,
+            'flag' => $this->flag,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
-        $props = $this->getPropsData();
-        if (isset($props) && count($props) > 0) {
-            foreach ($props as $key => $prop) {
-                $arr[$key] = $prop;
-            }
-        }
 
         return $arr;
     }

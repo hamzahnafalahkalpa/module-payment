@@ -28,13 +28,13 @@ class PaymentMethod extends BaseModel
         parent::booted();
     }
 
-    public function toShowApi()
+    public function getShowResource()
     {
-        return new ShowPaymentMethod($this);
+        return ShowPaymentMethod::class;
     }
 
-    public function toViewApi()
+    public function getViewResource()
     {
-        return new ViewPaymentMethod($this);
+        return ViewPaymentMethod::class;
     }
 }

@@ -1,11 +1,9 @@
 <?php
 
-use App\Models\User;
+use Hanafalah\ModulePayment\Models\Payment\PaymentMethod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Hanafalah\ModulePayment\Models\Transaction\Refund;
-use Hanafalah\ModulePayment\Models\Transaction\RefundItem;
 
 return new class extends Migration
 {
@@ -30,6 +28,7 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $table->ulid('id')->primary();
                 $table->string('name', 100)->unique();
+                $table->string('flag', 100)->unique();
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

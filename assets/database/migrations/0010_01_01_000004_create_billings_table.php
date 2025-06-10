@@ -9,7 +9,7 @@ use Hanafalah\ModulePayment\{
 };
 use Hanafalah\ModulePayment\Enums\Billing\Status;
 use Hanafalah\ModulePayment\Models\Transaction\Invoice;
-use Hanafalah\ModulePayment\Models\Transaction\Transaction;
+use Hanafalah\ModuleTransaction\Models\Transaction\Transaction;
 
 return new class extends Migration
 {

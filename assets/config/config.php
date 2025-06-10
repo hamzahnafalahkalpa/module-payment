@@ -4,13 +4,15 @@ use Hanafalah\ModulePayment\Commands as ModulePaymentCommands;
 use Hanafalah\ModulePayment\Contracts;
 
 return [
-    'commands' => [
-        ModulePaymentCommands\InstallMakeCommand::class
-    ],
-    'libs' => [
-        'model' => 'Models',
-        'contract' => 'Contracts',
-        'schema' => 'Schemas'
+    'namespace' => 'Hanafalah\ModulePayment',
+    'libs'          => [
+        'model'     => 'Models',
+        'contract'  => 'Contracts',
+        'schema'    => 'Schemas',
+        'database'  => 'Database',
+        'data'      => 'Data',
+        'resource'  => 'Resources',
+        'migration' => '../assets/database/migrations'
     ],
     'app' => [
         'contracts'  => [
@@ -32,6 +34,9 @@ return [
             'after_than_date'     => Contracts\Supports\Condition\DateCondition::class,
             'minimum_transaction' => Contracts\Supports\Condition\TransactionCondition::class
         ]
+    ],
+    'commands'  => [
+        ModulePaymentCommands\InstallMakeCommand::class
     ],
     'author' => \App\Models\User::class
 ];

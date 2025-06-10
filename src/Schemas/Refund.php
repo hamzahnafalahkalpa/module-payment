@@ -13,35 +13,10 @@ use Hanafalah\ModulePayment\Resources\Refund\ViewRefund;
 
 class Refund extends PackageManagement implements ContractsRefund
 {
-    protected array $__guard   = ['id', 'transaction_id'];
-    protected array $__add     = ['author_id', 'author_type', 'withdrawal_at', 'total'];
     protected string $__entity = 'Refund';
     public static $refund_model;
 
-    protected array $__resources = [
-        'view' => ViewRefund::class,
-        'show' => ShowRefund::class
-    ];
-
-
-
-    /**
-     * Add a new API access or update the existing one if found.
-     *
-     * The given attributes will be merged with the existing API access.
-     *
-     * @param array $attributes The attributes to be added to the API access.
-     *
-     * @return \Illuminate\Database\Eloquent\Model The API access model.
-     */
-    public function addOrChange(?array $attributes = []): self
-    {
-        $this->updateOrCreate($attributes);
-        return $this;
-    }
-
-    public function prepareViewRefundPaginate(mixed $cache_reference_type = null, ?array $morphs = null, int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): LengthAwarePaginator
-    {
+    public function prepareViewRefundPaginate(mixed $cache_reference_type = null, ?array $morphs = null, int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): LengthAwarePaginator{
         $morphs ??= $cache_reference_type;
         $paginate_options = compact('perPage', 'columns', 'pageName', 'page', 'total');
         $cache_reference_type ??= 'all';

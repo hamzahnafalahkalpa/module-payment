@@ -19,8 +19,7 @@ class ViewTariffComponent extends ApiResource
             'id'   => $this->id,
             'name' => $this->name,
             'component_details' => $this->relationValidation('componentDetails', function () {
-                $componentDetails = $this->componentDetails;
-                return $componentDetails->transform(function ($component) {
+                return $this->componentDetails->transform(function ($component) {
                     return $component->toViewApi();
                 });
             }),

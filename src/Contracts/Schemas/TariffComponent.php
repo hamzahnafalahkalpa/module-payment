@@ -2,23 +2,23 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Schemas;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
 
+/**
+ * @see \Hanafalah\ModulePayment\Schemas\TariffComponent
+ * @method self conditionals(mixed $conditionals)
+ * @method array storeTariffComponent(?TariffComponentData $rab_work_list_dto = null)
+ * @method bool deleteTariffComponent()
+ * @method bool prepareDeleteTariffComponent(? array $attributes = null)
+ * @method mixed getTariffComponent()
+ * @method ?Model prepareShowTariffComponent(?Model $model = null, ?array $attributes = null)
+ * @method array showTariffComponent(?Model $model = null)
+ * @method array viewTariffComponentList()
+ * @method Collection prepareViewTariffComponentList(? array $attributes = null)
+ * @method LengthAwarePaginator prepareViewTariffComponentPaginate(PaginateData $paginate_dto)
+ * @method array viewTariffComponentPaginate(?PaginateData $paginate_dto = null)
+ * @method Builder function tariffComponent(mixed $conditionals = null)
+ */
 interface TariffComponent extends DataManagement
 {
-    public function addOrChange(?array $attributes = []): self;
-    public function prepareStoreTariffComponent(?array $attributes = null): Model;
-    public function storeTariffComponent(): array;
-    public function prepareShowTariffComponent(?Model $model = null): ?Model;
-    public function showTariffComponent(?Model $model = null): array;
-    public function prepareRemoveTariffComponent(): bool;
-    public function removeTariffComponentById(): bool;
-    public function prepareViewTariffComponentList(string|array $flags): Collection;
-    public function prepareViewTariffComponentPaginate(int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): LengthAwarePaginator;
-    public function viewTariffComponentPaginate(int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): array;
-    public function viewTariffComponentList(string|array $flags): array;
-    public function getTariffComponent(): mixed;
 }

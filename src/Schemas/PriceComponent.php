@@ -4,26 +4,14 @@ namespace Hanafalah\ModulePayment\Schemas;
 
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\PriceComponent as ContractsPriceComponent;
-use Hanafalah\ModulePayment\Resources\PriceComponent\{
-    ViewPriceComponent,
-    ShowPriceComponent
-};
 
 class PriceComponent extends PackageManagement implements ContractsPriceComponent
 {
-    protected array $__guard   = ['id', 'model_type', 'model_id'];
-    protected array $__add     = ['tariff_component_id', 'price'];
     protected string $__entity = 'PriceComponent';
     public static $price_component;
     public static $price = 0;
 
-    protected array $__resources = [
-        'view' => ViewPriceComponent::class,
-        'show' => ShowPriceComponent::class
-    ];
-
-    public function prepareStorePriceComponent(mixed $attributes = null)
-    {
+    public function prepareStorePriceComponent(mixed $attributes = null){
         $attributes ??= request()->all();
 
         //GET EXISTING TARIFF COMPONENTS
@@ -107,16 +95,5 @@ class PriceComponent extends PackageManagement implements ContractsPriceComponen
         ]);
         // $this->updateOrCreate($attributes);
         return $this;
-    }
-
-    public function getPriceComponent(): mixed
-    {
-        return static::$price_component;
-    }
-
-    public function pricecomponent(mixed $conditionals = null)
-    {
-        $this->booting();
-        return $this->PriceComponentModel()->withParameters()->conditionals($conditionals);
     }
 }

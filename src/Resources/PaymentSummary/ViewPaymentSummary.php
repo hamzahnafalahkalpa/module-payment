@@ -3,8 +3,6 @@
 namespace Hanafalah\ModulePayment\Resources\PaymentSummary;
 
 use Hanafalah\LaravelSupport\Resources\ApiResource;
-use Hanafalah\ModulePayment\Models\Transaction\SplitBill;
-use Hanafalah\ModulePayment\Resources\PaymentDetail\ViewPaymentDetail;
 
 class ViewPaymentSummary extends ApiResource
 {
@@ -20,13 +18,10 @@ class ViewPaymentSummary extends ApiResource
         $arr = [
             'id'               => $this->id,
             'reference_type'   => $this->reference_type,
-            'total_amount'     => $this->total_amount,
-            'total_discount'   => $this->total_discount,
-            'total_debt'       => $this->total_debt,
-            'total_additional' => $this->total_additional,
-            'total_paid'       => $this->total_paid,
-            'total_tax'        => $this->total_tax,
-            'note'             => $this->note,
+            'amount'           => $this->amount,
+            'discount'         => $this->discount,
+            'debt'             => $this->debt,            
+            'paid'             => $this->paid,
             'reference'        => $this->relationValidation('reference', function () {
                 return $this->reference->toViewApi();
             }),
@@ -58,11 +53,11 @@ class ViewPaymentSummary extends ApiResource
                 });
             })
         ];
-        if (isset($this->pre_total_debt)) {
+        if (isset($this->pre_debt)) {
             $arr = $this->mergeArray($arr, [
-                "pre_total_debt"       => $this->pre_total_debt,
-                "pre_total_additional" => $this->pre_total_additional,
-                "pre_total_discount"   => $this->pre_total_discount,
+                "pre_debt"       => $this->pre_debt,
+                "pre_additional" => $this->pre_additional,
+                "pre_discount"   => $this->pre_discount,
             ]);
         }
 

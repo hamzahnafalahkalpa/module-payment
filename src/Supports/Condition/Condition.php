@@ -124,10 +124,10 @@ class Condition extends PackageManagement implements ConditionInterface
         $transaction->setRelation('childs', new Collection);
         $prop_summaries = new Collection;
         $payment_history->syncOriginal();
-        $payment_history->total_amount    = 0;
-        $payment_history->total_aditional = 0;
-        $payment_history->total_discount  = 0;
-        $payment_history->total_debt      = 0;
+        $payment_history->amount    = 0;
+        $payment_history->aditional = 0;
+        $payment_history->discount  = 0;
+        $payment_history->debt      = 0;
         foreach ($attributes['payment_summaries'] as $payment_summary) {
             //GET TRANSACTION FROM PAYMENT SUMMARY
             $this->findTransaction($payment_summary, $transaction);
@@ -155,15 +155,15 @@ class Condition extends PackageManagement implements ConditionInterface
                     $discounts                  += $payment_detail->discount;
                 }
 
-                $payment_summary_model->total_amount    = $this->rounding($amounts);
-                $payment_summary_model->total_aditional = $additionals;
-                $payment_summary_model->total_discount  = $discounts;
-                $payment_summary_model->total_debt      = $this->rounding($debts);
+                $payment_summary_model->amount    = $this->rounding($amounts);
+                $payment_summary_model->aditional = $additionals;
+                $payment_summary_model->discount  = $discounts;
+                $payment_summary_model->debt      = $this->rounding($debts);
 
-                $payment_history->total_amount          += $this->rounding($amounts);
-                $payment_history->total_aditional       += $additionals;
-                $payment_history->total_discount        += $discounts;
-                $payment_history->total_debt            += $this->rounding($debts);
+                $payment_history->amount          += $this->rounding($amounts);
+                $payment_history->aditional       += $additionals;
+                $payment_history->discount        += $discounts;
+                $payment_history->debt            += $this->rounding($debts);
             }
             static::$__payment_summaries[] = $payment_summary_model;
             $prop_summaries->push($payment_summary_model);
