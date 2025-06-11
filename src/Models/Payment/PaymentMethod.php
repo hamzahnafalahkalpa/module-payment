@@ -21,7 +21,7 @@ class PaymentMethod extends BaseModel
     public $incrementing  = false;
     protected $keyType    = "string";
     protected $primaryKey = 'id';
-    protected $list       = ['id', 'name', 'props'];
+    protected $list       = ['id', 'name', 'flag', 'props'];
 
     protected static function booted(): void
     {

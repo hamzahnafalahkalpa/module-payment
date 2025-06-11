@@ -6,5 +6,5 @@ enum Flag: string
 {
     case TUNAI     = 'TUNAI';
     case BILLED    = 'BILLED';
-    case NON_TUNAI = 'NON_TUNAI';
+    case NON_TUNAI = 'NON TUNAI';
 }
