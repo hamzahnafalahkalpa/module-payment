@@ -28,7 +28,7 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $table->ulid('id')->primary();
                 $table->string('name', 100)->unique();
-                $table->string('flag', 100)->unique();
+                $table->string('flag', 100);
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
