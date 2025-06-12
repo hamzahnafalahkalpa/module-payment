@@ -25,7 +25,12 @@ class ViewCoa extends ApiResource
             'code'           => $this->code,
             'status'         => $this->status,
             'created_at'     => $this->created_at,
-            'updated_at'     => $this->updated_at
+            'updated_at'     => $this->updated_at,
+            'childs' => $this->relationValidation('childs', function(){
+                return $this->childs->transform(function($child){
+                    return $child->toViewApi();
+                });
+            })
         ];
         return $arr;
     }

@@ -11,7 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Coa extends BaseModel
 {
     use SoftDeletes, HasProps;
-    protected $list = ['id', 'parent_id', 'flag', 'name', 'coa_type_id', 'code', 'balance_type', 'status', 'props'];
+    protected $list = [
+        'id', 'parent_id', 'flag', 'name', 
+        'coa_type_id', 'code', 'balance_type', 'status', 'props'
+    ];
 
     protected $casts = [
         'name' => 'string',
@@ -31,13 +34,11 @@ class Coa extends BaseModel
     }
 
     public function viewUsingRelation(): array{
-        return [];
+        return ['childs'];
     }
 
     public function showUsingRelation(): array{
-        return [
-            'childs'
-        ];
+        return ['childs'];
     }
 
     public function getViewResource(){

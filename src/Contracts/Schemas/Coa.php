@@ -18,7 +18,6 @@ use Hanafalah\ModulePayment\Contracts\Data\CoaData;
  * @method LengthAwarePaginator prepareViewCoaPaginate(PaginateData $paginate_dto)
  * @method array viewCoaPaginate(?PaginateData $paginate_dto = null)
  * @method array storeCoa(?CoaData $funding_dto = null)
- * @method Builder coa(mixed $conditionals = null)
  */
 interface Coa extends DataManagement
 {

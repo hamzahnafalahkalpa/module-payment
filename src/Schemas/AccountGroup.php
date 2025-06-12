@@ -23,8 +23,8 @@ class AccountGroup extends Coa implements ContractsAccountGroup
         $coa = $this->prepareStoreCoa($account_group_dto);
         if (isset($account_group_dto->coas) && count($account_group_dto->coas) > 0){
             foreach ($account_group_dto->coas as $coa_dto){
-                $coa_dto->parent_id   = $coa->getKey();
-                $coa_dto->coa_type_id = $account_group_dto->coa_type_id ?? null;
+                $coa_dto->parent_id     = $coa->getKey();
+                $coa_dto->coa_type_id ??= $account_group_dto->coa_type_id ?? null;
                 $this->prepareStoreCoa($coa_dto);
             }
         }

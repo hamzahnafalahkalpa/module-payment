@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\Coa as ContractsCoa;
 use Hanafalah\ModulePayment\Contracts\Data\CoaData;
+use Illuminate\Database\Eloquent\Builder;
+use PDO;
 
 class Coa extends PackageManagement implements ContractsCoa
 {
@@ -13,6 +15,15 @@ class Coa extends PackageManagement implements ContractsCoa
     public static $coa_model;
 
     public function prepareStoreCoa(CoaData $coa_dto): Model{
+        if (isset($coda_dto->coa_type)){
+            $coa_type_model = $this->schemaContract('coa_type')->prepareStoreCoaType($coa_dto->coa_type);
+            $coa_dto->coa_type_id = $coa_type_model->getKey();
+            $coa_dto->props['prop_coa_type'] = [
+                'id'   => $coa_type_model->getKey(),
+                'name' => $coa_type_model->name
+            ];
+        }
+
         $add = [
             'parent_id'     => $coa_dto->parent_id,
             'name'          => $coa_dto->name,
@@ -49,5 +60,9 @@ class Coa extends PackageManagement implements ContractsCoa
         $this->fillingProps($model,$coa_dto->props);
         $model->save();
         return static::$coa_model = $model;
+    }
+
+    public function coa(mixed $conditionals = null): Builder{
+        return $this->generalSchemaModel($conditionals)->whereNull('parent_id');
     }
 }

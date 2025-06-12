@@ -10,6 +10,7 @@ return [
         'contract'  => 'Contracts',
         'schema'    => 'Schemas',
         'database'  => 'Database',
+        'seeder'    => 'Database/Seeders',
         'data'      => 'Data',
         'resource'  => 'Resources',
         'migration' => '../assets/database/migrations'
