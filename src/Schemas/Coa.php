@@ -52,7 +52,7 @@ class Coa extends PackageManagement implements ContractsCoa
         }
 
         if (!isset($coa_dto->props['prop_coa_type']['name']) && isset($coa_dto->coa_type_id)){
-            $coa_type = $this->CoaModel()->findOrFail($coa_dto->coa_type_id);
+            $coa_type = $this->CoaTypeModel()->findOrFail($coa_dto->coa_type_id);
             $coa_dto->props['prop_coa_type']['id']   = $coa_type->getKey();
             $coa_dto->props['prop_coa_type']['name'] = $coa_type->name;
         }
