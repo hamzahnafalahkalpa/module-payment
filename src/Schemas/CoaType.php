@@ -35,9 +35,6 @@ class CoaType extends FinanceStuff implements ContractsCoaType
     }
 
     public function coaType(mixed $conditionals = null): Builder{
-        $this->booting();
-        return $this->usingEntity()->whereNull('parent_id')
-                    ->conditionals($this->mergeCondition($conditionals))
-                    ->withParameters()->orderBy('name','asc');
+        return $this->generalSchemaModel()->whereNull('parent_id');
     }
 }
