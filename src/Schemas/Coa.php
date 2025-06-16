@@ -30,7 +30,7 @@ class Coa extends PackageManagement implements ContractsCoa
             'flag'          => $coa_dto->flag,
             'code'          => $coa_dto->code ?? null,
             'coa_type_id'   => $coa_dto->coa_type_id ?? null,
-            'status'        => $coa_dto->status,
+            'status'        => $coa_dto->status ?? 'ACTIVE',
             'balance_type'  => $coa_dto->balance_type
         ];
         if (isset($coa_dto->id)){
