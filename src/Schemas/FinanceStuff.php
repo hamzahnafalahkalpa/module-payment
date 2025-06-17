@@ -14,6 +14,7 @@ class FinanceStuff extends BaseModulePayment implements ContractsFinanceStuff
 {
     protected string $__entity = 'FinanceStuff';
     public static $finance_stuff_model;
+    protected mixed $__order_by_created_at = false; //asc, desc, false
 
     protected array $__cache = [
         'index' => [
@@ -42,8 +43,6 @@ class FinanceStuff extends BaseModulePayment implements ContractsFinanceStuff
     }
 
     public function financeStuff(mixed $conditionals = null): Builder{
-        return $this->usingEntity()->whereNull('parent_id')
-                    ->conditionals($this->mergeCondition($conditionals))
-                    ->withParameters()->orderBy('name','asc');
+        return $this->generalSchemaModel($conditionals)->whereNull('parent_id');
     }
 }
