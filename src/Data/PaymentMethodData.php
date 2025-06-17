@@ -6,6 +6,7 @@ use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePayment\Contracts\Data\PaymentMethodData as DataPaymentMethodData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\Validation\In;
 
 class PaymentMethodData extends Data implements DataPaymentMethodData
 {
@@ -19,6 +20,7 @@ class PaymentMethodData extends Data implements DataPaymentMethodData
 
     #[MapInputName('flag')]
     #[MapName('flag')]
+    #[In('TUNAI','NON TUNAI','BILLED')]
     public string $flag;
 
     #[MapInputName('props')]

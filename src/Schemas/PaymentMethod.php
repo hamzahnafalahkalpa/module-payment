@@ -16,7 +16,6 @@ class PaymentMethod extends PackageManagement implements ContractsPaymentMethod
             'name' => $payment_method_dto->name,
             'flag' => $payment_method_dto->flag
         ];
-
         if (isset($payment_method_dto->id)){
             $guard = ['id' => $payment_method_dto->id];
             $create = [$guard,$add];
@@ -24,7 +23,7 @@ class PaymentMethod extends PackageManagement implements ContractsPaymentMethod
             $create = [$add];
         }
         $payment_method = $this->PaymentMethodModel()->updateOrCreate(...$create);
-        $this->fillingProps($payment_method, $payment_method_dto);
+        $this->fillingProps($payment_method, $payment_method_dto->props);
         $payment_method->save();
         return $payment_method;
     }

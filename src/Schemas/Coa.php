@@ -57,6 +57,14 @@ class Coa extends PackageManagement implements ContractsCoa
             $coa_dto->props['prop_coa_type']['name'] = $coa_type->name;
         }
 
+        if (isset($coa_dto->childs) && count($coa_dto->childs) > 0){
+            foreach ($coa_dto->childs as $coa_dto){
+                $coa_dto->parent_id     = $model->getKey();
+                $coa_dto->coa_type_id ??= $coa_dto->coa_type_id ?? null;
+                $this->prepareStoreCoa($coa_dto);
+            }
+        }
+
         $this->fillingProps($model,$coa_dto->props);
         $model->save();
         return static::$coa_model = $model;

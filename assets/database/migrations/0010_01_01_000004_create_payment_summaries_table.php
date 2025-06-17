@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Hanafalah\ModulePayment\{
     Models\Payment\PaymentSummary,
 };
-use Hanafalah\ModulePayment\Models\Transaction\Transaction;
+use Hanafalah\ModuleTransaction\Models\Transaction\Transaction;
 
 return new class extends Migration
 {
