@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method array viewFinanceStuffPaginate(?PaginateData $paginate_dto = null)
  * @method array storeFinanceStuff(?FinanceStuffData $finance_stuff_dto = null);
  */
-
 interface FinanceStuff extends DataManagement
 {
     public function prepareStoreFinanceStuff(FinanceStuffData $finance_stuff_dto): Model;

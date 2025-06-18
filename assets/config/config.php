@@ -39,5 +39,5 @@ return [
     'commands'  => [
         ModulePaymentCommands\InstallMakeCommand::class
     ],
-    'author' => \App\Models\User::class
+    'author' => 'User'
 ];

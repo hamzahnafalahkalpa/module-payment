@@ -1,6 +1,6 @@
 <?php
 
-namespace Hanafalah\ModulePayment\Models\Price;
+namespace Hanafalah\ModulePayment\Models\Accounting;
 
 use Hanafalah\ModulePayment\Resources\AccountGroup\ShowAccountGroup;
 use Hanafalah\ModulePayment\Resources\AccountGroup\ViewAccountGroup;

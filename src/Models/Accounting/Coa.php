@@ -1,6 +1,6 @@
 <?php
 
-namespace Hanafalah\ModulePayment\Models\Price;
+namespace Hanafalah\ModulePayment\Models\Accounting;
 
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
