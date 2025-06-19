@@ -22,9 +22,9 @@ class JournalEntryData extends Data implements DataJournalEntryData
     #[MapName('reference_id')]
     public mixed $reference_id;
 
-    #[MapInputName('transaction_id')]
-    #[MapName('transaction_id')]
-    public mixed $transaction_id;
+    #[MapInputName('transaction_reference_id')]
+    #[MapName('transaction_reference_id')]
+    public mixed $transaction_reference_id;
 
     #[MapInputName('journal_source_id')]
     #[MapName('journal_source_id')]
@@ -56,5 +56,21 @@ class JournalEntryData extends Data implements DataJournalEntryData
 
     public static function before(array &$attributes){
         if (!isset($attributes['id'])) $attributes['status'] = app(config('database.models.JournalEntry'))::STATUS_DRAFT;
+    }
+
+    public static function after(self $data): self{
+        $new = static::new();
+        $props = &$data->props;
+
+        $author = $new->{config('module-payment.author').'Model'}();
+        $author = (isset($data->author_id)) ? $author->findOrFail($data->author_id) : $author;
+        $props['prop_author'] = $author->toViewApi()->only(['id', 'name']);
+
+        $journal_source = $new->JournalSourceModel();
+        $journal_source = (isset($data->journal_source_id)) ? $author->findOrFail($data->journal_source_id) : $journal_source;
+        $props['prop_journal_source'] = $journal_source->toViewApi()->only([
+            'id', 'name', 'flag',
+        ]);
+        return $data;
     }
 }

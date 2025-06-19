@@ -14,7 +14,17 @@ class ViewJournalEntry extends ApiResource
    */
   public function toArray(\Illuminate\Http\Request $request): array
   {
-    $arr = parent::toArray($request);
+    $arr = [
+      'id'                       => $this->id,
+      'name'                     => $this->name,
+      'reference'                => $this->prop_reference,
+      'transaction_reference_id' => $this->transaction_reference_id,
+      'journal_source_id'        => $this->journal_source_id,
+      'journal_source'           => $this->prop_journal_source,
+      'reported_at'              => $this->reported_at,
+      'status'                   => $this->status,
+      'author'                   => $this->prop_author
+    ];
     return $arr;
   }
 }

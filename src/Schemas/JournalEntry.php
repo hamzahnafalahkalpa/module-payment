@@ -37,7 +37,7 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
             $guard = [
                 'reference_type' => $journal_entry_dto->reference_type,
                 'reference_id'   => $journal_entry_dto->reference_id,
-                'transaction_id' => $journal_entry_dto->transaction_id,
+                'transaction_reference_id' => $journal_entry_dto->transaction_reference_id,
             ];
         }
 

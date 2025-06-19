@@ -32,12 +32,12 @@ return new class extends Migration
                 $journal_source = app(config('database.models.JournalSource',JournalSource::class));
 
                 $table->ulid('id')->primary();
-                $table->string('reference_type', 50)->nullable(false);
-                $table->string('reference_id', 36)->nullable(false);
-                $table->foreignIdFor($transaction::class)->nullable(false)
-                      ->index()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+                $table->string('reference_type', 50)->nullable();
+                $table->string('reference_id', 36)->nullable();
+                $table->foreignIdFor($transaction::class,'reference_transaction_id')->nullable()
+                      ->index('jr_trx')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
 
-                $table->foreignIdFor($journal_source::class)->nullable(false)
+                $table->foreignIdFor($journal_source::class)->nullable()
                       ->index()->constrained()->restrictOnDelete()->cascadeOnUpdate();
                 $table->string('name', 255)->nullable();
                 $table->timestamp('reported_at')->nullable();

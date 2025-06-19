@@ -9,11 +9,12 @@ use Hanafalah\ModulePayment\Resources\JournalEntry\{
     ViewJournalEntry,
     ShowJournalEntry
 };
+use Hanafalah\ModuleTransaction\Concerns\HasTransaction;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class JournalEntry extends BaseModel
 {
-    use HasUlids, HasProps, SoftDeletes;
+    use HasUlids, HasProps, SoftDeletes, HasTransaction;
     
     const STATUS_DRAFT = 'DRAFT';
     const STATUS_POSTED = 'POSTED';
@@ -22,16 +23,10 @@ class JournalEntry extends BaseModel
     protected $keyType    = 'string';
     protected $primaryKey = 'id';
     public $list = [
-        'id',
-        'name',
-        'reference_type',
-        'reference_id',
-        'transaction_id',
-        'journal_source_id',
-        'reported_at',
-        'status',
-        'author_type',
-        'author_id',
+        'id', 'name', 'reference_type', 'reference_id',
+        'transaction_reference_id', 'journal_source_id',
+        'reported_at', 'status',
+        'author_type', 'author_id',
         'props',
     ];
 
@@ -65,7 +60,7 @@ class JournalEntry extends BaseModel
     }
 
     public function journalSource(){return $this->belongsToModel('JournalSource');}
-    public function transaction(){return $this->belongsToModel('Transaction');}
+    public function transactionReference(){return $this->belongsToModel('Transaction','transaction_reference_id');}
     public function reference(){return $this->morphTo();}
     public function author(){return $this->morphTo();}
 }
