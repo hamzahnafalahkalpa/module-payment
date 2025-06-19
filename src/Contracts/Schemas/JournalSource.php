@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @see \Hanafalah\ModulePayment\Schemas\JournalSource
+ * @method self setParamLogic(string $logic, bool $search_value = false, ?array $optionals = [])
  * @method self conditionals(mixed $conditionals)
  * @method array updateJournalSource(?JournalSourceData $journal_source_dto = null)
  * @method Model prepareUpdateJournalSource(JournalSourceData $journal_source_dto)

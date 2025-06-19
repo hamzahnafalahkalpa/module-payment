@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @see \Hanafalah\ModulePayment\Schemas\CoaType
+ * @method self setParamLogic(string $logic, bool $search_value = false, ?array $optionals = [])
  * @method self conditionals(mixed $conditionals)
  * @method array updateCoaType(?CoaTypeData $coa_type_dto = null)
  * @method Model prepareUpdateCoaType(CoaTypeData $coa_type_dto)

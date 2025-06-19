@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @see \Hanafalah\ModulePayment\Schemas\FinanceStuff
+ * @method self setParamLogic(string $logic, bool $search_value = false, ?array $optionals = [])
  * @method self conditionals(mixed $conditionals)
  * @method array updateFinanceStuff(?FinanceStuffData $finance_stuff_dto = null)
  * @method Model prepareUpdateFinanceStuff(FinanceStuffData $finance_stuff_dto)
