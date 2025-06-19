@@ -48,7 +48,9 @@ class JournalEntry extends BaseModel
     }
 
     public function showUsingRelation(): array{
-        return [];
+        return [
+            'coaEntries'
+        ];
     }
 
     public function getViewResource(){
@@ -63,4 +65,5 @@ class JournalEntry extends BaseModel
     public function transactionReference(){return $this->belongsToModel('Transaction','transaction_reference_id');}
     public function reference(){return $this->morphTo();}
     public function author(){return $this->morphTo();}
+    public function coaEntries(){return $this->hasManyModel('CoaEntry');}
 }

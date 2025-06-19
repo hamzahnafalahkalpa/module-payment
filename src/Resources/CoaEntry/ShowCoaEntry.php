@@ -1,8 +1,8 @@
 <?php
 
-namespace Hanafalah\ModulePayment\Resources\JournalEntry;
+namespace Hanafalah\ModulePayment\Resources\CoaEntry;
 
-class ShowJournalEntry extends ViewJournalEntry
+class ShowCoaEntry extends ViewCoaEntry
 {
   /**
    * Transform the resource into an array.
@@ -12,13 +12,7 @@ class ShowJournalEntry extends ViewJournalEntry
    */
   public function toArray(\Illuminate\Http\Request $request): array
   {
-    $arr = [
-      'coa_entries' => $this->relationValidation('coaEntries',function(){
-        return $this->coaEntries->transform(function($coaEntry){
-          return $coaEntry->toViewApi();
-        });
-      })
-    ];
+    $arr = [];
     $arr = $this->mergeArray(parent::toArray($request),$arr);
     return $arr;
   }

@@ -2,7 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Schemas;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModulePayment\{
     Supports\BaseModulePayment
@@ -42,6 +41,14 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
         }
 
         $journal_entry = $this->usingEntity()->updateOrCreate($guard,$add);
+
+        if (isset($journal_entry_dto->coa_entries) && count($journal_entry_dto->coa_entries) > 0){
+            foreach ($journal_entry_dto->coa_entries as $coa_entry){
+                $coa_entry->journal_entry_id = $journal_entry->getKey();
+                $this->schemaContract('coa_entry')->prepareStoreCoaEntry($coa_entry);
+            }
+        }
+
         $this->fillingProps($journal_entry,$journal_entry_dto->props);
         $journal_entry->save();
         return static::$journal_entry_model = $journal_entry;

@@ -5,6 +5,7 @@ namespace Hanafalah\ModulePayment\Data;
 use Carbon\Carbon;
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePayment\Contracts\Data\JournalEntryData as DataJournalEntryData;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
@@ -16,19 +17,19 @@ class JournalEntryData extends Data implements DataJournalEntryData
 
     #[MapInputName('reference_type')]
     #[MapName('reference_type')]
-    public string $reference_type;
+    public ?string $reference_type = null;
 
     #[MapInputName('reference_id')]
     #[MapName('reference_id')]
-    public mixed $reference_id;
+    public mixed $reference_id = null;
 
     #[MapInputName('transaction_reference_id')]
     #[MapName('transaction_reference_id')]
-    public mixed $transaction_reference_id;
+    public mixed $transaction_reference_id = null;
 
     #[MapInputName('journal_source_id')]
     #[MapName('journal_source_id')]
-    public mixed $journal_source_id;
+    public mixed $journal_source_id = null;
 
     #[MapInputName('name')]
     #[MapName('name')]
@@ -49,6 +50,11 @@ class JournalEntryData extends Data implements DataJournalEntryData
     #[MapInputName('author_id')]
     #[MapName('author_id')]
     public ?string $author_id = null;
+
+    #[MapInputName('coa_entries')]
+    #[MapName('coa_entries')]
+    #[DataCollectionOf(CoaEntryData::class)]
+    public ?array $coa_entries = null;
 
     #[MapInputName('props')]
     #[MapName('props')]
