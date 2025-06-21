@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Resources\JournalSource\{
 
 class JournalSource extends FinanceStuff
 {
-    protected $table    = 'finance_stuffs';
+    protected $table    = 'unicodes';
 
 
     protected static function booted(): void{

@@ -7,6 +7,7 @@ use Hanafalah\ModulePayment\Contracts\Data\JournalSourceData as DataJournalSourc
 class JournalSourceData extends FinanceStuffData implements DataJournalSourceData
 {
     public static function before(array &$attributes){
-        $attributes['flag'] = 'JournalSource';
+        $attributes['flag'] ??= 'JournalSource';
+        parent::before($attributes);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Schemas;
 
-use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
-
 /**
  * @see \Hanafalah\ModulePayment\Schemas\PaymentMethod
  * @method self setParamLogic(string $logic, bool $search_value = false, ?array $optionals = [])
@@ -20,4 +18,4 @@ use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
  * @method array viewPaymentMethodPaginate(?PaginateData $paginate_dto = null)
  * @method Builder function paymentMethod(mixed $conditionals = null)
  */
-interface PaymentMethod extends DataManagement {}
+interface PaymentMethod extends FinanceStuff {}

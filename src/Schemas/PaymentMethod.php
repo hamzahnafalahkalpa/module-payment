@@ -2,29 +2,21 @@
 
 namespace Hanafalah\ModulePayment\Schemas;
 
-use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Data\PaymentMethodData;
 use Hanafalah\ModulePayment\Contracts\Schemas\PaymentMethod as ContractsPaymentMethod;
+use Illuminate\Database\Eloquent\Builder;
 
-class PaymentMethod extends PackageManagement implements ContractsPaymentMethod
+class PaymentMethod extends FinanceStuff implements ContractsPaymentMethod
 {
     protected string $__entity = 'PaymentMethod';
     public static $payment_method_model;
 
     public function prepareStorePaymentMethod(PaymentMethodData $payment_method_dto){
-        $add = [
-            'name' => $payment_method_dto->name,
-            'flag' => $payment_method_dto->flag
-        ];
-        if (isset($payment_method_dto->id)){
-            $guard = ['id' => $payment_method_dto->id];
-            $create = [$guard,$add];
-        }else{
-            $create = [$add];
-        }
-        $payment_method = $this->PaymentMethodModel()->updateOrCreate(...$create);
-        $this->fillingProps($payment_method, $payment_method_dto->props);
-        $payment_method->save();
-        return $payment_method;
+        $payment_method = $this->prepareStoreFinanceStuff($payment_method_dto);
+        return self::$payment_method_model = $payment_method;
+    }
+
+    public function paymentMethod(mixed $conditionals = null): Builder{
+        return $this->financeStuff($conditionals);
     }
 }

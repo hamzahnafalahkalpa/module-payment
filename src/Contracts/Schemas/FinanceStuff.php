@@ -2,6 +2,7 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Schemas;
 
+use Hanafalah\LaravelSupport\Contracts\Schemas\Unicode;
 use Hanafalah\ModulePayment\Contracts\Data\FinanceStuffData;
 //use Hanafalah\ModulePayment\Contracts\Data\FinanceStuffUpdateData;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
@@ -25,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method array viewFinanceStuffPaginate(?PaginateData $paginate_dto = null)
  * @method array storeFinanceStuff(?FinanceStuffData $finance_stuff_dto = null);
  */
-interface FinanceStuff extends DataManagement
+interface FinanceStuff extends Unicode
 {
     public function prepareStoreFinanceStuff(FinanceStuffData $finance_stuff_dto): Model;
     public function financeStuff(mixed $conditionals = null): Builder;

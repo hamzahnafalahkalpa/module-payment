@@ -3,8 +3,9 @@
 namespace Hanafalah\ModulePayment\Resources\PaymentMethod;
 
 use Hanafalah\LaravelSupport\Resources\ApiResource;
+use Hanafalah\ModulePayment\Resources\FinanceStuff\ViewFinanceStuff;
 
-class ViewPaymentMethod extends ApiResource
+class ViewPaymentMethod extends ViewFinanceStuff
 {
 
     /**
@@ -16,13 +17,8 @@ class ViewPaymentMethod extends ApiResource
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
-            'id'   => $this->id,
-            'name' => $this->name,
-            'flag' => $this->flag,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
-
+        $arr = $this->mergeArray(parent::toArray($request), $arr);
         return $arr;
     }
 }

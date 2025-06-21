@@ -4,9 +4,6 @@ namespace Hanafalah\ModulePayment\Schemas;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Hanafalah\ModulePayment\{
-    Supports\BaseModulePayment
-};
 use Hanafalah\ModulePayment\Contracts\Schemas\CoaType as ContractsCoaType;
 use Hanafalah\ModulePayment\Contracts\Data\CoaTypeData;
 

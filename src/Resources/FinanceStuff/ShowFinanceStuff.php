@@ -2,6 +2,8 @@
 
 namespace Hanafalah\ModulePayment\Resources\FinanceStuff;
 
+use Hanafalah\LaravelSupport\Resources\Unicode\ShowUnicode;
+
 class ShowFinanceStuff extends ViewFinanceStuff
 {
   /**
@@ -13,7 +15,8 @@ class ShowFinanceStuff extends ViewFinanceStuff
   public function toArray(\Illuminate\Http\Request $request): array
   {
     $arr = [];
-    $arr = $this->mergeArray(parent::toArray($request),$arr);
+    $show = $this->resolveNow(new ShowUnicode($this));
+    $arr = $this->mergeArray(parent::toArray($request),$show,$arr);
     return $arr;
   }
 }

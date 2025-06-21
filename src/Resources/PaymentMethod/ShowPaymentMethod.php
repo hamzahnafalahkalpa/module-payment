@@ -2,8 +2,7 @@
 
 namespace Hanafalah\ModulePayment\Resources\PaymentMethod;
 
-use Hanafalah\LaravelSupport\Resources\ApiResource;
-use Hanafalah\ModulePayment\Resources\TransactionItem\ShowTransactionItem;
+use Hanafalah\ModulePayment\Resources\FinanceStuff\ShowFinanceStuff;
 
 class ShowPaymentMethod extends ViewPaymentMethod
 {
@@ -17,8 +16,8 @@ class ShowPaymentMethod extends ViewPaymentMethod
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [];
-        $arr = $this->mergeArray(parent::toArray($request), $arr);
-
+        $show = $this->resolveNow(new ShowFinanceStuff($this));
+        $arr = $this->mergeArray(parent::toArray($request),$show,$arr);
         return $arr;
     }
 }

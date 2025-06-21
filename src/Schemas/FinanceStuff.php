@@ -2,15 +2,13 @@
 
 namespace Hanafalah\ModulePayment\Schemas;
 
+use Hanafalah\LaravelSupport\Schemas\Unicode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Hanafalah\ModulePayment\{
-    Supports\BaseModulePayment
-};
 use Hanafalah\ModulePayment\Contracts\Schemas\FinanceStuff as ContractsFinanceStuff;
 use Hanafalah\ModulePayment\Contracts\Data\FinanceStuffData;
 
-class FinanceStuff extends BaseModulePayment implements ContractsFinanceStuff
+class FinanceStuff extends Unicode implements ContractsFinanceStuff
 {
     protected string $__entity = 'FinanceStuff';
     public static $finance_stuff_model;
@@ -25,24 +23,11 @@ class FinanceStuff extends BaseModulePayment implements ContractsFinanceStuff
     ];
 
     public function prepareStoreFinanceStuff(FinanceStuffData $finance_stuff_dto): Model{
-        $add = [
-            'parent_id' => $finance_stuff_dto->parent_id,
-            'name'      => $finance_stuff_dto->name,
-            'flag'      => $finance_stuff_dto->flag
-        ];
-        if (isset($finance_stuff_dto->id)){
-            $guard = ['id' => $finance_stuff_dto->id];
-            $create = [$guard,$add];
-        }else{
-            $create = [$add];
-        }
-        $finance_stuff = $this->usingEntity()->updateOrCreate(...$create);
-        $this->fillingProps($finance_stuff,$finance_stuff_dto->props);
-        $finance_stuff->save();
+        $finance_stuff = $this->prepareStoreUnicode($finance_stuff_dto);
         return static::$finance_stuff_model = $finance_stuff;
     }
 
     public function financeStuff(mixed $conditionals = null): Builder{
-        return $this->generalSchemaModel($conditionals)->whereNull('parent_id');
+        return $this->unicode($conditionals);
     }
 }

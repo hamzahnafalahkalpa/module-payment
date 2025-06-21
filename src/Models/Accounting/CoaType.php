@@ -6,7 +6,7 @@ use Hanafalah\ModulePayment\Models\Price\FinanceStuff;
 
 class CoaType extends FinanceStuff
 {
-    protected $table = 'finance_stuffs';
+    protected $table = 'unicodes';
 
     protected static function booted(): void{
         parent::booted();

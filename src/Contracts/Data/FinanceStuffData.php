@@ -2,4 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Data;
 
-interface FinanceStuffData {}
+use Hanafalah\LaravelSupport\Contracts\Data\UnicodeData;
+
+interface FinanceStuffData extends UnicodeData {}

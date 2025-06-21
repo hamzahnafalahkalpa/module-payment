@@ -2,9 +2,9 @@
 
 namespace Hanafalah\ModulePayment\Resources\FinanceStuff;
 
-use Hanafalah\LaravelSupport\Resources\ApiResource;
+use Hanafalah\LaravelSupport\Resources\Unicode\ViewUnicode;
 
-class ViewFinanceStuff extends ApiResource
+class ViewFinanceStuff extends ViewUnicode
 {
   /**
    * Transform the resource into an array.
@@ -14,19 +14,8 @@ class ViewFinanceStuff extends ApiResource
    */
   public function toArray(\Illuminate\Http\Request $request): array
   {
-    $arr = [
-      'id'         => $this->id,
-      'parent_id'  => $this->parent_id,
-      'name'       => $this->name,
-      'flag'       => $this->flag,
-      'created_at' => $this->created_at,
-      'updated_at' => $this->updated_at,
-      'childs'     => $this->relationValidation('childs',function(){
-        return $this->childs->transform(function($child){
-          return $child->toViewApi();
-        });
-      })
-    ];
+    $arr = [];
+    $arr = $this->mergeArray(parent::toArray($request),$arr);
     return $arr;
   }
 }

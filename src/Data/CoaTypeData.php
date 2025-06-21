@@ -7,6 +7,7 @@ use Hanafalah\ModulePayment\Contracts\Data\CoaTypeData as DataCoaTypeData;
 class CoaTypeData extends FinanceStuffData implements DataCoaTypeData
 {
     public static function before(array &$attributes){
-        $attributes['flag'] = 'CoaType';
+        $attributes['flag'] ??= 'CoaType';
+        parent::before($attributes);
     }
 }

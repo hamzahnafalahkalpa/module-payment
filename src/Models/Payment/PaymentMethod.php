@@ -2,23 +2,15 @@
 
 namespace Hanafalah\ModulePayment\Models\Payment;
 
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Hanafalah\LaravelHasProps\Concerns\HasProps;
-use Hanafalah\LaravelSupport\Models\BaseModel;
+use Hanafalah\ModulePayment\Models\Price\FinanceStuff;
 use Hanafalah\ModulePayment\Resources\PaymentMethod\{
     ShowPaymentMethod,
     ViewPaymentMethod
 };
 
-class PaymentMethod extends BaseModel
+class PaymentMethod extends FinanceStuff
 {
-    use HasUlids, HasProps, SoftDeletes;
-
-    public $incrementing  = false;
-    protected $keyType    = "string";
-    protected $primaryKey = 'id';
-    protected $list       = ['id', 'name', 'flag', 'props'];
+    protected $table = 'unicodes';
 
     public function getShowResource()
     {
