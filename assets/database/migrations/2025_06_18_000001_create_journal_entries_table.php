@@ -44,6 +44,7 @@ return new class extends Migration
                 $table->string('status',50)->default($this->__table::STATUS_DRAFT)->nullable(false);
                 $table->string('author_type',50)->nullable();
                 $table->string('author_id',36)->nullable();
+                $table->bigInteger('current_balance')->nullable();
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

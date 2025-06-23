@@ -73,10 +73,19 @@ class JournalEntryData extends Data implements DataJournalEntryData
         $props['prop_author'] = $author->toViewApi()->only(['id', 'name']);
 
         $journal_source = $new->JournalSourceModel();
-        $journal_source = (isset($data->journal_source_id)) ? $author->findOrFail($data->journal_source_id) : $journal_source;
-        $props['prop_journal_source'] = $journal_source->toViewApi()->only([
-            'id', 'name', 'flag',
-        ]);
+        $journal_source = (isset($data->journal_source_id)) ? $journal_source->findOrFail($data->journal_source_id) : $journal_source;
+        $props['prop_journal_source'] = $journal_source->toViewApi()->only(['id', 'name', 'flag']);
+
+        if (isset($data->id)){
+            $journal_entry = $new->JournalEntryModel()->findOrFail($data->id);
+
+            $new->fillMissingFromModel($data, $journal_entry, [
+                'reference_type', 'reference_id', 'transaction_reference_id'
+            ]);
+
+            $reference = $new->{$data->reference_type.'Model'}()->findOrFail($data->reference_id);
+            $props['prop_reference'] = $reference->toViewApi()->only(['id', 'name']);
+        }
         return $data;
     }
 }

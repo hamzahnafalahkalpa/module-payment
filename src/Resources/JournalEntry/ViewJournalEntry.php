@@ -22,6 +22,7 @@ class ViewJournalEntry extends ApiResource
       'journal_source_id'        => $this->journal_source_id,
       'journal_source'           => $this->prop_journal_source,
       'reported_at'              => $this->reported_at,
+      'current_balance'          => $this->current_balance,
       'status'                   => $this->status,
       'author'                   => $this->prop_author
     ];

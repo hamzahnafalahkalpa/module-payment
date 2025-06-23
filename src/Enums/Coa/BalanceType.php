@@ -6,4 +6,5 @@ enum BalanceType: string
 {
     case DEBIT   = 'DEBIT';
     case CREDIT  = 'CREDIT';
+    case MIXED   = 'MIXED';
 }

@@ -25,7 +25,8 @@ class JournalEntry extends BaseModel
     public $list = [
         'id', 'name', 'reference_type', 'reference_id',
         'transaction_reference_id', 'journal_source_id',
-        'reported_at', 'status',
+        'reported_at', 'status', 
+        'current_balance',
         'author_type', 'author_id',
         'props',
     ];

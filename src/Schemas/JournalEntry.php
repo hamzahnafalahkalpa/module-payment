@@ -34,6 +34,7 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
             $guard  = ['id' => $journal_entry_dto->id];
         }else{
             $guard = [
+                'id'             => null,
                 'reference_type' => $journal_entry_dto->reference_type,
                 'reference_id'   => $journal_entry_dto->reference_id,
                 'transaction_reference_id' => $journal_entry_dto->transaction_reference_id,
@@ -41,12 +42,22 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
         }
 
         $journal_entry = $this->usingEntity()->updateOrCreate($guard,$add);
-
         if (isset($journal_entry_dto->coa_entries) && count($journal_entry_dto->coa_entries) > 0){
+            $current_balance = 0;
+            $kredit_balance  = 0;
+            $debit_balance   = 0;
             foreach ($journal_entry_dto->coa_entries as $coa_entry){
                 $coa_entry->journal_entry_id = $journal_entry->getKey();
-                $this->schemaContract('coa_entry')->prepareStoreCoaEntry($coa_entry);
+                $coa_entry = $this->schemaContract('coa_entry')->prepareStoreCoaEntry($coa_entry);
+                if ($coa_entry->balance_type == 'debit'){
+                    $debit_balance += $coa_entry->value;
+                }else{
+                    $kredit_balance += $coa_entry->value;
+                }
             }
+            $current_balance = $debit_balance - $kredit_balance;
+            $journal_entry->current_balance = $current_balance;
+            $journal_entry->save();
         }
 
         $this->fillingProps($journal_entry,$journal_entry_dto->props);
