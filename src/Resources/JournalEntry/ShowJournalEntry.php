@@ -13,6 +13,9 @@ class ShowJournalEntry extends ViewJournalEntry
   public function toArray(\Illuminate\Http\Request $request): array
   {
     $arr = [
+      'reference'   => $this->relationValidation('reference',function(){
+        return $this->reference->toShowApi();
+      }),
       'coa_entries' => $this->relationValidation('coaEntries',function(){
         return $this->coaEntries->transform(function($coaEntry){
           return $coaEntry->toViewApi();

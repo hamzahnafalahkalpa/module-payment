@@ -25,10 +25,8 @@ class JournalEntry extends BaseModel
     public $list = [
         'id', 'name', 'reference_type', 'reference_id',
         'transaction_reference_id', 'journal_source_id',
-        'reported_at', 'status', 
-        'current_balance',
-        'author_type', 'author_id',
-        'props',
+        'reported_at', 'status', 'current_balance',
+        'author_type', 'author_id', 'props',
     ];
 
     protected $casts = [
@@ -37,11 +35,8 @@ class JournalEntry extends BaseModel
         'journal_source_name' => 'string'
     ];
 
-    public function getPropsQuery(): array
-    {
-        return [
-            'journal_source_name' => 'props->prop_journal_source->name'
-        ];
+    public function getPropsQuery(): array{
+        return ['journal_source_name' => 'props->prop_journal_source->name'];
     }
 
     public function viewUsingRelation(): array{
@@ -50,7 +45,8 @@ class JournalEntry extends BaseModel
 
     public function showUsingRelation(): array{
         return [
-            'coaEntries'
+            'transactionReference','journalSource',
+            'coaEntries', 'reference', 'author'
         ];
     }
 
