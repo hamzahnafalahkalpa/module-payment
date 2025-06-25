@@ -40,7 +40,6 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
                 'transaction_reference_id' => $journal_entry_dto->transaction_reference_id,
             ];
         }
-
         $journal_entry = $this->usingEntity()->updateOrCreate($guard,$add);
         if (isset($journal_entry_dto->coa_entries) && count($journal_entry_dto->coa_entries) > 0){
             $current_balance = 0;
