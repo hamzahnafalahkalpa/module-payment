@@ -17,19 +17,19 @@ class ShowBilling extends ViewBilling
     {
         $arr = [
             'author'         => $this->relationValidation('author', function () {
-                return $this->author->toShowApi();
+                return $this->author->toShowApi()->resolve();
             }),
             'cashier'        => $this->relationValidation('cashier', function () {
-                return $this->cashier->toShowApi();
+                return $this->cashier->toShowApi()->resolve();
             }),
             'split_bills' => $this->relationValidation('splitBills', function () {
                 return $this->splitBills->map(function ($splitBill) {
-                    return $splitBill->toShowApi();
+                    return $splitBill->toShowApi()->resolve();
                 });
             }),
             'splitBills' => $this->relationValidation('splitBills', function () {
                 return $this->splitBills->map(function ($splitBill) {
-                    return $splitBill->toShowApi();
+                    return $splitBill->toShowApi()->resolve();
                 });
             }),
         ];

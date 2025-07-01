@@ -19,11 +19,11 @@ class ViewVoucher extends ApiResource
             'max_benefit_value'   => $this->max_benefit_value,
             'is_auto_implement'   => ($this->is_auto_implement ?? 0) == 1,
             'author'              => $this->relationValidation('employee', function () {
-                return $this->author->toViewApi();
+                return $this->author->toViewApi()->resolve();
             }),
             'voucher_rules'       => $this->relationValidation('voucherRules', function () {
                 return $this->voucherRules->transform(function ($voucherRule) {
-                    return $voucherRule->toViewApi();
+                    return $voucherRule->toViewApi()->resolve();
                 });
             })
         ];

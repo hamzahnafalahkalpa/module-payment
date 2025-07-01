@@ -22,16 +22,16 @@ class ViewBilling extends ApiResource
             'billing_code'   => $this->billing_code,
             'transaction_id' => $this->transaction_id,
             'author'         => $this->relationValidation('author', function () {
-                return $this->author->toViewApi();
+                return $this->author->toViewApi()->resolve();
             }),
             'cashier'        => $this->relationValidation('cashier', function () {
-                return $this->cashier->toViewApi();
+                return $this->cashier->toViewApi()->resolve();
             }),
             'transaction'  => $this->relationValidation('hasTransaction', function () {
-                return $this->hasTransaction->toShowApi();
+                return $this->hasTransaction->toShowApi()->resolve();
             }),
             'transaction_billing' => $this->relationValidation('transaction', function () {
-                return $this->transaction->toShowApi();
+                return $this->transaction->toShowApi()->resolve();
             }),
             'debt'     => $this->debt ?? 0,
             'amount'   => $this->amount ?? 0,

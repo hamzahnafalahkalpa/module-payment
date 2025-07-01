@@ -18,10 +18,10 @@ class ViewRefundItem extends ApiResource
         $arr = [
             'id'     => $this->id,
             'refund' => $this->relationValidation('refund', function () {
-                return $this->refund->toViewApi();
+                return $this->refund->toViewApi()->resolve();
             }),
             'item'   => $this->relationValidation('item', function () {
-                return $this->item->toViewApi();
+                return $this->item->toViewApi()->resolve();
             })
         ];
 

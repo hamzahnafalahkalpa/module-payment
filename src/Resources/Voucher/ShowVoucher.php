@@ -15,11 +15,11 @@ class ShowVoucher extends ViewVoucher
     {
         $arr = [
             'author'              => $this->relationValidation('employee', function () {
-                return $this->author->toShowApi();
+                return $this->author->toShowApi()->resolve();
             }),
             'voucher_rules'       => $this->relationValidation('voucherRules', function () {
                 return $this->voucherRules->transform(function ($voucherRule) {
-                    return $voucherRule->toShowApi();
+                    return $voucherRule->toShowApi()->resolve();
                 });
             })
         ];

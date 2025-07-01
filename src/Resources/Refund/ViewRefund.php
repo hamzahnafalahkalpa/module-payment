@@ -19,16 +19,16 @@ class ViewRefund extends ApiResource
             'id'          => $this->id,
             'refund_code' => $this->refund_code,
             'author'      => $this->relationValidation('author', function () {
-                return $this->author->toViewApi();
+                return $this->author->toViewApi()->resolve();
             }),
             'withdrawal_at' => $this->withdrawal_at,
             'total' => $this->total,
             'transaction' => $this->relationValidation('transaction', function () {
-                return $this->transaction->toViewApi();
+                return $this->transaction->toViewApi()->resolve();
             }),
             'refund_items' => $this->relationValidation('refundItems', function () {
                 return $this->refundItems->map(function ($refundItem) {
-                    return $refundItem->toViewApi();
+                    return $refundItem->toViewApi()->resolve();
                 });
             })
         ];

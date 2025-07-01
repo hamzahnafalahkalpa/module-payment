@@ -15,7 +15,7 @@ class ShowVoucherRule extends ViewVoucherRule
     {
         $arr = [
             'voucher'             => $this->relationValidation('voucher', function () {
-                return $this->voucher->toShowApi();
+                return $this->voucher->toShowApi()->resolve();
             })
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);

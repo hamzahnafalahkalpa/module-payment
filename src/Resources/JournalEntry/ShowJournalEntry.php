@@ -14,11 +14,11 @@ class ShowJournalEntry extends ViewJournalEntry
   {
     $arr = [
       'reference'   => $this->relationValidation('reference',function(){
-        return $this->reference->toShowApi();
+        return $this->reference->toShowApi()->resolve();
       }),
       'coa_entries' => $this->relationValidation('coaEntries',function(){
         return $this->coaEntries->transform(function($coaEntry){
-          return $coaEntry->toViewApi();
+          return $coaEntry->toViewApi()->resolve();
         });
       })
     ];

@@ -17,7 +17,7 @@ class ViewAccountGroup extends ViewCoa
     $arr = [
       'coas' => $this->relationValidation('coas', function(){
           return $this->coas->transform(function($coa){
-              return $coa->toShowApi();
+              return $coa->toShowApi()->resolve();
           });
       })
     ];

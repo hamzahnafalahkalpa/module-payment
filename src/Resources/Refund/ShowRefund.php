@@ -18,7 +18,7 @@ class ShowRefund extends ViewRefund
         $arr = [
             'refund_items' => $this->relationValidation('refundItems', function () {
                 return $this->refundItems->transform(function ($refundItem) {
-                    return $refundItem->toViewApi();
+                    return $refundItem->toViewApi()->resolve();
                 });
             })
         ];

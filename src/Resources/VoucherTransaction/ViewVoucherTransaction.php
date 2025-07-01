@@ -12,13 +12,13 @@ class ViewVoucherTransaction extends ApiResource
             'id'      => $this->id,
             'name'    => $this->name,
             'voucher' => $this->relationValidation('voucher', function () {
-                return $this->voucher->toViewApi();
+                return $this->voucher->toViewApi()->resolve();
             }),
             'consument' => $this->relationValidation('consument', function () {
-                return $this->consument->toViewApi();
+                return $this->consument->toViewApi()->resolve();
             }),
             'payment_history' => $this->relationValidation('paymentHistory', function () {
-                return $this->paymentHistory->toViewApi();
+                return $this->paymentHistory->toViewApi()->resolve();
             })
         ];
 

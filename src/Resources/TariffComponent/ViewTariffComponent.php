@@ -20,7 +20,7 @@ class ViewTariffComponent extends ApiResource
             'name' => $this->name,
             'component_details' => $this->relationValidation('componentDetails', function () {
                 return $this->componentDetails->transform(function ($component) {
-                    return $component->toViewApi();
+                    return $component->toViewApi()->resolve();
                 });
             }),
             'created_at' => $this->created_at,

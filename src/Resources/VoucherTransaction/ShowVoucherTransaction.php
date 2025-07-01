@@ -15,13 +15,13 @@ class ShowVoucherTransaction extends ViewVoucherTransaction
     {
         $arr = [
             'voucher' => $this->relationValidation('voucher', function () {
-                return $this->voucher->toShowApi();
+                return $this->voucher->toShowApi()->resolve();
             }),
             'consument' => $this->relationValidation('consument', function () {
-                return $this->consument->toShowApi();
+                return $this->consument->toShowApi()->resolve();
             }),
             'payment_history' => $this->relationValidation('paymentHistory', function () {
-                return $this->paymentHistory->toShowApi();
+                return $this->paymentHistory->toShowApi()->resolve();
             })
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);

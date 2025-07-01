@@ -16,10 +16,10 @@ class ViewInvoice extends ApiResource
             'paid_at'           => $this->paid_at,
             'created_at'        => $this->created_at,
             'transaction_billing_deferred' => $this->relationValidation('transactionBillingDeferred', function () {
-                return $this->transactionBillingDeferred->toViewApi();
+                return $this->transactionBillingDeferred->toViewApi()->resolve();
             }),
             'payment_summary'   => $this->relationValidation('paymentSummary', function () {
-                return $this->paymentSummary->toViewApi();
+                return $this->paymentSummary->toViewApi()->resolve();
             }),
             'author'            => $this->relationValidation('author', function () {
                 $author = $this->author;

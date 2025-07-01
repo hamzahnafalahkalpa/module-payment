@@ -15,7 +15,7 @@ class ShowPriceComponent extends ViewPriceComponent
     {
         $arr = [
             'tariff_component' => $this->relationValidation('tariffComponent', function () {
-                return $this->tariffComponent->toShowApi();
+                return $this->tariffComponent->toShowApi()->resolve();
             })
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);

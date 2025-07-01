@@ -19,13 +19,13 @@ class ShowPaymentDetail extends ViewPaymentDetail
         $arr = [
             'transaction_item' => $this->relationValidation('transactionItem', function () {
                 $transactionItem = $this->transactionItem;
-                return $transactionItem->toShowApi();
+                return $transactionItem->toShowApi()->resolve();
             }),
             'paymentHistory'  => $this->relationValidation("paymentHistory", function () {
-                return $this->paymentHistory->toShowApi();
+                return $this->paymentHistory->toShowApi()->resolve();
             }),
             'payment_history'  => $this->relationValidation("paymentHistory", function () {
-                return $this->paymentHistory->toShowApi();
+                return $this->paymentHistory->toShowApi()->resolve();
             })
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);

@@ -17,7 +17,7 @@ class ShowPaymentSummary extends ViewPaymentSummary
             'name'             => $this->name ?? null,
             'reference_type'   => $this->reference_type,
             'transaction'      => $this->relationValidation('transaction', function () {
-                return $this->transaction->toShowApi();
+                return $this->transaction->toShowApi()->resolve();
             }),
             'refund'           => $this->refund,
             'additional'       => $this->additional,
@@ -27,18 +27,18 @@ class ShowPaymentSummary extends ViewPaymentSummary
                 $paymentDetails = $this->paymentDetails;
                 return $paymentDetails->transform(function ($paymentDetail) {
                     $paymentDetail->load('paymentHistory');
-                    return $paymentDetail->toShowApi();
+                    return $paymentDetail->toShowApi()->resolve();
                 });
             }),
             'childs' => $this->relationValidation('childs', function () {
                 $childs = $this->childs;
                 return $childs->transform(function ($child) {
-                    return $child->toShowApi();
+                    return $child->toShowApi()->resolve();
                 });
             }),
             'payment_summaries' => $this->relationValidation('paymentSummaries', function () {
                 return $this->paymentSummaries->transform(function ($paymentSummary) {
-                    return $paymentSummary->toShowApi();
+                    return $paymentSummary->toShowApi()->resolve();
                 });
             })
         ];
@@ -47,7 +47,7 @@ class ShowPaymentSummary extends ViewPaymentSummary
             $arr['childs'] = $this->relationValidation('recursiveChilds', function () {
                 $childs = $this->recursiveChilds;
                 return $childs->transform(function ($child) {
-                    return $child->toShowApi();
+                    return $child->toShowApi()->resolve();
                 });
             });
         }
@@ -56,7 +56,7 @@ class ShowPaymentSummary extends ViewPaymentSummary
             $arr['childs'] = $this->relationValidation('recursiveInvoiceChilds', function () {
                 $childs = $this->recursiveInvoiceChilds;
                 return $childs->transform(function ($child) {
-                    return $child->toShowApi();
+                    return $child->toShowApi()->resolve();
                 });
             });
         }

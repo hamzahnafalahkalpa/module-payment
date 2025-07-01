@@ -19,7 +19,7 @@ class ViewPriceComponent extends ApiResource
             'id'         => $this->id,
             'price'      => $this->price,
             'tariff_component' => $this->relationValidation('tariffComponent', function () {
-                return $this->tariffComponent->toViewApi();
+                return $this->tariffComponent->toViewApi()->resolve();
             }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

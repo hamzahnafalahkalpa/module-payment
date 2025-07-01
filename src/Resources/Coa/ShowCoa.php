@@ -18,7 +18,7 @@ class ShowCoa extends ViewCoa
         $arr = [
             'childs' => $this->relationValidation('childs', function(){
                 return $this->childs->transform(function($child){
-                    return $child->toShowApi();
+                    return $child->toShowApi()->resolve();
                 });
             })
         ];

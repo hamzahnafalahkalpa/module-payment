@@ -22,23 +22,23 @@ class ViewSplitBill extends ApiResource
             'paid'        => $this->paid,
             'note'              => $this->note,
             'payer'             => $this->relationValidation('payer', function () {
-                return $this->payer->toViewApi();
+                return $this->payer->toViewApi()->resolve();
             }),
             'payment_summary'   => $this->relationValidation('paymentSummary', function () {
-                return $this->paymentSummary->toViewApi();
+                return $this->paymentSummary->toViewApi()->resolve();
             }),
             'payment_history' => $this->relationValidation('paymentHistory', function () {
-                return $this->paymentHistory->toViewApi();
+                return $this->paymentHistory->toViewApi()->resolve();
             }),
             'payment_details' => $this->getPaymentDetails(),
             // 'payment_details' => $this->relationValidation('paymentHistoryDetails',function(){
             //     return $this->paymentHistoryDetails->transform(function($payment_history){
-            //         return $payment_history->toViewApi();
+            //         return $payment_history->toViewApi()->resolve();
             //     });
             // }),
             // 'payment_history_details' => $this->relationValidation('paymentHistoryDetails',function(){
             //     return $this->paymentHistoryDetails->transform(function($payment_history){
-            //         return $payment_history->toViewApi();
+            //         return $payment_history->toViewApi()->resolve();
             //     });
             // }),
             'created_at'      => $this->created_at,

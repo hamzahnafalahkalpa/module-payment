@@ -17,7 +17,7 @@ class ShowDeposit extends ViewDeposit
     {
         $arr = [
             'reference' => $this->relationValidation('reference', function () {
-                return $this->reference->toShowApi();
+                return $this->reference->toShowApi()->resolve();
             })
         ];
 
