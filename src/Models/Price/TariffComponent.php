@@ -2,23 +2,13 @@
 
 namespace Hanafalah\ModulePayment\Models\Price;
 
-use Hanafalah\LaravelSupport\Models\BaseModel;
-use Hanafalah\ModulePayment\Enums\TariffComponent\Flag;
+use Hanafalah\LaravelSupport\Models\Unicode\Unicode;
 use Hanafalah\ModulePayment\Resources\TariffComponent\ShowTariffComponent;
 use Hanafalah\ModulePayment\Resources\TariffComponent\ViewTariffComponent;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
-class TariffComponent extends BaseModel
+class TariffComponent extends Unicode
 {
-    use HasUlids;
-
-    public $incrementing  = false;
-    protected $keyType    = 'string';
-    protected $primaryKey = 'id';
-    protected $fillable   = ['id', 'name'];
-    protected $casts = [
-        'name' => 'string'
-    ];
+    protected $table = 'unicodes';
 
     public function showUsingRelation(): array{
         return ['componentDetails'];
@@ -32,11 +22,5 @@ class TariffComponent extends BaseModel
         return ShowTariffComponent::class;
     }
 
-    public function getFlags(){
-        return array_column(Flag::cases(), 'value');
-    }
-
-    public function componentDetails(){
-        return $this->morphManyModel('ComponentDetail', 'reference');
-    }
+    public function componentDetails(){return $this->morphManyModel('ComponentDetail', 'reference');}
 }

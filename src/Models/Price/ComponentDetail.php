@@ -24,18 +24,7 @@ class ComponentDetail extends BaseModel
         'name' => 'string'
     ];
 
-    public function getViewResource()
-    {
-        return ViewComponentDetail::class;
-    }
-
-    public function getShowResource()
-    {
-        return ShowComponentDetail::class;
-    }
-
-    public function reference()
-    {
-        return $this->morphTo();
-    }
+    public function getViewResource(){return ViewComponentDetail::class;}
+    public function getShowResource(){return ShowComponentDetail::class;}
+    public function reference(){return $this->morphTo();}
 }
