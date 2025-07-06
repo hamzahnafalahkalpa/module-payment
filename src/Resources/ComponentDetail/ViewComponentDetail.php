@@ -17,7 +17,9 @@ class ViewComponentDetail extends ApiResource
     {
         $arr = [
             'id'   => $this->id,
-            'name' => $this->flag
+            'name' => $this->flag,
+            'coa_id' => $this->coa_id,
+            'coa' => $this->prop_coa
         ];
 
         return $arr;

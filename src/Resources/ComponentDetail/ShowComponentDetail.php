@@ -1,8 +1,8 @@
 <?php
 
-namespace Hanafalah\ModulePayment\Resources\TariffComponent;
+namespace Hanafalah\ModulePayment\Resources\ComponentDetail;
 
-class ShowComponentDetail extends ViewTariffComponent
+class ShowComponentDetail extends ViewComponentDetail
 {
 
     /**
@@ -15,7 +15,6 @@ class ShowComponentDetail extends ViewTariffComponent
     {
         $arr = [];
         $arr = $this->mergeArray(parent::toArray($request), $arr);
-
         return $arr;
     }
 }

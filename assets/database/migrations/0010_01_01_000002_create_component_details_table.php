@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Hanafalah\ModulePayment\{
     Models\Price\ComponentDetail,
 };
+use Hanafalah\ModulePayment\Models\Accounting\Coa;
 
 return new class extends Migration
 {
@@ -29,10 +30,14 @@ return new class extends Migration
         $table_name = $this->__table->getTable();
         if (!$this->isTableExists()) {
             Schema::create($table_name, function (Blueprint $table) {
+                $coa = app(config('database.models.Coa', Coa::class));
+
                 $table->ulid('id')->primary();
                 $table->string('reference_type', 50)->nullable(false);
                 $table->string('reference_id', 36)->nullable(false);
                 $table->string('flag', 255)->nullable(false);
+                $table->foreignIdFor($coa, 'coa_id')->nullable()->index()->constrained()
+                      ->cascadeOnUpdate()->restrictOnDelete();
                 $table->json('props')->nullable();
             });
         }

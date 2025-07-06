@@ -5,12 +5,10 @@ namespace Hanafalah\ModulePayment\Models\Price;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
-use Hanafalah\ModulePayment\Resources\ComponentDetail\ViewComponentDetail;
-use Hanafalah\ModulePayment\Resources\TariffComponent\ShowComponentDetail;
+use Hanafalah\ModulePayment\Resources\ComponentDetail\{ViewComponentDetail, ShowComponentDetail};
 
 class ComponentDetail extends BaseModel
 {
-
     use HasUlids, HasProps;
 
     public $timestamps    = false;
@@ -18,7 +16,7 @@ class ComponentDetail extends BaseModel
     protected $primaryKey = 'id';
     protected $keyType    = 'string';
 
-    protected $fillable = ['id', 'reference_type', 'reference_id', 'flag'];
+    protected $list = ['id', 'reference_type', 'reference_id', 'flag', 'coa_id', 'props'];
 
     protected $casts = [
         'name' => 'string'
@@ -27,4 +25,5 @@ class ComponentDetail extends BaseModel
     public function getViewResource(){return ViewComponentDetail::class;}
     public function getShowResource(){return ShowComponentDetail::class;}
     public function reference(){return $this->morphTo();}
+    public function coa(){return $this->belongsToModel('Coa');}
 }
