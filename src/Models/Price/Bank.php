@@ -6,11 +6,15 @@ use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\ModulePayment\Enums\Bank\Status;
 use Hanafalah\ModulePayment\Resources\Bank\{ViewBank, ShowBank};
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bank extends BaseModel
 {
-    use SoftDeletes, HasProps;
+    use HasUlids, SoftDeletes, HasProps;
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
     protected $list = ['id', 'name', 'account_number', 'account_name', 'status', 'props'];
 
     protected $casts = [

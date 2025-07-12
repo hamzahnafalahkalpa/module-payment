@@ -6,11 +6,16 @@ use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\ModulePayment\Enums\Coa\Status;
 use Hanafalah\ModulePayment\Resources\Coa\{ViewCoa, ShowCoa};
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Coa extends BaseModel
 {
-    use SoftDeletes, HasProps;
+    use SoftDeletes, HasProps, HasUlids;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
     protected $list = [
         'id', 'parent_id', 'flag', 'name', 
         'coa_type_id', 'code', 'balance_type', 'status', 'props'
