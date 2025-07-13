@@ -30,7 +30,7 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $coa_type = app(config('database.models.CoaType', CoaType::class));
 
-                $table->id();
+                $table->ulid('id')->primary();
                 $table->string('name', 100)->nullable();
                 $table->string('code', 60)->nullable();
                 $table->string('flag', 100)->nullable(false);

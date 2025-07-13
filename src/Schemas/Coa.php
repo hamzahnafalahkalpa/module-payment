@@ -40,7 +40,7 @@ class Coa extends PackageManagement implements ContractsCoa
             $create = [$add];
         }
 
-        if ($coa_dto->flag == 'Coa'){
+        if (isset($coa_dto->parent_id)){
             $model = $this->CoaModel()->updateOrCreate(...$create);
             if (!isset($coa_dto->props['prop_parent']['name']) && isset($coa_dto->parent_id)){
                 $parent = $this->usingEntity()->findOrFail($coa_dto->parent_id);

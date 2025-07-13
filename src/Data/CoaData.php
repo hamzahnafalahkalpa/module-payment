@@ -69,7 +69,7 @@ class CoaData extends Data implements DataCoaData
     public ?array $props = null;
 
     public static function after(CoaData $data): CoaData{
-        $data->flag = 'Coa';
+        $data->flag ??= 'Coa';
 
         if (isset($data->account_group_id)){
             $data->parent_id = $data->account_group_id;
