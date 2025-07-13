@@ -14,11 +14,7 @@ class AccountGroup extends Coa
         parent::booted();
         static::addGlobalScope('coa-status', function ($query) {
             $query->whereNull('parent_id')
-                  ->flagIn(['AccountGroup'])
                   ->where('status', Status::ACTIVE->value);
-        });
-        static::creating(function($query){
-            $query->flag = 'AccountGroup';
         });
     }
 
