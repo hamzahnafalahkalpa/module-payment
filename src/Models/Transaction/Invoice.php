@@ -45,13 +45,6 @@ class Invoice extends BaseModel
             $consument                   = $query->consument;
             $transaction->consument_name = $consument->name ?? '-';
         });
-        static::updating(function ($query) {
-            if ($query->isDirty('billing_at')) {
-                if (!isset($query->invoice_code)) {
-                    //                    $query->invoice_code = static::hasEncoding('INVOICE');
-                }
-            }
-        });
         static::updated(function ($query) {
             if ($query->isDirty('billing_at')) {
                 $consument = $query->consument;
