@@ -18,12 +18,11 @@ class ShowCoa extends ViewCoa
         $arr = [
             'childs' => $this->relationValidation('childs', function(){
                 return $this->childs->transform(function($child){
-                    return $child->toShowApi()->resolve();
+                    return $child->toShowApi();
                 });
             })
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);
-
         return $arr;
     }
 }
