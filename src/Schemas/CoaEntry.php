@@ -13,7 +13,7 @@ use Hanafalah\ModulePayment\Contracts\Data\CoaEntryData;
 class CoaEntry extends BaseModulePayment implements ContractsCoaEntry
 {
     protected string $__entity = 'CoaEntry';
-    public static $coa_entry_model;
+    public $coa_entry_model;
 
     protected array $__cache = [
         'index' => [
@@ -41,6 +41,6 @@ class CoaEntry extends BaseModulePayment implements ContractsCoaEntry
         $coa_entry = $this->usingEntity()->updateOrCreate(...$create);
         $this->fillingProps($coa_entry,$coa_entry_dto->props);
         $coa_entry->save();
-        return static::$coa_entry_model = $coa_entry;
+        return $this->coa_entry_model = $coa_entry;
     }
 }

@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Resources\VoucherRule\{ViewVoucherRule, ShowVoucherR
 
 class VoucherRule extends PackageManagement implements ContractsVoucherRule
 {
-    public static $voucher_rule_model;
+    public $voucher_rule_model;
 
 
     protected array $__resources = [
@@ -25,7 +25,7 @@ class VoucherRule extends PackageManagement implements ContractsVoucherRule
 
     public function getVoucherRule(): mixed
     {
-        return static::$voucher_rule_model;
+        return $this->voucher_rule_model;
     }
 
     public function prepareStoreVoucherRule(?array $attributes = null): Model
@@ -42,7 +42,7 @@ class VoucherRule extends PackageManagement implements ContractsVoucherRule
         $model->rule = $attributes['rule'] ?? null;
         $model->save();
 
-        return static::$voucher_rule_model = $model;
+        return $this->voucher_rule_model = $model;
     }
 
     public function storeVoucherRule(): array
@@ -64,7 +64,7 @@ class VoucherRule extends PackageManagement implements ContractsVoucherRule
         } else {
             $model->load($this->showUsingRelation());
         }
-        return static::$voucher_rule_model = $model;
+        return $this->voucher_rule_model = $model;
     }
 
     public function showVoucherRule(?Model $model = null): array
@@ -78,7 +78,7 @@ class VoucherRule extends PackageManagement implements ContractsVoucherRule
     {
         $attributes ??= request()->all();
 
-        return static::$voucher_rule_model = $this->voucherRule()->orderBy('name', 'asc')->get();
+        return $this->voucher_rule_model = $this->voucherRule()->orderBy('name', 'asc')->get();
     }
 
     public function viewVoucherRuleList(): array

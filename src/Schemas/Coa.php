@@ -12,7 +12,7 @@ use PDO;
 class Coa extends PackageManagement implements ContractsCoa
 {
     protected string $__entity = 'Coa';
-    public static $coa_model;
+    public $coa_model;
 
     public function prepareStoreCoa(CoaData $coa_dto): Model{
         if (isset($coda_dto->coa_type)){
@@ -67,7 +67,7 @@ class Coa extends PackageManagement implements ContractsCoa
 
         $this->fillingProps($model,$coa_dto->props);
         $model->save();
-        return static::$coa_model = $model;
+        return $this->coa_model = $model;
     }
 
     public function coa(mixed $conditionals = null): Builder{

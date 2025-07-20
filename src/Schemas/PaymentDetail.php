@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentDetail extends PackageManagement implements ContractsPaymentDetail
 {
     protected string $__entity = 'PaymentDetail';
-    public static $payment_detail_model;
+    public $payment_detail_model;
 
     protected function viewUsingRelation(): array{
         return [];
@@ -22,7 +22,7 @@ class PaymentDetail extends PackageManagement implements ContractsPaymentDetail
     }
 
     public function getPaymentDetail(): mixed{
-        return static::$payment_detail_model;
+        return $this->payment_detail_model;
     }
 
     public function prepareStorePaymentDetail(PaymentDetailData $payment_detail_dto): Model{
@@ -43,7 +43,7 @@ class PaymentDetail extends PackageManagement implements ContractsPaymentDetail
             return $add;
         }));
 
-        return static::$payment_detail_model = $payment_detail;
+        return $this->payment_detail_model = $payment_detail;
     }
 
     public function storePaymentDetail(?PaymentDetailData $payment_detail_dto = null): array{

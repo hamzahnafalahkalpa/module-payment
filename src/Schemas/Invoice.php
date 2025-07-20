@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends PackageManagement implements ContractsInvoice
 {
     protected string $__entity = 'Invoice';
-    public static $invoice_model;
+    public $invoice_model;
 
     public function prepareStoreInvoice(InvoiceData $invoice_dto): Model{
         $add = [

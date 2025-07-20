@@ -16,7 +16,7 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
 {
     use PaymentCalculation, PaymentHistoryMapper;
 
-    public static $payment_history_model;
+    public $payment_history_model;
     private $__split_bill_model;
     private $__billing_model;
     private $__split_transaction_model;
@@ -37,7 +37,7 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
 
     public function getPaymentHistory(): mixed
     {
-        return static::$payment_history_model;
+        return $this->payment_history_model;
     }
 
     protected function createPaymentHistory(PaymentHistoryData $payment_history_dto): Model
@@ -110,7 +110,7 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
         // $payment_history->setAttribute('paid_summaries',$this->__history_paid_summaries);
         $payment_history->save();
         $payment_history->load('childs.paymentDetails');
-        return static::$payment_history_model = $payment_history;
+        return $this->payment_history_model = $payment_history;
     }
 
     protected function clonePaymentSummary(Model &$payment_history, Model $payment_summary): Model
@@ -250,7 +250,7 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
         } else {
             $model->load($this->showUsingRelation());
         }
-        return static::$payment_history_model = $model;
+        return $this->payment_history_model = $model;
     }
 
     public function showPaymentHistory(?Model $model = null): array

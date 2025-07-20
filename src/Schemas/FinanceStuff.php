@@ -11,7 +11,7 @@ use Hanafalah\ModulePayment\Contracts\Data\FinanceStuffData;
 class FinanceStuff extends Unicode implements ContractsFinanceStuff
 {
     protected string $__entity = 'FinanceStuff';
-    public static $finance_stuff_model;
+    public $finance_stuff_model;
     protected mixed $__order_by_created_at = false; //asc, desc, false
 
     protected array $__cache = [
@@ -24,7 +24,7 @@ class FinanceStuff extends Unicode implements ContractsFinanceStuff
 
     public function prepareStoreFinanceStuff(FinanceStuffData $finance_stuff_dto): Model{
         $finance_stuff = $this->prepareStoreUnicode($finance_stuff_dto);
-        return static::$finance_stuff_model = $finance_stuff;
+        return $this->finance_stuff_model = $finance_stuff;
     }
 
     public function financeStuff(mixed $conditionals = null): Builder{

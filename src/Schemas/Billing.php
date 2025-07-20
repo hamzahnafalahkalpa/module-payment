@@ -13,7 +13,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class Billing extends PackageManagement implements ContractsBilling
 {
     protected string $__entity = 'Billing';
-    public static $billing_model;
+    public $billing_model;
 
     protected function viewUsingRelation(): array{
         return ['hasTransaction.reference'];
@@ -29,7 +29,7 @@ class Billing extends PackageManagement implements ContractsBilling
     }
 
     public function getBilling(): mixed{
-        return static::$billing_model;
+        return $this->billing_model;
     }
 
     public function initializeBilling(Model $billing): void{
@@ -41,7 +41,7 @@ class Billing extends PackageManagement implements ContractsBilling
             ...$paginate_dto->toArray()
         )->appends(request()->all());
 
-        return static::$billing_model = $billing;
+        return $this->billing_model = $billing;
     }
 
     public function viewBillingPaginate(?PaginateData $paginate_dto = null): array{
@@ -84,7 +84,7 @@ class Billing extends PackageManagement implements ContractsBilling
         $billing->refresh();
         $billing->load(['splitBills.paymentHistory.paymentHistoryDetails']);
 
-        return static::$billing_model = $billing;
+        return $this->billing_model = $billing;
     }
 
     public function storeBilling(?BillingData $billing_dto = null): array{
@@ -110,7 +110,7 @@ class Billing extends PackageManagement implements ContractsBilling
             $model->load($this->showUsingRelation());
         }
 
-        return static::$billing_model = $model;
+        return $this->billing_model = $model;
     }
 
     protected function findBillingById(): Model{

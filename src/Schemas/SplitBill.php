@@ -11,7 +11,7 @@ use Hanafalah\ModulePayment\Resources\SplitBill\ViewSplitBill;
 class SplitBill extends PackageManagement implements ContractsSplitBill
 {
     protected string $__entity = 'SplitBill';
-    public static $split_bill_model;
+    public $split_bill_model;
 
     protected function showUsingRelation(): array{
         return [
@@ -111,7 +111,7 @@ class SplitBill extends PackageManagement implements ContractsSplitBill
         $split_bill->save();
         $split_bill->reporting();
         $billing->save();
-        return static::$split_bill_model = $split_bill;
+        return $this->split_bill_model = $split_bill;
     }
 
     private function paymentMethodProp($attributes, $payment_method, &$split_bill)
@@ -161,7 +161,7 @@ class SplitBill extends PackageManagement implements ContractsSplitBill
             $model->load($this->showUsingRelation());
         }
 
-        return static::$split_bill_model = $model;
+        return $this->split_bill_model = $model;
     }
 
     public function showSplitBill(?Model $model = null): array
@@ -177,6 +177,6 @@ class SplitBill extends PackageManagement implements ContractsSplitBill
 
     public function getSplitBill(): mixed
     {
-        return static::$split_bill_model;
+        return $this->split_bill_model;
     }
 }

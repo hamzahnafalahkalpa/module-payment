@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Contracts\Data\BankData;
 class Bank extends PackageManagement implements ContractsBank
 {
     protected string $__entity = 'Bank';
-    public static $bank_model;
+    public $bank_model;
     protected mixed $__order_by_created_at = false; //asc, desc, false
 
     public function prepareStoreBank(BankData $bank_dto): Model{
@@ -31,6 +31,6 @@ class Bank extends PackageManagement implements ContractsBank
             ]);
         }
 
-        return static::$bank_model = $model;
+        return $this->bank_model = $model;
     }
 }

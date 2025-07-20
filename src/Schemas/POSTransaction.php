@@ -8,7 +8,7 @@ use Hanafalah\ModuleTransaction\Schemas\Transaction;
 
 class POSTransaction extends Transaction implements ContractsPOSTransaction
 {
-    public static $billing_model;
+    public $billing_model;
 
     protected function showUsingRelation(): array
     {
@@ -40,7 +40,7 @@ class POSTransaction extends Transaction implements ContractsPOSTransaction
             'split_bills'    => $transaction->split_bills,
             'reported_at'    => now()
         ]);
-        return static::$billing_model = $billing;
+        return $this->billing_model = $billing;
     }
 
     public function checkout(): array
@@ -67,7 +67,7 @@ class POSTransaction extends Transaction implements ContractsPOSTransaction
             'author_id'      => $attributes['author_id'] ?? null,
             'split_bills'    => $attributes['split_bills'] ?? $attributes['split_bill'] ?? []
         ]);
-        return static::$billing_model = $billing;
+        return $this->billing_model = $billing;
     }
 
     public function storePaidPayment(): array

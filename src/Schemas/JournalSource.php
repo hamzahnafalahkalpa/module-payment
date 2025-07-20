@@ -12,7 +12,7 @@ class JournalSource extends FinanceStuff implements ContractsJournalSource
 {
     protected string $__entity = 'JournalSource';
     protected $__config_name = 'module-payment';
-    public static $journal_source_model;
+    public $journal_source_model;
     protected mixed $__order_by_created_at = false; //asc, desc, false
 
     protected array $__cache = [
@@ -25,7 +25,7 @@ class JournalSource extends FinanceStuff implements ContractsJournalSource
 
     public function prepareStoreJournalSource(JournalSourceData $journal_source_dto): Model{
         $journal_source = parent::prepareStoreFinanceStuff($journal_source_dto);
-        return static::$journal_source_model = $journal_source;
+        return $this->journal_source_model = $journal_source;
     }
 
     public function journalSource(mixed $conditionals = null): Builder{

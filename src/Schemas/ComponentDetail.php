@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Contracts\Schemas\ComponentDetail as ContractsCompon
 class ComponentDetail extends PackageManagement implements ContractsComponentDetail
 {
     protected string $__entity = 'ComponentDetail';
-    public static $component_detail_model;
+    public $component_detail_model;
 
     protected array $__cache = [
         'index' => [
@@ -36,6 +36,6 @@ class ComponentDetail extends PackageManagement implements ContractsComponentDet
         $component_detail = $this->usingEntity()->updateOrCreate(...$create);
         $this->fillingProps($component_detail,$component_detail_dto->props);
         $component_detail->save();
-        return static::$component_detail_model = $component_detail;
+        return $this->component_detail_model = $component_detail;
     }
 }

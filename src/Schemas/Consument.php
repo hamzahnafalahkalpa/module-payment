@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Contracts\Data\ConsumentData;
 class Consument extends PackageManagement implements ContractsConsument
 {
     protected string $__entity = 'Consument';
-    public static $consument_model;
+    public $consument_model;
 
     public function prepareStoreConsument(ConsumentData $consument_dto): Model{
         $add = [
@@ -28,6 +28,6 @@ class Consument extends PackageManagement implements ContractsConsument
         $consument = $this->usingEntity()->updateOrCreate(...$create);
         $this->fillingProps($consument,$consument_dto->props);
         $consument->save();
-        return static::$consument_model = $consument;
+        return $this->consument_model = $consument;
     }
 }

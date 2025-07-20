@@ -12,7 +12,7 @@ use Hanafalah\ModulePayment\Contracts\Data\JournalEntryData;
 class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
 {
     protected string $__entity = 'JournalEntry';
-    public static $journal_entry_model;
+    public $journal_entry_model;
 
     protected array $__cache = [
         'index' => [
@@ -61,6 +61,6 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
 
         $this->fillingProps($journal_entry,$journal_entry_dto->props);
         $journal_entry->save();
-        return static::$journal_entry_model = $journal_entry;
+        return $this->journal_entry_model = $journal_entry;
     }
 }

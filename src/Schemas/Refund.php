@@ -14,7 +14,7 @@ use Hanafalah\ModulePayment\Resources\Refund\ViewRefund;
 class Refund extends PackageManagement implements ContractsRefund
 {
     protected string $__entity = 'Refund';
-    public static $refund_model;
+    public $refund_model;
 
     public function prepareViewRefundPaginate(mixed $cache_reference_type = null, ?array $morphs = null, int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): LengthAwarePaginator{
         $morphs ??= $cache_reference_type;
@@ -87,7 +87,7 @@ class Refund extends PackageManagement implements ContractsRefund
             $model->load($this->showUsingRelation());
         }
 
-        return static::$refund_model = $model;
+        return $this->refund_model = $model;
     }
 
     public function showRefund(?Model $model = null): array
@@ -111,6 +111,6 @@ class Refund extends PackageManagement implements ContractsRefund
 
     public function getRefund(): mixed
     {
-        return static::$refund_model;
+        return $this->refund_model;
     }
 }

@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Contracts\Data\CoaTypeData;
 class CoaType extends FinanceStuff implements ContractsCoaType
 {
     protected string $__entity = 'CoaType';
-    public static $coa_type_model;
+    public $coa_type_model;
 
     protected array $__cache = [
         'index' => [
@@ -28,7 +28,7 @@ class CoaType extends FinanceStuff implements ContractsCoaType
                     ]);
         $this->fillingProps($coa_type,$coa_type_dto->props);
         $coa_type->save();
-        return static::$coa_type_model = $coa_type;
+        return $this->coa_type_model = $coa_type;
     }
 
     public function coaType(mixed $conditionals = null): Builder{

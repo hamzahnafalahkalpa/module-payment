@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 class PaymentMethod extends FinanceStuff implements ContractsPaymentMethod
 {
     protected string $__entity = 'PaymentMethod';
-    public static $payment_method_model;
+    public $payment_method_model;
 
     public function prepareStorePaymentMethod(PaymentMethodData $payment_method_dto){
         $payment_method = $this->prepareStoreFinanceStuff($payment_method_dto);

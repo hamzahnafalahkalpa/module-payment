@@ -9,7 +9,7 @@ use Hanafalah\ModulePayment\Contracts\Data\AccountGroupData;
 class AccountGroup extends Coa implements ContractsAccountGroup
 {
     protected string $__entity = 'AccountGroup';
-    public static $account_group_model;
+    public $account_group_model;
 
     protected array $__cache = [
         'index' => [
@@ -29,6 +29,6 @@ class AccountGroup extends Coa implements ContractsAccountGroup
             }
         }
         $coa->load('coas');
-        return static::$account_group_model = $coa;
+        return $this->account_group_model = $coa;
     }
 }

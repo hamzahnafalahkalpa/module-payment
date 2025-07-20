@@ -19,7 +19,7 @@ class Voucher extends PackageManagement implements ContractsVoucher
     use PaymentCalculation;
 
     protected string $__entity = 'voucher';
-    public static $voucher_model;
+    public $voucher_model;
 
     protected array $__resources = [
         'view' => ViewVoucher::class,
@@ -35,7 +35,7 @@ class Voucher extends PackageManagement implements ContractsVoucher
 
     public function getVoucher(): mixed
     {
-        return static::$voucher_model;
+        return $this->voucher_model;
     }
 
     public function prepareStoreVoucher(?array $attributes = null): Model
@@ -85,7 +85,7 @@ class Voucher extends PackageManagement implements ContractsVoucher
             $model->voucherRules()->whereNotIn('id', $keep)->delete();
         }
         $model->save();
-        return static::$voucher_model = $model;
+        return $this->voucher_model = $model;
     }
 
     public function storeVoucher(): array
@@ -107,7 +107,7 @@ class Voucher extends PackageManagement implements ContractsVoucher
         } else {
             $model->load($this->showUsingRelation());
         }
-        return static::$voucher_model = $model;
+        return $this->voucher_model = $model;
     }
 
     public function showVoucher(?Model $model = null): array

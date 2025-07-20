@@ -10,7 +10,7 @@ use Hanafalah\ModulePayment\Contracts\Schemas\TariffComponent as ContractsTariff
 class TariffComponent extends Unicode implements ContractsTariffComponent
 {
     protected string $__entity = 'TariffComponent';
-    public static $tariff_component_model;
+    public $tariff_component_model;
 
     protected array $__cache = [
         'index' => [
@@ -37,6 +37,6 @@ class TariffComponent extends Unicode implements ContractsTariffComponent
         }
         $this->fillingProps($tariff,$tariff_component_dto->props);
         $tariff->save();
-        return static::$tariff_component_model = $tariff;
+        return $this->tariff_component_model = $tariff;
     }
 }

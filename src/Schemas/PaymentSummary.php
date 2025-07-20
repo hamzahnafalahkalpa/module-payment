@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentSummary extends PackageManagement implements ContractsPaymentSummary
 {
     protected string $__entity = 'PaymentSummary';
-    public static $payment_summary_model;
+    public $payment_summary_model;
 
     public function prepareStorePaymentSummary(PaymentSummaryData $payment_summary_dto): Model{
         $add = [
@@ -29,6 +29,6 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
         $payment_summary = $this->usingEntity()->updateOrCreate(...$create);
         $this->fillingProps($payment_summary, $payment_summary_dto->props);
         $payment_summary->save();
-        return static::$payment_summary_model = $payment_summary;
+        return $this->payment_summary_model = $payment_summary;
     }
 }
