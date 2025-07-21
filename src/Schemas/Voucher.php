@@ -135,7 +135,7 @@ class Voucher extends PackageManagement implements ContractsVoucher
     public function prepareViewVoucherList(?array $attributes = null): Collection
     {
         $attributes ??= request()->all();
-        static::$voucher_model = $vouchers = $this->voucher()
+        $this->voucher_model = $vouchers = $this->voucher()
             ->when(isset(request()->available_voucher), function ($query) {
                 $query->whereNull('is_auto_implement');
             })->with('voucherRules')->orderBy('name', 'asc')->get();

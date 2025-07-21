@@ -33,21 +33,7 @@ class Billing extends PackageManagement implements ContractsBilling
     }
 
     public function initializeBilling(Model $billing): void{
-        static::$billing_model = $billing;
-    }
-
-    public function prepareViewBillingPaginate(PaginateData $paginate_dto): LengthAwarePaginator{
-        $billing = $this->billing()->with($this->viewUsingRelation())->paginate(
-            ...$paginate_dto->toArray()
-        )->appends(request()->all());
-
-        return $this->billing_model = $billing;
-    }
-
-    public function viewBillingPaginate(?PaginateData $paginate_dto = null): array{
-        return $this->viewEntityResource(function() use ($paginate_dto){
-            return $this->prepareViewBillingPaginate($paginate_dto ?? $this->requestDTO(request()->all()));
-        });
+        $this->billing_model = $billing;
     }
 
     public function prepareStoreBilling(BillingData $billing_dto): Model{
@@ -87,30 +73,12 @@ class Billing extends PackageManagement implements ContractsBilling
         return $this->billing_model = $billing;
     }
 
-    public function storeBilling(?BillingData $billing_dto = null): array{
-        return $this->transaction(function() use ($billing_dto){
-            return $this->prepareStoreBilling($billing_dto ?? BillingData::from());
-        });
-    }
-
     protected function createBillingTransaction(Model &$billing): void{
         $biling_transaction            = $billing->transaction()->firstOrCreate();
         $biling_transaction->parent_id = $billing->transaction_id;
         $biling_transaction->save();
 
         $billing->setRelation('transaction', $biling_transaction);
-    }
-
-    public function prepareShowBilling(?Model $model = null): ?Model{
-        $this->booting();
-        $model ??= $this->getBilling();
-        if (!isset($model)) {
-            $model = isset(request()->id) ? $this->findBillingById() : $this->findBillingByUuid();
-        } else {
-            $model->load($this->showUsingRelation());
-        }
-
-        return $this->billing_model = $model;
     }
 
     protected function findBillingById(): Model{

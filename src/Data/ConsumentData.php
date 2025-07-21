@@ -16,7 +16,7 @@ class ConsumentData extends Data implements DataConsumentData
 
     #[MapInputName('name')]
     #[MapName('name')]
-    public string $name;
+    public ?string $name = null;
 
     #[MapInputName('phone')]
     #[MapName('phone')]

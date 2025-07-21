@@ -13,7 +13,7 @@ class PaymentMethod extends FinanceStuff implements ContractsPaymentMethod
 
     public function prepareStorePaymentMethod(PaymentMethodData $payment_method_dto){
         $payment_method = $this->prepareStoreFinanceStuff($payment_method_dto);
-        return self::$payment_method_model = $payment_method;
+        return $this->payment_method_model = $payment_method;
     }
 
     public function paymentMethod(mixed $conditionals = null): Builder{
