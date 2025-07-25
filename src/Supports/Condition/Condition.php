@@ -78,7 +78,7 @@ class Condition extends PackageManagement implements ConditionInterface
                     static::$__payment_history->save();
                 }
             }
-        }
+        } 
         static::$__benefit_conditions['services'] = [];
         return [$voucher, static::$__payment_history];
     }
