@@ -43,7 +43,7 @@ return new class extends Migration
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
 
                 $table->foreignIdFor($transaction_item::class)->nullable()->index()
-                    ->constrained()->cascadeOnUpdate()->restrictOnDelete();
+                    ->constrained()->cascadeOnUpdate()->restrictOnDelete();                
 
                 $table->unsignedInteger('amount')->nullable()->default(0);
                 $table->unsignedInteger('qty')->nullable()->default(0);
@@ -63,10 +63,14 @@ return new class extends Migration
             });
 
             Schema::table($table_name, function (Blueprint $table) {
+                $payment_detail = app(config('database.models.PaymentDetail', PaymentDetail::class));
+
                 $table->foreignIdFor($this->__table::class, 'parent_id')
                     ->nullable()->after('id')
-                    ->index()->constrained()
                     ->cascadeOnUpdate()->restrictOnDelete();
+
+                $table->foreignIdFor($payment_detail::class)->nullable()->index()
+                    ->constrained()->cascadeOnUpdate()->restrictOnDelete();
             });
         }
     }
