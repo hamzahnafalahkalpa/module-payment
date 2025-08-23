@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePayment\Contracts\Data\BillingData as DataBillingData;
 use Hanafalah\ModulePayment\Enums\Billing\Status;
+use Hanafalah\ModuleTransaction\Contracts\Data\TransactionData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
@@ -21,9 +22,13 @@ class BillingData extends Data implements DataBillingData
     #[MapName('uuid')]
     public mixed $uuid = null;
 
-    #[MapInputName('transaction_id')]
-    #[MapName('transaction_id')]
+    #[MapInputName('has_transaction_id')]
+    #[MapName('has_transaction_id')]
     public mixed $transaction_id;
+
+    #[MapInputName('transaction')]
+    #[MapName('transaction')]
+    public ?TransactionData $transaction = null;
 
     #[MapInputName('author_type')]
     #[MapName('author_type')]
@@ -53,4 +58,14 @@ class BillingData extends Data implements DataBillingData
     #[MapInputName('reported_at')]
     #[MapName('reported_at')]
     public ?Carbon $reported_at = null;
+
+    #[MapInputName('props')]
+    #[MapName('props')]
+    public ?array $props = null;
+
+    public static function before(array &$attributes){
+        $attributes['transaction'] ??= [
+            'id' => null
+        ];
+    }
 }

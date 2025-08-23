@@ -48,6 +48,14 @@ class Billing extends BaseModel
         });
     }
 
+    public function viewUsingRelation(): array{
+        return ['hasTransaction'];
+    }
+
+    public function showUsingRelation(): array{
+        return ['hasTransaction','splitBills','cashier','author'];
+    }
+
     public function getShowResource(){
         return ShowBilling::class;
     }

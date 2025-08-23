@@ -36,6 +36,7 @@ return new class extends Migration
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
                 $table->foreignIdFor($consument::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
+                $table->json('props')->nullable();
                 $table->timestamps();
             });
         }

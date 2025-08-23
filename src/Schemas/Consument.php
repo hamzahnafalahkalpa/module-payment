@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePayment\Contracts\Schemas\Consument as ContractsConsument;
 use Hanafalah\ModulePayment\Contracts\Data\ConsumentData;
+use Illuminate\Support\Str;
 
 class Consument extends PackageManagement implements ContractsConsument
 {
@@ -26,6 +27,12 @@ class Consument extends PackageManagement implements ContractsConsument
             $create = [$add];
         }
         $consument = $this->usingEntity()->updateOrCreate(...$create);
+
+        if (isset($consument_dto->reference_type) && isset($consument_dto->reference_id)) {
+            $reference = $this->{$consument_dto->reference_type.'Model'}()->findOrFail($consument_dto->reference_id);
+            $consument_dto->props['prop_'.Str::snake($consument_dto->reference_type)] = $reference->toViewApi()->resolve();
+        }
+
         $this->fillingProps($consument,$consument_dto->props);
         $consument->save();
         return $this->consument_model = $consument;

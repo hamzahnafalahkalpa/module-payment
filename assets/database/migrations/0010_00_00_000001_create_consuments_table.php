@@ -30,8 +30,8 @@ return new class extends Migration
                 $table->string('uuid', 36)->nullable();
                 $table->string('name')->nullable();
                 $table->string('phone', 30)->nullable();
-                $table->string('reference_type', 50)->nullable(false);
-                $table->string('reference_id', 36)->nullable(false);
+                $table->string('reference_type', 50)->nullable();
+                $table->string('reference_id', 36)->nullable();
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

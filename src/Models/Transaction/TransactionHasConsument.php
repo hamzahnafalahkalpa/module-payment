@@ -2,14 +2,15 @@
 
 namespace Hanafalah\ModulePayment\Models\Transaction;
 
+use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 
 class TransactionHasConsument extends BaseModel
 {
-    use HasUlids;
+    use HasUlids, HasProps;
 
-    protected $list = ['id', 'transaction_id', 'consument_id'];
+    protected $list = ['id', 'transaction_id', 'consument_id', 'props'];
 
     public $incrementing  = false;
     protected $primaryKey = 'id';

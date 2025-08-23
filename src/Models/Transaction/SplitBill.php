@@ -21,12 +21,14 @@ class SplitBill extends BaseModel
     protected $primaryKey = 'id';
     protected $list      = [
         'id',
-        'payment_method',
+        'payment_method_id',
         'billing_id',
+        'money_paid',
         'paid',
         'invoice_id',
         'payer_id',
-        'payer_type'
+        'payer_type',
+        'props'
     ];
     protected $show      = [];
 
@@ -40,22 +42,13 @@ class SplitBill extends BaseModel
         });
     }
 
-    public function getShowResource()
-    {
-        return ViewSplitBill::class;
-    }
-
-    public function getViewResource()
-    {
-        return ViewSplitBill::class;
-    }
+    public function getShowResource(){return ViewSplitBill::class;}
+    public function getViewResource(){return ViewSplitBill::class;}
 
     public function getPaymentDetails()
     {
         $payment_history = $this->paymentHistory;
-
         $transaction_id = $payment_history->transaction_id;
-
         return $this->PaymentDetailModel()
             ->select('qty', 'amount', 'debt', 'tax', 'additional', 'props', 'transaction_item_id', 'id')
             ->with([
@@ -70,20 +63,8 @@ class SplitBill extends BaseModel
             });
     }
 
-    public function billing()
-    {
-        return $this->belongsToModel('Billing');
-    }
-    public function payer()
-    {
-        return $this->morphTo();
-    }
-    public function paymentSummary()
-    {
-        return $this->morphOneModel('PaymentSummary', 'reference', 'reference_type', 'reference_id', 'id');
-    } //will delete soon
-    public function paymentHistory()
-    {
-        return $this->morphOneModel('PaymentHistory', 'reference', 'reference_type', 'reference_id', 'id');
-    }
+    public function paymentMethod(){return $this->belongsToModel('PaymentMethod');}
+    public function billing(){return $this->belongsToModel('Billing');}
+    public function payer(){return $this->morphTo();}
+    public function paymentHistory(){return $this->morphOneModel('PaymentHistory', 'reference', 'reference_type', 'reference_id', 'id');}
 }
