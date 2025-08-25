@@ -3,11 +3,11 @@
 namespace Hanafalah\ModulePayment\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
-use Hanafalah\ModulePayment\Contracts\Data\SplitBillData as DataSplitBillData;
+use Hanafalah\ModulePayment\Contracts\Data\SplitPaymentData as DataSplitPaymentData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
-class SplitBillData extends Data implements DataSplitBillData
+class SplitPaymentData extends Data implements DataSplitPaymentData
 {
     #[MapName('id')]
     #[MapInputName('id')]
@@ -21,13 +21,13 @@ class SplitBillData extends Data implements DataSplitBillData
     #[MapInputName('payment_method_model')]
     public ?object $payment_method_model;
 
-    #[MapName('billing_id')]
-    #[MapInputName('billing_id')]
-    public mixed $billing_id = null;
+    #[MapName('invoice_id')]
+    #[MapInputName('invoice_id')]
+    public mixed $invoice_id = null;
 
-    #[MapName('billing_model')]
-    #[MapInputName('billing_model')]
-    public ?object $billing_model = null;
+    #[MapName('invoice_model')]
+    #[MapInputName('invoice_model')]
+    public ?object $invoice_model = null;
 
     #[MapName('paid')]
     #[MapInputName('paid')]
@@ -36,18 +36,6 @@ class SplitBillData extends Data implements DataSplitBillData
     #[MapName('discount')]
     #[MapInputName('discount')]
     public ?int $discount = null;
-
-    #[MapName('invoice_id')]
-    #[MapInputName('invoice_id')]
-    public mixed $invoice_id = null;
-
-    #[MapName('payer_id')]
-    #[MapInputName('payer_id')]
-    public mixed $payer_id = null;
-
-    #[MapName('payer_type')]
-    #[MapInputName('payer_type')]
-    public ?string $payer_type = null;
 
     #[MapName('props')]
     #[MapInputName('props')]

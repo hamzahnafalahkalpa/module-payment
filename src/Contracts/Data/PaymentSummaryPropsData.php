@@ -2,4 +2,4 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Data;
 
-interface SplitBillData {}
+interface PaymentSummaryPropsData{}

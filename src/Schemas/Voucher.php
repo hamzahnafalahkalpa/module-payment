@@ -119,7 +119,7 @@ class Voucher extends PackageManagement implements ContractsVoucher
 
     public function prepareRevalidateVoucher(mixed $vouchers, array &$attributes): mixed
     {
-        if (isset($attributes['split_bill_id']) || isset($attributes['transaction_id'])) {
+        if (isset($attributes['split_payment_id']) || isset($attributes['transaction_id'])) {
             $condition_schema = $this->schemaContract('condition');
             $condition_schema->setupTransaction($attributes);
             foreach ($vouchers as &$voucher) {

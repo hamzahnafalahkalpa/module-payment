@@ -2,4 +2,4 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Data;
 
-interface PaymentHistoryData {}
+interface PaymentHistoryData extends PaymentSummaryData {}

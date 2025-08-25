@@ -10,26 +10,14 @@ class PaymentHistory extends PaymentSummary
     {
         parent::booted();
         static::addGlobalScope('splitBill', function ($query) {
-            $splitBill = app(config('database.models.SplitBill'));
+            $splitBill = app(config('database.models.SplitPayment'));
             $hasModel  = app(config('database.models.PaymentHistoryHasModel'));
             $query->whereIn('reference_type', [$splitBill->getMorphClass(), $hasModel->getMorphClass()]);
         });
     }
 
-    public function splitBill()
-    {
-        return $this->morphTo('reference');
-    }
-    public function paymentHistoryDetails()
-    {
-        return $this->hasManyModel('PaymentHistoryDetail', 'payment_history_id');
-    }
-    public function paymentHistoryHasModel()
-    {
-        return $this->hasManyModel('PaymentHistoryHasModel', 'payment_history_id');
-    }
-    public function childHistoryRekursi()
-    {
-        return $this->hasManyModel('PaymentHistory', 'parent_id')->with(["childHistoryRekursi", "paymentHistoryDetails.transactionItem"]);
-    }
+    public function invoice(){return $this->morphTo('reference');}
+    public function paymentHistoryDetails(){return $this->hasManyModel('PaymentHistoryDetail', 'payment_history_id');}
+    public function paymentHistoryHasModel(){return $this->hasManyModel('PaymentHistoryHasModel', 'payment_history_id');}
+    public function childs(){return $this->hasManyModel('PaymentHistory', 'parent_id')->with(["paymentSummaries", "paymentHistoryDetails.transactionItem"]);}
 }

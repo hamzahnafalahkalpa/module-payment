@@ -26,6 +26,10 @@ class BillingData extends Data implements DataBillingData
     #[MapName('has_transaction_id')]
     public mixed $transaction_id;
 
+    #[MapInputName('has_transaction')]
+    #[MapName('has_transaction')]
+    public ?TransactionData $has_transaction = null;
+
     #[MapInputName('transaction')]
     #[MapName('transaction')]
     public ?TransactionData $transaction = null;
@@ -50,10 +54,10 @@ class BillingData extends Data implements DataBillingData
     #[MapName('status')]
     public ?string $status = Status::DRAFT->value;
 
-    #[MapInputName('split_bills')]
-    #[MapName('split_bills')]      
-    #[DataCollectionOf(SplitBillData::class)]
-    public ?DataCollection $split_bills = null;
+    #[MapInputName('invoices')]
+    #[MapName('invoices')]      
+    #[DataCollectionOf(InvoiceData::class)]
+    public ?DataCollection $invoices = null;
 
     #[MapInputName('reported_at')]
     #[MapName('reported_at')]
@@ -64,8 +68,33 @@ class BillingData extends Data implements DataBillingData
     public ?array $props = null;
 
     public static function before(array &$attributes){
+        $new = static::new();
         $attributes['transaction'] ??= [
             'id' => null
         ];
+
+        if (isset($attributes['invoices']) && count($attributes['invoices']) > 0){
+            $transaction = $new->TransactionModel()->with('consument')->findOrFail($attributes['has_transaction_id']);
+            $consument = $transaction->consument;
+            foreach ($attributes['invoices'] as &$invoice) {
+                if (!isset($invoice['payer_type']) || !isset($invoice['payer_id'])){
+                    $invoice['payer_type'] = $consument->getMorphClass();
+                    $invoice['payer_id']   = $consument->getKey();
+                }
+            }
+        }
+    }
+
+    public static function after(self $data): self{
+        $new = self::new();
+
+        $props = &$data->props;
+
+        $author = $new->{$data->author_type.'Model'}()->findOrFail($data->author_id);
+        $props['prop_author'] = $author->toViewApiOnlies('id','name');
+
+        $cashier = $new->{$data->cashier_type.'Model'}()->findOrFail($data->cashier_id);
+        $props['prop_cashier'] = $cashier->toViewApiOnlies('id','name');
+        return $data;
     }
 }

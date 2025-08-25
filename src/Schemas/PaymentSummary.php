@@ -14,7 +14,7 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
 
     public function prepareStorePaymentSummary(PaymentSummaryData $payment_summary_dto): Model{
         $add = [
-            'parent_id' => $payment_summary_dto->parent_id,
+            'parent_id'      => $payment_summary_dto->parent_id,
             'transaction_id' => $payment_summary_dto->transaction_id
         ];
         if (isset($payment_summary_dto->id)){
@@ -27,6 +27,11 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
         }
         $create = [$guard,$add];
         $payment_summary = $this->usingEntity()->updateOrCreate(...$create);
+
+        if (isset($payment_summary_dto->payment_details) && count($payment_summary_dto->payment_details) > 0) {
+            
+        }
+
         $this->fillingProps($payment_summary, $payment_summary_dto->props);
         $payment_summary->save();
         return $this->payment_summary_model = $payment_summary;

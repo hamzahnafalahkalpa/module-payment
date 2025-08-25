@@ -2,4 +2,4 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Supports\Benefit;
 
-interface Billing extends Benefit {}
+interface BillingBenefit extends Benefit {}

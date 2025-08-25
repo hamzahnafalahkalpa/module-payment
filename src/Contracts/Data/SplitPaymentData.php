@@ -4,4 +4,4 @@ namespace Hanafalah\ModulePayment\Contracts\Data;
 
 use Spatie\LaravelData\Contracts\BaseData;
 
-interface PaymentDetailData extends BaseData{}
+interface SplitPaymentData extends BaseData {}

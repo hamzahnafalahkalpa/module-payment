@@ -6,7 +6,6 @@ use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePayment\Contracts\Data\ConsumentData as DataConsumentData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Illuminate\Support\Str;
 
 class ConsumentData extends Data implements DataConsumentData
 {
@@ -36,10 +35,6 @@ class ConsumentData extends Data implements DataConsumentData
 
     public static function after(self $data): self{
         $new = static::new();
-        if (isset($data->reference_id)){
-            $reference = $new->{$data->reference_type.'Model'}()->findOrFail($data->reference_id);
-            $data->props['prop_'.Str::snake($data->reference_type)] = $reference->toViewApi()->resolve();
-        }
         return $data;
     }
 }

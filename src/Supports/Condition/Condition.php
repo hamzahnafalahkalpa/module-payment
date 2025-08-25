@@ -13,7 +13,7 @@ class Condition extends PackageManagement implements ConditionInterface
 {
     use PaymentCalculation;
 
-    protected static $__split_bill_model;
+    protected static $__split_payment_model;
     protected static $__payment_history;
     protected static $__transaction_model;
     protected static $__transaction;
@@ -29,10 +29,10 @@ class Condition extends PackageManagement implements ConditionInterface
 
     public function setupTransaction(array &$attributes)
     {
-        if (isset($attributes['split_bill_id'])) {
-            static::$__split_bill_model   = $this->SplitBillModel()->findOrFail($attributes['split_bill_id']);
-            $split_bill                   = &static::$__split_bill_model;
-            static::$__payment_history    = $split_bill->paymentHistory;
+        if (isset($attributes['split_payment_id'])) {
+            static::$__split_payment_model   = $this->SplitPaymentModel()->findOrFail($attributes['split_payment_id']);
+            $split_payment                   = &static::$__split_payment_model;
+            static::$__payment_history    = $split_payment->paymentHistory;
             $payment_history              = &static::$__payment_history;
         } else {
             static::$__payment_history = $this->PaymentHistoryModel();

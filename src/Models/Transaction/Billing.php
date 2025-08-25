@@ -24,7 +24,7 @@ class Billing extends BaseModel
         'id',
         'uuid',
         'billing_code',
-        'transaction_id',
+        'has_transaction_id',
         'author_type',
         'author_id',
         'cashier_type',
@@ -53,14 +53,14 @@ class Billing extends BaseModel
     }
 
     public function showUsingRelation(): array{
-        return ['hasTransaction','splitBills','cashier','author'];
+        return ['hasTransaction','cashier','author'];
     }
 
     public function getShowResource(){
         return ShowBilling::class;
     }
 
-    public function getViewBilling(){
+    public function getViewResource(){
         return ViewBilling::class;
     }
 
@@ -69,7 +69,5 @@ class Billing extends BaseModel
     public function paymentHistories(){return $this->morphManyModel('PaymentHistory', 'reference');}
     public function cashier(){return $this->morphTo();}
     public function author(){return $this->morphTo();}
-    public function hasTransaction(){return $this->belongsToModel("Transaction");}
-    public function splitBill(){return $this->hasOneModel("SplitBill");}
-    public function splitBills(){return $this->hasManyModel("SplitBill");}
+    public function hasTransaction(){return $this->belongsToModel("Transaction",'has_transaction_id');}
 }

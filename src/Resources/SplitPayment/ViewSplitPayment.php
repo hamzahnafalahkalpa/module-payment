@@ -1,10 +1,10 @@
 <?php
 
-namespace Hanafalah\ModulePayment\Resources\SplitBill;
+namespace Hanafalah\ModulePayment\Resources\SplitPayment;
 
 use Hanafalah\LaravelSupport\Resources\ApiResource;
 
-class ViewSplitBill extends ApiResource
+class ViewSplitPayment extends ApiResource
 {
 
     /**
@@ -17,7 +17,7 @@ class ViewSplitBill extends ApiResource
     {
         $arr = [
             'id'                => $this->id,
-            'split_bill_code'   => $this->split_bill_code,
+            'split_payment_code'   => $this->split_payment_code,
             'payment_method'    => $this->payment_method,
             'paid'        => $this->paid,
             'note'              => $this->note,

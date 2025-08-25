@@ -20,11 +20,7 @@ class ViewPaymentDetail extends ApiResource
             'paid'              => $this->paid,
             'created_at'        => $this->created_at,
             'transaction_item'  => $this->relationValidation('transactionItem', function () {
-                $transactionItem = $this->transactionItem;
-                return $transactionItem->toViewApi()->resolve();
-            }),
-            'paymentHistory'  => $this->relationValidation("paymentHistory", function () {
-                return $this->paymentHistory->toViewApi()->resolve();
+                return $this->transactionItem->toViewApi()->resolve();
             }),
             'payment_history'  => $this->relationValidation("paymentHistory", function () {
                 return $this->paymentHistory->toViewApi()->resolve();

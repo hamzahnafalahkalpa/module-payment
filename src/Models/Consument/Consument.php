@@ -5,14 +5,14 @@ namespace Hanafalah\ModulePayment\Models\Consument;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Hanafalah\LaravelSupport\Models\BaseModel;
-use Hanafalah\ModulePayment\Concerns\HasConsumentInvoice;
+use Hanafalah\ModulePayment\Concerns\HasBillingDeferred;
 use Hanafalah\ModulePayment\Resources\Consument\{
     ViewConsument, ShowConsument
 };
 
 class Consument extends BaseModel
 {
-    use HasUlids, HasProps, HasConsumentInvoice;
+    use HasUlids, HasProps, HasBillingDeferred;
 
     public $incrementing  = false;
     protected $primaryKey = 'id';

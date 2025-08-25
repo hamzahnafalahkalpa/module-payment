@@ -14,8 +14,8 @@ class ViewConsument extends ApiResource
             'name'       => $this->name,
             'phone'      => $this->phone,
             'reference'  => $this->relationValidation('reference', function () {
-                return $this->reference->toViewApi()->resolve();
-            }),
+                return $this->propsNil($this->reference->toViewApi()->resolve(),'consument');
+            },$this->prop_reference),
             'created_at'  => $this->created_at,
             'updated_at'  => $this->updated_at
         ];

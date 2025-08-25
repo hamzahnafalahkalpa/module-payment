@@ -2,9 +2,9 @@
 
 namespace Hanafalah\ModulePayment\Supports\Benefit;
 
-use Hanafalah\ModulePayment\Contracts\Supports\Benefit\Billing as BillingInterface;
+use Hanafalah\ModulePayment\Contracts\Supports\Benefit\BillingBenefit as BillingInterface;
 
-class Billing extends Benefit implements BillingInterface
+class BillingBenefit extends Benefit implements BillingInterface
 {
     public function calculating(&$payment_history, &$voucher, &$attributes)
     {

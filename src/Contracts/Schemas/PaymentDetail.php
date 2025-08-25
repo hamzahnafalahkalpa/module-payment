@@ -9,8 +9,5 @@ use Hanafalah\ModulePayment\Data\PaymentDetailData;
 
 interface PaymentDetail extends DataManagement
 {
-    public function getPaymentDetail(): mixed;
     public function prepareStorePaymentDetail(PaymentDetailData $payment_detail_dto): Model;
-    public function storePaymentDetail(?PaymentDetailData $payment_detail_dto = null): array;
-    public function paymentDetail(mixed $conditionals = null): Builder;
 }

@@ -6,18 +6,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Hanafalah\ModulePayment\Concerns\PaymentCalculation;
-use Hanafalah\ModulePayment\Concerns\PaymentHistoryMapper;
+use Hanafalah\ModulePayment\Contracts\Data\PaymentHistoryData;
 use Hanafalah\ModulePayment\Contracts\Schemas\PaymentHistory as ContractsPaymentHistory;
-use Hanafalah\ModulePayment\Data\PaymentHistoryData;
-use Hanafalah\ModulePayment\Data\PaymentHistoryDTO;
-use Hanafalah\ModulePayment\Schemas\PaymentSummary;
 
 class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
 {
-    use PaymentCalculation, PaymentHistoryMapper;
+    use PaymentCalculation;
 
     public $payment_history_model;
-    private $__split_bill_model;
+    private $__split_payment_model;
     private $__billing_model;
     private $__split_transaction_model;
     private $__payment_summary_history_model;
@@ -28,63 +25,13 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
     private $__history_gross = 0;
     private $__history_paid_summaries;
 
-    public function showUsingRelation(): array
-    {
-        return [
-            'paymentHistoryDetails'
-        ];
+    protected function createPaymentHistory(PaymentHistoryData $payment_history_dto): Model{
+        parent::prepareStorePaymentSummary($payment_history_dto);
     }
 
-    public function getPaymentHistory(): mixed
-    {
-        return $this->payment_history_model;
-    }
-
-    protected function createPaymentHistory(PaymentHistoryData $payment_history_dto): Model
-    {
-        if (isset($payment_history_dto->id)) {
-            $guard = ['id' => $payment_history_dto->id];
-        } else {
-            if (!isset($payment_history_dto->transaction_id)) throw new \Exception('Transaction id not found');
-            if (!isset($payment_history_dto->reference_type) || !isset($payment_history_dto->reference_id)) throw new \Exception('Reference not found');
-            $guard = [
-                'transaction_id' => $payment_history_dto->transaction_id,
-                'reference_type' => $payment_history_dto->reference_type,
-                'reference_id'   => $payment_history_dto->reference_id,
-                'parent_id'      => $payment_history_dto->parent_id
-            ];
-        }
-        return $this->PaymentHistoryModel()->updateOrCreate($guard, [
-            'amount'     => $payment_history_dto->amount,
-            'cogs'       => $payment_history_dto->cogs,
-            'discount'   => $payment_history_dto->discount,
-            'debt'       => $payment_history_dto->debt,
-            'tax'        => $payment_history_dto->tax,
-            'refund'     => $payment_history_dto->refund,
-            'additional' => $payment_history_dto->additional
-        ]);
-    }
-
-    protected function splitBillInitialize(array &$attributes): self
-    {
-        $has_split_bill = $attributes['split_bill'] ?? $attributes['reference_id'] ?? null;
-        if (!isset($has_split_bill)) throw new \Exception('Split bill not found');
-
-        $this->__split_bill_model        = $attributes['split_bill'] ?? $this->SplitBillModel()->findOrFail($attributes['reference_id']);
-        $this->__billing_model           = $attributes['billing'] ?? $this->__split_bill_model->billing;
-        if ($this->__billing_model->relationLoaded('transaction')) $this->__billing_model->load('transaction');
-        $this->__split_transaction_model = $this->__split_bill_model->transaction()->firstOrCreate();
-        $attributes['transaction_id']    = $this->__split_transaction_model->getKey();
-        return $this;
-    }
-
-    public function prepareStorePaymentHistory(?array $attributes = null): Model
-    {
-        $attributes ??= \request()->all();
-
-        $payment_history = $this->splitBillInitialize($attributes)
-            ->createPaymentHistory($this->storePaymentHistoryMapper($attributes));
-        $attributes['split_bill_id'] = $payment_history->reference_id;
+    public function prepareStorePaymentHistory(PaymentHistoryData $payment_history_dto): Model{
+        $this->createPaymentHistory($payment_history_dto);
+        $attributes['split_payment_id'] = $payment_history->reference_id;
         $attributes['reported_at']   = now();
         $this->voucherProcessing($attributes);
         $payment_history->refresh();
@@ -112,6 +59,37 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
         $payment_history->load('childs.paymentDetails');
         return $this->payment_history_model = $payment_history;
     }
+
+    // public function prepareStorePaymentHistory(PaymentHistoryData $payment_history_data): Model{
+    //     $this->createPaymentHistory($this->storePaymentHistoryMapper($attributes));
+    //     $attributes['split_payment_id'] = $payment_history->reference_id;
+    //     $attributes['reported_at']   = now();
+    //     $this->voucherProcessing($attributes);
+    //     $payment_history->refresh();
+    //     $payment_history->note            = $attributes['note'] ?? null;
+    //     $payment_history->amount          = 0;
+    //     $payment_history->debt            = 0;
+    //     $payment_history->discount      ??= 0;
+    //     $payment_history->discount       += $discount = $attributes['discount'] ??= 0;
+    //     $payment_history->paid_money      = $attributes['paid_money'] ??= 0;
+    //     $payment_history->cash_over       = $cash_over  = $attributes['cash_over'] ??= 0;
+    //     $payment_history->omzet           = 0;
+    //     $payment_history->save();
+    //     $attributes['paid_money'] += $discount;
+    //     $this->processUsingPaymentSummaries($payment_history, $attributes);
+    //     $payment_history->refresh();
+    //     $payment_history->debt          += $this->__history_debt;
+    //     $payment_history->omzet         += $this->__history_omzet;
+    //     $payment_history->cogs          += $this->__history_cogs;
+    //     $payment_history->gross          = $this->__history_gross;
+    //     $payment_history->net            = $this->__history_net - $discount;
+    //     $payment_history->paid           = $payment_history->omzet + $cash_over - $discount; //total bayar
+    //     $payment_history->charge         = $payment_history->paid_money - $payment_history->paid;
+    //     // $payment_history->setAttribute('paid_summaries',$this->__history_paid_summaries);
+    //     $payment_history->save();
+    //     $payment_history->load('childs.paymentDetails');
+    //     return $this->payment_history_model = $payment_history;
+    // }
 
     protected function clonePaymentSummary(Model &$payment_history, Model $payment_summary): Model
     {
@@ -147,7 +125,7 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
             }
         }
         $billing_transaction = $this->__billing_model->transaction;
-        $attributes['split_bill_id']   = $attributes['split_bill_id'];
+        $attributes['split_payment_id']   = $attributes['split_payment_id'];
         $attributes['consument_id']    = $billing_transaction->reference_id;
         $attributes['consument_type']  = $billing_transaction->reference_type;
         list($vouchers, $payment_history) = $this->schemaContract('voucher')->prepareRevalidateVoucher($vouchers, $attributes);

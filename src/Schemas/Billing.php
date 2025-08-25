@@ -29,7 +29,9 @@ class Billing extends PackageManagement implements ContractsBilling
             'cashier_id'   => $billing_dto->cashier_id,
             'reported_at'  => $billing_dto->reported_at
         ]);
-        $billing->load('transaction');
+        $billing->load(['transaction','hasTransaction']);
+
+        $billing_dto->props['prop_has_transaction'] = $billing->hasTransaction->toViewApi()->resolve();
 
         if (isset($billing_dto->transaction)){
             $transaction_dto = &$billing_dto->transaction;
@@ -39,12 +41,12 @@ class Billing extends PackageManagement implements ContractsBilling
             $this->schemaContract('transaction')->prepareStoreTransaction($transaction_dto);
         }
 
-        if (isset($billing_dto->split_bills) && count($billing_dto->split_bills) > 0){
-            $split_bill_schema = $this->schemaContract('split_bill');
-            foreach ($billing_dto->split_bills as &$split_bill_dto) {
-                $split_bill_dto->billing_id = $billing->getKey();
-                $split_bill_dto->billing_model = $billing;
-                $split_bill_schema->prepareStoreSplitBill($split_bill_dto);
+        if (isset($billing_dto->invoices) && count($billing_dto->invoices) > 0){
+            $split_payment_schema = $this->schemaContract('invoice');
+            foreach ($billing_dto->invoices as &$split_payment_dto) {
+                $split_payment_dto->billing_id = $billing->getKey();
+                $split_payment_dto->billing_model = $billing;
+                $split_payment_schema->prepareStoreSplitPayment($split_payment_dto);
             }
         }
         $this->fillingProps($billing, $billing_dto->props);

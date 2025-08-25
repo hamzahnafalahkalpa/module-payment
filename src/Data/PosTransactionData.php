@@ -2,7 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Data;
 
-use Carbon\Carbo;
 use Hanafalah\ModulePayment\Contracts\Data\BillingData;
 use Hanafalah\ModulePayment\Contracts\Data\PosTransactionData as DataPosTransactionData;
 use Hanafalah\ModuleTransaction\Data\TransactionData as DataTransactionData;
@@ -14,4 +13,21 @@ class PosTransactionData extends DataTransactionData implements DataPosTransacti
     #[MapInputName('billing')]
     #[MapName('billing')]      
     public ?BillingData $billing = null;
+
+    public static function before(array &$attributes){
+        $new = static::new();
+        if (isset($attributes['billing'])){
+            $billing = &$attributes['billing'];
+            if (isset($billing['invoices']) && count($billing['invoices']) > 0){
+                $transaction = $new->TransactionModel()->with('consument')->findOrFail($attributes['id']);
+                $consument = $transaction->consument;
+                foreach ($billing['invoices'] as &$invoice) {
+                    if (!isset($invoice['payer_type']) || !isset($invoice['payer_id'])){
+                        $invoice['payer_type'] = $consument->getMorphClass();
+                        $invoice['payer_id'] = $consument->getKey();
+                    }
+                }
+            }
+        }
+    }
 }

@@ -4,6 +4,8 @@ namespace Hanafalah\ModulePayment\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePayment\Contracts\Data\PaymentSummaryData as DataPaymentSummaryData;
+use Hanafalah\ModulePayment\Contracts\Data\PaymentSummaryPropsData;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
@@ -53,15 +55,26 @@ class PaymentSummaryData extends Data implements DataPaymentSummaryData
     #[MapName('cogs')]
     public ?int $cogs = 0;
 
-    #[MapInputName('tax')]
-    #[MapName('tax')]
-    public ?int $tax = 0;
+    #[MapInputName('total_tax')]
+    #[MapName('total_tax')]
+    public ?int $total_tax = 0;
 
     #[MapInputName('additional')]
     #[MapName('additional')]
     public ?int $additional = 0;
 
+    #[MapInputName('payment_details')]
+    #[MapName('payment_details')]
+    #[DataCollectionOf(PaymentDetailData::class)]
+    public ?array $payment_details = null;
+
     #[MapInputName('props')]
     #[MapName('props')]
-    public ?array $props = null;
+    public ?PaymentSummaryPropsData $props = null;
+
+    public static function before(array &$attributes){
+        $attributes['total_tax'] ??= [
+            'total' => 0
+        ];
+    }
 }

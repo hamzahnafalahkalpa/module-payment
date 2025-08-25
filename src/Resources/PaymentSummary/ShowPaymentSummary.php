@@ -14,52 +14,48 @@ class ShowPaymentSummary extends ViewPaymentSummary
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
-            'name'             => $this->name ?? null,
             'reference_type'   => $this->reference_type,
             'transaction'      => $this->relationValidation('transaction', function () {
                 return $this->transaction->toShowApi()->resolve();
-            }),
+            },$this->prop_transaction),
             'refund'           => $this->refund,
             'additional'       => $this->additional,
             'tax'              => $this->tax,
             'note'             => $this->note,
             'payment_details'  => $this->relationValidation('paymentDetails', function () {
-                $paymentDetails = $this->paymentDetails;
-                return $paymentDetails->transform(function ($paymentDetail) {
-                    $paymentDetail->load('paymentHistory');
-                    return $paymentDetail->toShowApi()->resolve();
+                return $this->paymentDetails->transform(function ($paymentDetail) {
+                    return $paymentDetail->toShowApi();
                 });
             }),
             'childs' => $this->relationValidation('childs', function () {
-                $childs = $this->childs;
-                return $childs->transform(function ($child) {
-                    return $child->toShowApi()->resolve();
+                return $this->childs->transform(function ($child) {
+                    return $child->toShowApi();
                 });
             }),
             'payment_summaries' => $this->relationValidation('paymentSummaries', function () {
                 return $this->paymentSummaries->transform(function ($paymentSummary) {
-                    return $paymentSummary->toShowApi()->resolve();
+                    return $paymentSummary->toShowApi();
                 });
             })
         ];
 
         if ($this->relationLoaded('recursiveChilds')) {
             $arr['childs'] = $this->relationValidation('recursiveChilds', function () {
-                $childs = $this->recursiveChilds;
-                return $childs->transform(function ($child) {
-                    return $child->toShowApi()->resolve();
+                return $this->recursiveChilds->transform(function ($child) {
+                    return $child->toShowApi();
                 });
             });
         }
 
         if ($this->relationLoaded('recursiveInvoiceChilds')) {
             $arr['childs'] = $this->relationValidation('recursiveInvoiceChilds', function () {
-                $childs = $this->recursiveInvoiceChilds;
-                return $childs->transform(function ($child) {
+                return $this->recursiveInvoiceChilds->transform(function ($child) {
                     return $child->toShowApi()->resolve();
                 });
             });
         }
+
+        $arr = $this->mergeArray(parent::toArray($request), $arr);
         return $arr;
     }
 }
