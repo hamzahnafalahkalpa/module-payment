@@ -12,13 +12,6 @@ class PaymentMethod extends FinanceStuff
 {
     protected $table = 'unicodes';
 
-    public function getShowResource()
-    {
-        return ShowPaymentMethod::class;
-    }
-
-    public function getViewResource()
-    {
-        return ViewPaymentMethod::class;
-    }
+    public function getShowResource(){return ShowPaymentMethod::class;}
+    public function getViewResource(){return ViewPaymentMethod::class;}
 }

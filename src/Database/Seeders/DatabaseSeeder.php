@@ -9,7 +9,8 @@ class DatabaseSeeder extends Seeder{
     {
         $this->call([
             CoaTypeSeeder::class,
-            CoaSeeder::class
+            CoaSeeder::class,
+            WalletSeeder::class
         ]);
     }
 }

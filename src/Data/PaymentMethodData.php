@@ -11,7 +11,7 @@ class PaymentMethodData extends FinanceStuffData implements DataPaymentMethodDat
 {
     #[MapInputName('flag')]
     #[MapName('flag')]
-    #[In('TUNAI','NON TUNAI','BILLED')]
+    #[In('TUNAI','NON TUNAI')]
     public string $flag;
 
     public static function before(array &$attributes){

@@ -8,6 +8,7 @@ use Hanafalah\ModulePayment\{
 };
 use Hanafalah\ModulePayment\Models\Payment\PaymentHistory;
 use Hanafalah\ModulePayment\Models\Payment\PaymentSummary;
+use Hanafalah\ModulePayment\Models\Transaction\Invoice;
 use Hanafalah\ModuleTransaction\Models\Transaction\TransactionItem;
 
 return new class extends Migration
@@ -31,12 +32,17 @@ return new class extends Migration
         $table_name = $this->__table->getTable();
         if (!$this->isTableExists()) {
             Schema::create($table_name, function (Blueprint $table) {
+                $invoice                = app(config('database.models.Invoice', Invoice::class));
                 $payment_summary        = app(config('database.models.PaymentSummary', PaymentSummary::class));
                 $transaction_item       = app(config('database.models.TransactionItem', TransactionItem::class));
                 $payment_history        = app(config('database.models.PaymentHistory', PaymentHistory::class));
 
                 $table->ulid('id')->primary();
+                $table->string('name',255)->nullable();
                 $table->foreignIdFor($payment_summary::class)->nullable()->index()
+                    ->constrained()->cascadeOnUpdate()->restrictOnDelete();
+
+                $table->foreignIdFor($invoice::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->restrictOnDelete();
 
                 $table->foreignIdFor($payment_history::class)->nullable()->index()

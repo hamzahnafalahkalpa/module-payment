@@ -14,6 +14,11 @@ class PaymentHistoryData extends PaymentSummaryData implements DataPaymentHistor
     #[DataCollectionOf(PaymentHistoryDetailData::class)]
     public ?array $payment_history_details = null;
 
+    #[MapInputName('payment_has_models')]
+    #[MapName('payment_has_models')]
+    #[DataCollectionOf(PaymentHasModelData::class)]
+    public ?array $payment_has_models = null;
+
     #[MapInputName('childs')]
     #[MapName('childs')]
     #[DataCollectionOf(PaymentHistoryData::class)]
@@ -22,16 +27,5 @@ class PaymentHistoryData extends PaymentSummaryData implements DataPaymentHistor
     public static function before(array &$attributes){
         parent::before($attributes);
         $new = static::new();
-        if (isset($attributes['form'])){
-            $form = &$attributes['form'];
-            if (isset($form['payment_summaries']) && count($form['payment_summaries']) > 0) {
-                $attributes['childs'] = [];
-                $childs = &$attributes['childs'];
-                foreach ($form['payment_summaries'] as &$payment_summary) {
-                    $payment_summary_model = $new->PaymentSummaryModel()->findOrFail($payment_summary['id']);
-                    $child['id'] = null;
-                }
-            }
-        }
     }
 }

@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method array storeJournalEntry(?JournalEntryData $journal_entry_dto = null);
  * @method Builder journalEntry(mixed $conditionals = null);
  */
-
 interface JournalEntry extends DataManagement
 {
     public function prepareStoreJournalEntry(JournalEntryData $journal_entry_dto): Model;

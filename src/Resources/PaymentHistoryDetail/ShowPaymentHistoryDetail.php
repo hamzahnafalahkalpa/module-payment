@@ -2,6 +2,8 @@
 
 namespace Hanafalah\ModulePayment\Resources\PaymentHistoryDetail;
 
+use Hanafalah\ModulePayment\Resources\PaymentDetail\ShowPaymentDetail;
+
 class ShowPaymentHistoryDetail extends ViewPaymentHistoryDetail
 {
   /**
@@ -13,7 +15,8 @@ class ShowPaymentHistoryDetail extends ViewPaymentHistoryDetail
   public function toArray(\Illuminate\Http\Request $request): array
   {
     $arr = [];
-    $arr = $this->mergeArray(parent::toArray($request),$arr);
+    $show = $this->resolveNow(new ShowPaymentDetail($this));
+    $arr = $this->mergeArray(parent::toArray($request),$show,$arr);
     return $arr;
   }
 }

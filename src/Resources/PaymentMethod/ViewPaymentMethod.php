@@ -17,6 +17,7 @@ class ViewPaymentMethod extends ViewFinanceStuff
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
+            'form' => $this->form
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);
         return $arr;

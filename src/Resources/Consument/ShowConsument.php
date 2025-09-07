@@ -7,6 +7,9 @@ class ShowConsument extends ViewConsument
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
+            'user_wallet' => $this->relationValidation('userWallet',function(){
+                return $this->userWallet->toShowApi();
+            }),
             'reference'  => $this->relationValidation('reference', function () {
                 return $this->reference->toShowApi()->resolve();
             },$this->prop_reference)

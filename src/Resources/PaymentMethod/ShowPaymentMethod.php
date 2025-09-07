@@ -15,7 +15,9 @@ class ShowPaymentMethod extends ViewPaymentMethod
      */
     public function toArray(\Illuminate\Http\Request $request): array
     {
-        $arr = [];
+        $arr = [
+            'form' => $this->form
+        ];
         $show = $this->resolveNow(new ShowFinanceStuff($this));
         $arr = $this->mergeArray(parent::toArray($request),$show,$arr);
         return $arr;

@@ -2,9 +2,9 @@
 
 namespace Hanafalah\ModulePayment\Resources\Refund;
 
-use Hanafalah\LaravelSupport\Resources\ApiResource;
+use Hanafalah\ModulePayment\Resources\BaseWalletTransaction\ViewBaseWalletTransaction;
 
-class ViewRefund extends ApiResource
+class ViewRefund extends ViewBaseWalletTransaction
 {
 
     /**
@@ -16,27 +16,16 @@ class ViewRefund extends ApiResource
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
-            'id'          => $this->id,
-            'refund_code' => $this->refund_code,
-            'author'      => $this->relationValidation('author', function () {
-                return $this->author->toViewApi()->resolve();
-            }),
-            'withdrawal_at' => $this->withdrawal_at,
-            'total' => $this->total,
-            'transaction' => $this->relationValidation('transaction', function () {
-                return $this->transaction->toViewApi()->resolve();
-            }),
+            'invoice' => $this->relationValidation('invoice',function(){
+                return $this->invoice->toViewApi()->resolve();
+            },$this->prop_invoice),
             'refund_items' => $this->relationValidation('refundItems', function () {
                 return $this->refundItems->map(function ($refundItem) {
-                    return $refundItem->toViewApi()->resolve();
+                    return $refundItem->toViewApi();
                 });
             })
         ];
-        $props = $this->getPropsData();
-        foreach ($props as $key => $prop) {
-            $arr[$key] = $prop;
-        }
-
+        $arr = $this->mergeArray(parent::toArray($request),$arr);
         return $arr;
     }
 }

@@ -19,11 +19,14 @@ class ViewPaymentDetail extends ApiResource
             'discount'          => $this->discount,
             'paid'              => $this->paid,
             'created_at'        => $this->created_at,
+            'transaction_item_type' => $this->transaciton_item_type,
+            'transaction_item_id' => $this->transaciton_item_id,
+            'created_at'        => $this->created_at,
             'transaction_item'  => $this->relationValidation('transactionItem', function () {
-                return $this->transactionItem->toViewApi()->resolve();
+                return $this->transactionItem->toViewApi();
             }),
             'payment_history'  => $this->relationValidation("paymentHistory", function () {
-                return $this->paymentHistory->toViewApi()->resolve();
+                return $this->paymentHistory->toViewApi();
             })
         ];
 

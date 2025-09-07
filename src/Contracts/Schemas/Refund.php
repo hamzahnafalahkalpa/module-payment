@@ -2,21 +2,22 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Schemas;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-
-interface Refund
-{
-    // public function addOrChange(?array $attributes = []): self;
-    // public function prepareViewRefundPaginate(mixed $cache_reference_type = null,?array $morphs = null,int $perPage = 50,array $columns = ['*'],string $pageName = 'page',?int $page = null,?int $total = null
-    // ): LengthAwarePaginator;
-    // public function viewRefundPaginate(mixed $cache_reference_type = null,?array $morphs = null,int $perPage = 10,array $columns = ['*'],string $pageName = 'page',?int $page = null,?int $total = null
-    // ): array;
-    // public function prepareShowRefund(?Model $model = null): ?Model;
-    // public function showRefund(?Model $model = null): array;
-    // public function refund(mixed $conditionals = null): Builder;
-    // public function get(mixed $conditionals = null): Collection;
-    // public function getRefund(): mixed;
-}
+/**
+ * @see \Hanafalah\ModuleTransaction\Schemas\Refund
+ * @method self setParamLogic(string $logic, bool $search_value = false, ?array $optionals = [])
+ * @method self conditionals(mixed $conditionals)
+ * @method mixed export(string $type)
+ * @method array updateRefund(?RefundData $refund_dto = null)
+ * @method Model prepareUpdateRefund(RefundData $refund_dto)
+ * @method bool deleteRefund()
+ * @method bool prepareDeleteRefund(? array $attributes = null)
+ * @method mixed getRefund()
+ * @method ?Model prepareShowRefund(?Model $model = null, ?array $attributes = null)
+ * @method array showRefund(?Model $model = null)
+ * @method Collection prepareViewRefundList()
+ * @method array viewRefundList()
+ * @method LengthAwarePaginator prepareViewRefundPaginate(PaginateData $paginate_dto)
+ * @method array viewRefundPaginate(?PaginateData $paginate_dto = null)
+ * @method array storeRefund(?RefundData $refund_dto = null);
+ */
+interface Refund extends BaseWalletTransaction {}

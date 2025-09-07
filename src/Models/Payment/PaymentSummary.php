@@ -63,6 +63,7 @@ class PaymentSummary extends BaseModel
             $previous_parent = $query->parent;
             $is_deleting = true;
         } else {
+            
             if (!$query->isDirty('parent_id')) {
                 $query->load('parent');
             }
@@ -75,6 +76,8 @@ class PaymentSummary extends BaseModel
                     ? $query->{$rate_name} 
                     : static::calculateCurrent($query, $rate_name, $is_deleting);
             }
+            // if ($query->reference_type == 'VisitRegistration') dd($query);
+
             $parent_payment_summary->save();
         }
         if (isset($previous_parent)) {
@@ -103,15 +106,15 @@ class PaymentSummary extends BaseModel
                     ->with(['paymentDetails.transactionItem', 'recursiveInvoiceChilds'])->where('amount', '>', 0);
     }
     public function recursiveChilds(){
-        return $this->hasManyModel('PaymentSummary', 'parent_id')->debtNotZero()
+        return $this->hasManyModel('PaymentSummary', 'parent_id')
             ->with([
                 'paymentDetails' => function ($query) {
-                    $query->with('transactionItem')->debtNotZero();
+                    $query->with('transactionItem');
                 },
                 'recursiveChilds'
             ]);
     }
     public function recursiveParent(){return $this->belongsToModel('PaymentSummary', 'parent_id')->with('recursiveParent');}
-    public function paymentHistoryHasModel(){return $this->morphOneModel('PaymentHistoryHasModel', 'model');}
+    public function paymentHasModel(){return $this->morphOneModel('PaymentHasModel', 'model');}
     public function transactionItem(){return $this->morphOneModel('TransactionItem', 'item');}
 }

@@ -2,115 +2,51 @@
 
 namespace Hanafalah\ModulePayment\Schemas;
 
-use Hanafalah\LaravelSupport\Supports\PackageManagement;
-use Hanafalah\ModulePayment\Contracts\Schemas\Refund as ContractsRefund;
-use Illuminate\Database\Eloquent\Model;
+use Hanafalah\ModulePayment\Contracts\Data\BaseWalletTransactionData;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Hanafalah\ModulePayment\Resources\Refund\ShowRefund;
-use Hanafalah\ModulePayment\Resources\Refund\ViewRefund;
+use Illuminate\Database\Eloquent\Model;
+use Hanafalah\ModulePayment\Contracts\Schemas\Refund as ContractsRefund;
+use Hanafalah\ModulePayment\Contracts\Data\RefundData;
 
-class Refund extends PackageManagement implements ContractsRefund
+class Refund extends BaseWalletTransaction implements ContractsRefund
 {
     protected string $__entity = 'Refund';
     public $refund_model;
+    //protected mixed $__order_by_created_at = false; //asc, desc, false
 
-    public function prepareViewRefundPaginate(mixed $cache_reference_type = null, ?array $morphs = null, int $perPage = 50, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): LengthAwarePaginator{
-        $morphs ??= $cache_reference_type;
-        $paginate_options = compact('perPage', 'columns', 'pageName', 'page', 'total');
-        $cache_reference_type ??= 'all';
-        $cache_reference_type .= '-paginate';
-        // $this->localAddSuffixCache($cache_reference_type);
-        return $this->getRefundBuilder()
-            ->when(isset(request()->search_value) && request()->search_value, function ($q) {
-                $q->whereHas('transaction', function ($q) {
-                    $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(props, '$.\"prop_patient\".\"name\"')) LIKE ?", ['%' . request()->search_value . '%']);
-                });
-            })
-            ->paginate(...$this->arrayValues($paginate_options))
-            ->appends(request()->all());
-    }
+    protected array $__cache = [
+        'index' => [
+            'name'     => 'refund',
+            'tags'     => ['refund', 'refund-index'],
+            'duration' => 24 * 60
+        ]
+    ];
 
-    public function getRefundBuilder()
-    {
-        return $this->refund(function ($query) {
-            $query->with([
-                'author',
-                'transaction' => function ($query) {
-                    $query->with([
-                        'patient',
-                    ]);
-                },
-                'refundItems.item' => function ($query) {
-                    $query->with([
-                        'payer',
-                    ]);
-                }
-            ]);
-        });
-    }
 
-    public function viewRefundPaginate(mixed $cache_reference_type = null, ?array $morphs = null, int $perPage = 10, array $columns = ['*'], string $pageName = 'page', ?int $page = null, ?int $total = null): array
-    {
-        $paginate_options = compact('perPage', 'columns', 'pageName', 'page', 'total');
-        return $this->transforming($this->__resources['view'], function () use ($cache_reference_type, $morphs, $paginate_options) {
-            return $this->prepareViewRefundPaginate($cache_reference_type, $morphs, ...$this->arrayValues($paginate_options));
-        });
-    }
-
-    protected function showUsingRelation(): array
-    {
+    protected function additionalData(BaseWalletTransactionData $base_wallet_transaction_dto): array{
         return [
-            'author',
-            'transaction' => function ($query) {
-                $query->with([
-                    'patient',
-                ]);
-            },
-            'refundItems.item' => function ($query) {
-                $query->with([
-                    'payer',
-                ]);
-            }
+            'name' => $base_wallet_transaction_dto->name,
+            'invoice_id' => $base_wallet_transaction_dto->invoice_id
         ];
     }
 
-    public function prepareShowRefund(?Model $model = null): ?Model
-    {
-        $this->booting();
-
-        $model ??= $this->getRefund();
-        if (!isset($model)) {
-            $model = $this->refund()->with($this->showUsingRelation())->find(request()->id);
-        } else {
-            $model->load($this->showUsingRelation());
+    public function prepareStoreRefund(RefundData $refund_dto): Model{
+        $refund = $this->prepareStoreBaseWalletTransaction($refund_dto);
+        if (isset($refund_dto->refund_items) && count($refund_dto->refund_items) > 0){
+            $refund->load('transaction');
+            foreach ($refund_dto->refund_items as &$refund_item_dto) {
+                $refund_item_dto->reference_id = $refund->getKey();
+                $refund_item_dto->reference_type = $refund->getMorphClass();
+                $refund_item_dto->transaction_id = $refund->transaction->getKey();
+                $this->schemaContract('refund_item')->prepareStoreRefundItem($refund_item_dto);
+            }
         }
-
-        return $this->refund_model = $model;
+        $this->fillingProps($refund,$refund_dto->props);
+        $refund->save();
+        return $this->refund_model = $refund;
     }
 
-    public function showRefund(?Model $model = null): array
-    {
-        return $this->transforming($this->__resources['show'], $this->prepareShowRefund($model));
-    }
-
-    // public function storeRefund(){
-    //     // Implement store refund;
-    // }
-
-    public function refund(mixed $conditionals = null): Builder
-    {
-        return $this->RefundModel()->withParameters()->conditionals($conditionals)->orderBy('created_at', 'desc');
-    }
-
-    public function get(mixed $conditionals = null): Collection
-    {
-        return $this->refund($conditionals)->get();
-    }
-
-    public function getRefund(): mixed
-    {
-        return $this->refund_model;
+    public function refund(mixed $conditionals = null): Builder{
+        return $this->baseWalletTransaction($conditionals);
     }
 }

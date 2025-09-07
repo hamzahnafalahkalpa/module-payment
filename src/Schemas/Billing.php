@@ -13,16 +13,10 @@ class Billing extends PackageManagement implements ContractsBilling
     public $billing_model;
 
     public function prepareStoreBilling(BillingData $billing_dto): Model{
-        if (isset($billing_dto->id)) {
-            $guard = ['id' => $billing_dto->id];
-        } else {
-            $guard = [
-                'reported_at'    => null,
-                'has_transaction_id' => $billing_dto->has_transaction_id
-            ];
-        }
-
-        $billing = $this->usingEntity()->updateOrCreate($guard, [
+        $billing = $this->usingEntity()->updateOrCreate([
+            'id' => $billing_dto->id ?? null,
+        ],[
+            'has_transaction_id' => $billing_dto->has_transaction_id,
             'author_type'  => $billing_dto->author_type,
             'author_id'    => $billing_dto->author_id,
             'cashier_type' => $billing_dto->cashier_type,
@@ -30,7 +24,6 @@ class Billing extends PackageManagement implements ContractsBilling
             'reported_at'  => $billing_dto->reported_at
         ]);
         $billing->load(['transaction','hasTransaction']);
-
         $billing_dto->props['prop_has_transaction'] = $billing->hasTransaction->toViewApi()->resolve();
 
         if (isset($billing_dto->transaction)){
@@ -41,12 +34,23 @@ class Billing extends PackageManagement implements ContractsBilling
             $this->schemaContract('transaction')->prepareStoreTransaction($transaction_dto);
         }
 
+        if (isset($billing_dto->deferred_payments) && count($billing_dto->deferred_payments) > 0){
+            $deferred_payment_schema = $this->schemaContract('deferred_payment');
+            foreach ($billing_dto->deferred_payments as &$deferred_payment_dto) {
+                $deferred_payment_dto->billing_id = $billing->getKey();
+                $deferred_payment_dto->billing_model = $billing;
+                $deferred_payment_schema->prepareStoreDeferredPayment($deferred_payment_dto);
+            }
+        }
+
         if (isset($billing_dto->invoices) && count($billing_dto->invoices) > 0){
-            $split_payment_schema = $this->schemaContract('invoice');
-            foreach ($billing_dto->invoices as &$split_payment_dto) {
-                $split_payment_dto->billing_id = $billing->getKey();
-                $split_payment_dto->billing_model = $billing;
-                $split_payment_schema->prepareStoreSplitPayment($split_payment_dto);
+            foreach ($billing_dto->invoices as &$invoice_dto) {
+                $invoice_dto->billing_id = $billing->getKey();
+                $invoice_dto->billing_model = $billing;
+                // ($invoice_dto->is_deferred) 
+                //     ? $this->schemaContract('deferred_payment')->prepareStoreDeferredPayment($invoice_dto)
+                    // : $this->schemaContract('invoice')->prepareStoreInvoice($invoice_dto);
+                $this->schemaContract('invoice')->prepareStoreInvoice($invoice_dto);
             }
         }
         $this->fillingProps($billing, $billing_dto->props);

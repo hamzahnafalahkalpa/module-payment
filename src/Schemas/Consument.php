@@ -33,6 +33,13 @@ class Consument extends PackageManagement implements ContractsConsument
             $consument_dto->props['prop_reference'] = $reference->toViewApi()->resolve();
         }
 
+        if (isset($consument_dto->user_wallet)) {
+            $user_wallet_dto = &$consument_dto->user_wallet;
+            $user_wallet_dto->consument_type = $consument->getMorphClass();
+            $user_wallet_dto->consument_id = $consument->getKey();
+            $this->schemaContract('user_wallet')->prepareStoreUserWallet($user_wallet_dto);
+        }
+
         $this->fillingProps($consument,$consument_dto->props);
         $consument->save();
         return $this->consument_model = $consument;

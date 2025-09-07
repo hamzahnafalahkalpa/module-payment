@@ -17,9 +17,16 @@ class ShowBilling extends ViewBilling
             'author'  => $this->relationValidation('author', function () {
                 return $this->author->toShowApi()->resolve();
             }, $this->prop_author),
-            'cashier' => $this->relationValidation('cashier', function () {
-                return $this->cashier->toShowApi()->resolve();
-            }, $this->prop_cashier)
+            'deferred_payments'  => $this->relationValidation('deferredPayments', function () {
+                return $this->deferredPayments->transform(function($deferredPayment){
+                    return $this->propNil($deferredPayment->toShowApi(),'billing');
+                });
+            }),
+            'invoices'  => $this->relationValidation('invoices', function () {
+                return $this->invoices->transform(function($invoice){
+                    return $this->propNil($invoice->toShowApi(),'billing');
+                });
+            })
         ];
         $arr = $this->mergeArray(parent::toArray($request), $arr);
 

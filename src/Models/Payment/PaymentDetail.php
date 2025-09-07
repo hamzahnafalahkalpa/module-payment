@@ -20,7 +20,7 @@ class PaymentDetail extends BaseModel
     public $incrementing  = false;
     protected $keyType    = "string";
     protected $primaryKey = 'id';
-    protected $list       = ['id', 'payment_summary_id', 'qty', 'payment_history_id', 'transaction_item_id', 'is_loan'];
+    protected $list       = ['id', 'payment_summary_id', 'name', 'qty', 'invoice_id', 'payment_history_id', 'transaction_id', 'transaction_item_id', 'is_loan'];
     protected $show       = ['parent_id', 'cogs', 'amount', 'debt', 'price', 'discount', 'refund', 'paid', 'tax', 'additional', 'refund_item_id'];
 
     protected static function booted(): void
@@ -132,4 +132,5 @@ class PaymentDetail extends BaseModel
     public function paymentHistory(){return $this->belongsToModel('PaymentHistory');}
     public function recursiveParent(){return $this->parent()->with('recursiveParent');}
     public function refundItem(){return $this->hasOneModel('RefundItem');}
+    public function invoice(){return $this->belongsToModel('Invoice');}
 }

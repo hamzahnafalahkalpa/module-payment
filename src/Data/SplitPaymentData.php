@@ -29,13 +29,13 @@ class SplitPaymentData extends Data implements DataSplitPaymentData
     #[MapInputName('invoice_model')]
     public ?object $invoice_model = null;
 
+    #[MapName('money_paid')]
+    #[MapInputName('money_paid')]
+    public ?int $money_paid = null;
+
     #[MapName('paid')]
     #[MapInputName('paid')]
-    public ?int $paid = null;
-
-    #[MapName('discount')]
-    #[MapInputName('discount')]
-    public ?int $discount = null;
+    public ?int $paid = 0;
 
     #[MapName('props')]
     #[MapInputName('props')]
@@ -46,12 +46,11 @@ class SplitPaymentData extends Data implements DataSplitPaymentData
 
         $props = &$data->props;
         $props['paid_money'] ??= 0;
-        $props['cash_over'] ??= 0;
-        $props['note'] ??= '';
+        $props['cash_over']  ??= 0;
+        $props['note']       ??= '';
 
         $data->payment_method_model = $payment_method_model = $new->PaymentMethodModel()->findOrFail($data->payment_method_id);
-        $props['payment_method'] = $payment_method_model->toViewApi()->resolve();
-        
+        $props['payment_method'] = $payment_method_model->toViewApiOnlies('id','name','flag','label');
         return $data;
     }
 }

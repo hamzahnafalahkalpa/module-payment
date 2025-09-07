@@ -2,7 +2,7 @@
 
 namespace Hanafalah\ModulePayment\Resources\Refund;
 
-use Hanafalah\LaravelSupport\Resources\ApiResource;
+use Hanafalah\ModulePayment\Resources\BaseWalletTransaction\ShowBaseWalletTransaction;
 
 class ShowRefund extends ViewRefund
 {
@@ -18,13 +18,13 @@ class ShowRefund extends ViewRefund
         $arr = [
             'refund_items' => $this->relationValidation('refundItems', function () {
                 return $this->refundItems->transform(function ($refundItem) {
-                    return $refundItem->toViewApi()->resolve();
+                    return $refundItem->toShowApi();
                 });
             })
         ];
 
-        $arr = array_merge(parent::toArray($request), $arr);
-
+        $show = $this->resolveNow(new ShowBaseWalletTransaction($this));
+        $arr = $this->mergeArray(parent::toArray($request), $show, $arr);
         return $arr;
     }
 }

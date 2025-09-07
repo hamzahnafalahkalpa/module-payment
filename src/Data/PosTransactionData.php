@@ -19,12 +19,14 @@ class PosTransactionData extends DataTransactionData implements DataPosTransacti
         if (isset($attributes['billing'])){
             $billing = &$attributes['billing'];
             if (isset($billing['invoices']) && count($billing['invoices']) > 0){
-                $transaction = $new->TransactionModel()->with('consument')->findOrFail($attributes['id']);
-                $consument = $transaction->consument;
-                foreach ($billing['invoices'] as &$invoice) {
-                    if (!isset($invoice['payer_type']) || !isset($invoice['payer_id'])){
-                        $invoice['payer_type'] = $consument->getMorphClass();
-                        $invoice['payer_id'] = $consument->getKey();
+                if (isset($attributes['id'])){
+                    $transaction = $new->TransactionModel()->with('consument')->findOrFail($attributes['id']);
+                    $consument = $transaction->consument;
+                    foreach ($billing['invoices'] as &$invoice) {
+                        if (!isset($invoice['payer_type']) || !isset($invoice['payer_id'])){
+                            $invoice['payer_type'] = $consument->getMorphClass();
+                            $invoice['payer_id'] = $consument->getKey();
+                        }
                     }
                 }
             }

@@ -37,6 +37,6 @@ class PosTransaction extends Transaction
     public function getShowResource(){return ShowPosTransaction::class;}
 
     public function paymentSummary(){return $this->hasOneModel("PaymentSummary");}
-    public function billing(){return $this->hasOneModel("Billing",'has_transaction_id');}
+    public function billing(){return $this->hasOneModel("Billing",'has_transaction_id')->orderBy('created_at','desc');}
     public function billings(){return $this->hasManyModel("Billing",'has_transaction_id');}
 }

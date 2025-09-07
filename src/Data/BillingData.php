@@ -10,7 +10,6 @@ use Hanafalah\ModuleTransaction\Contracts\Data\TransactionData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Spatie\LaravelData\DataCollection;
 
 class BillingData extends Data implements DataBillingData
 {
@@ -24,11 +23,15 @@ class BillingData extends Data implements DataBillingData
 
     #[MapInputName('has_transaction_id')]
     #[MapName('has_transaction_id')]
-    public mixed $transaction_id;
+    public mixed $has_transaction_id;
 
     #[MapInputName('has_transaction')]
     #[MapName('has_transaction')]
     public ?TransactionData $has_transaction = null;
+
+    #[MapInputName('has_transaction_model')]
+    #[MapName('has_transaction_model')]
+    public ?object $has_transaction_model = null;
 
     #[MapInputName('transaction')]
     #[MapName('transaction')]
@@ -54,14 +57,23 @@ class BillingData extends Data implements DataBillingData
     #[MapName('status')]
     public ?string $status = Status::DRAFT->value;
 
+    #[MapInputName('deferred_payments')]
+    #[MapName('deferred_payments')]      
+    #[DataCollectionOf(DeferredPaymentData::class)]
+    public ?array $deferred_payments = null;
+
     #[MapInputName('invoices')]
     #[MapName('invoices')]      
     #[DataCollectionOf(InvoiceData::class)]
-    public ?DataCollection $invoices = null;
+    public ?array $invoices = null;
 
     #[MapInputName('reported_at')]
     #[MapName('reported_at')]
-    public ?Carbon $reported_at = null;
+    public ?string $reported_at = null;
+
+    #[MapInputName('reporting')]
+    #[MapName('reporting')]
+    public ?bool $reporting = null;
 
     #[MapInputName('props')]
     #[MapName('props')]
@@ -73,8 +85,13 @@ class BillingData extends Data implements DataBillingData
             'id' => null
         ];
 
-        if (isset($attributes['invoices']) && count($attributes['invoices']) > 0){
-            $transaction = $new->TransactionModel()->with('consument')->findOrFail($attributes['has_transaction_id']);
+        if (isset($attributes['id'])){
+            $billing = $new->BillingModel()->load('hasTransaction.consument')->findOrFail($attributes['id']);
+            $attributes['has_transaction_model'] = $billing->hasTransaction;
+        }
+
+        if (isset($attributes['has_transaction_id']) && isset($attributes['invoices']) && count($attributes['invoices']) > 0){
+            $transaction = $attributes['has_transaction_model'] ?? $new->TransactionModel()->with('consument')->findOrFail($attributes['has_transaction_id']);
             $consument = $transaction->consument;
             foreach ($attributes['invoices'] as &$invoice) {
                 if (!isset($invoice['payer_type']) || !isset($invoice['payer_id'])){
@@ -89,12 +106,14 @@ class BillingData extends Data implements DataBillingData
         $new = self::new();
 
         $props = &$data->props;
-
         $author = $new->{$data->author_type.'Model'}()->findOrFail($data->author_id);
         $props['prop_author'] = $author->toViewApiOnlies('id','name');
 
         $cashier = $new->{$data->cashier_type.'Model'}()->findOrFail($data->cashier_id);
         $props['prop_cashier'] = $cashier->toViewApiOnlies('id','name');
+
+        if (isset($data->reporting) && $data->reporting) $data->reported_at = now()->toDateTimeString();
+        if (isset($data->reported_at)) $data->reporting ??= true;
         return $data;
     }
 }
