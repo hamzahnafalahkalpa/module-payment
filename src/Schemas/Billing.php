@@ -25,7 +25,6 @@ class Billing extends PackageManagement implements ContractsBilling
         ]);
         $billing->load(['transaction','hasTransaction']);
         $billing_dto->props['prop_has_transaction'] = $billing->hasTransaction->toViewApi()->resolve();
-
         if (isset($billing_dto->transaction)){
             $transaction_dto = &$billing_dto->transaction;
             $transaction_dto->id = $billing->transaction->getKey();

@@ -62,7 +62,7 @@ class UserWalletData extends Data implements DataUserWalletData
         $attributes['balance'] ??= 0;
         if (isset($attributes['verifying']) && $attributes['verifying']){
             $attributes['verified_at'] = now();
-            $attributes['status'] = Status::ACTIVE->value;
+            $attributes['status'] = Status::REPORTED->value;
         }elseif(isset($attributes['suspending']) && $attributes['suspending']){
             $attributes['suspended_at'] = now();
             $attributes['status'] = Status::SUSPENDED->value;

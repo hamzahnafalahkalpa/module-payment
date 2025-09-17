@@ -35,6 +35,10 @@ class BaseWalletTransactionData extends Data implements DataBaseWalletTransactio
     #[MapName('wallet_transaction')]
     public ?WalletTransactionData $wallet_transaction = null;
 
+    #[MapName('withdrawal')]
+    #[MapInputName('withdrawal')]
+    public ?WithdrawalData $withdrawal = null;
+
     #[MapInputName('props')]
     #[MapName('props')]
     public ?BaseWalletTransactionPropsData $props = null;
@@ -46,5 +50,27 @@ class BaseWalletTransactionData extends Data implements DataBaseWalletTransactio
             $attributes['channel_model'] = $channel_model = $new->ChannelModel()->findOrFail($attributes['channel_id']);
             $attributes['prop_channel'] = $channel_model->toViewApi()->resolve();        
         }
+    }
+
+    protected function initWithdrawal(){
+        $new = static::new();
+    }
+
+    protected function initWalletTransaction(array &$attributes, string $transaction_type, string $transaction_type_value){
+        $new = static::new();
+        $wallet_transaction = &$attributes['wallet_transaction'];
+        if (!isset($attributes['user_wallet_id'])){
+            $user_wallet = $new->UserWalletModel()
+                        ->with(['wallet', 'consument'])
+                        ->where('props->prop_wallet->label','PERSONAL')
+                        ->where('consument_type',$attributes['consument_type'])
+                        ->where('consument_id',$attributes['consument_id'])
+                        ->firstOrFail();
+            $wallet_transaction['user_wallet_id'] = $user_wallet->getKey();
+            $wallet_transaction['user_wallet_model'] = $user_wallet;
+        }
+        $wallet_transaction['name'] ??= $attributes['name'];
+        $wallet_transaction['transaction_type'] = $transaction_type_value;
+        $wallet_transaction['reference_type'] = $transaction_type;
     }
 }

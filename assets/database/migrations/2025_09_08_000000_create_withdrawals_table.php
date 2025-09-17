@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Hanafalah\ModulePayment\Models\Consument\{
-    Wallet
+use Hanafalah\ModulePayment\Models\{
+    Withdrawals
 };
 
 return new class extends Migration
@@ -15,7 +15,7 @@ return new class extends Migration
 
     public function __construct()
     {
-        $this->__table = app(config('database.models.Wallet', Wallet::class));
+        $this->__table = app(config('database.models.Withdrawals', Withdrawals::class));
     }
 
     /**
@@ -30,8 +30,6 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $table->ulid('id')->primary();
                 $table->string('name', 255)->nullable(false);
-                $table->string('reference_type',50)->nullable(true);
-                $table->string('reference_id',36)->nullable(true);
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

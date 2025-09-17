@@ -158,6 +158,7 @@ class Invoice extends PackageManagement implements ContractsInvoice
     protected function generateSplitPayment(SplitPaymentData &$split_payment_dto, Model &$invoice): self{
         //WHEN BILLING TRIGGERED
         $split_payment_dto->invoice_id = $invoice->getKey();
+        $split_payment_dto->invoice_model = $invoice;
         $split_payment_model = $this->schemaContract('split_payment')->prepareStoreSplitPayment($split_payment_dto);
         $split_payment_dto->id = $split_payment_model->getKey();
         return $this;

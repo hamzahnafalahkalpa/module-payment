@@ -24,6 +24,7 @@ class SplitPayment extends BaseModel
         'payment_method_id',
         'invoice_id',
         'money_paid',
+        'user_wallet_id',
         'paid',
         'props'
     ];
@@ -43,4 +44,5 @@ class SplitPayment extends BaseModel
 
     public function paymentMethod(){return $this->belongsToModel('PaymentMethod');}
     public function invoice(){return $this->belongsToModel('Invoice');}
+    public function userWallet(){return $this->belongsToModel('UserWallet');}
 }

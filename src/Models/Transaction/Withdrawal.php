@@ -2,14 +2,15 @@
 
 namespace Hanafalah\ModulePayment\Models\Transaction;
 
-use Hanafalah\ModulePayment\Resources\Refund\{ShowRefund, ViewRefund};
+use Hanafalah\ModulePayment\Resources\Withdrawal\{ShowWithdrawal, ViewWithdrawal};
 
-class Refund extends BaseWalletTransaction{
+class Withdrawal extends BaseWalletTransaction{
     public $list = [
         'id',
         'code',
         'name',
-        'invoice_id',
+        'reference_type',
+        'reference_id',
         'props',
     ];
 
@@ -17,7 +18,7 @@ class Refund extends BaseWalletTransaction{
     {
         parent::booted();
         static::creating(function ($query) {
-            if (!isset($query->code)) $query->code = static::hasEncoding('Refund');
+            if (!isset($query->code)) $query->code = static::hasEncoding('Withdrawal');
         });
     }
 
@@ -30,19 +31,19 @@ class Refund extends BaseWalletTransaction{
     public function showUsingRelation(): array{
         return [
             'walletTransaction',
-            'refundItems'
+            'reference'
         ];
     }
 
     public function getViewResource(){
-        return ViewRefund::class;
+        return ViewWithdrawal::class;
     }
 
     public function getShowResource(){
-        return ShowRefund::class;
+        return ShowWithdrawal::class;
     }
 
-    public function refundItems(){return $this->morphManyModel('RefundItem','reference');}
+    public function WithdrawalItems(){return $this->morphManyModel('WithdrawalItem','reference');}
     public function invoice(){return $this->belongsToModel('Invoice');}
     public function withdrawal(){return $this->morphOneModel('Withdrawal','reference');}
 }

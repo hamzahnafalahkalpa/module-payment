@@ -41,6 +41,13 @@ class Refund extends BaseWalletTransaction implements ContractsRefund
                 $this->schemaContract('refund_item')->prepareStoreRefundItem($refund_item_dto);
             }
         }
+
+        if (isset($refund_dto->withdrawal)){
+            $refund_dto->withdrawal->reference_id = $refund->getKey();
+            $refund_dto->withdrawal->reference_type = $refund->getMorphClass();
+            $this->schemaContract('withdrawal')->prepareStoreWithdrawal($refund_dto->withdrawal);
+        }
+
         $this->fillingProps($refund,$refund_dto->props);
         $refund->save();
         return $this->refund_model = $refund;

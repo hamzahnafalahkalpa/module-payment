@@ -6,4 +6,5 @@ enum Status: string
 {
     case DRAFT     = 'DRAFT';
     case REPORTED    = 'REPORTED';
+    case SUSPENDED    = 'SUSPENDED';
 }
