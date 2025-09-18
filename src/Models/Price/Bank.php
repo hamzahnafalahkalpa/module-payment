@@ -29,7 +29,7 @@ class Bank extends BaseModel
             $query->where('status', Status::ACTIVE->value);
         });
         static::creating(function ($query) {
-            if (!isset($query->status)) $query->status = Status::ACTIVE->value;
+            $query->status ??= Status::ACTIVE->value;
         });
     }
 
