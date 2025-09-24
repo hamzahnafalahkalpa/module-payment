@@ -26,7 +26,7 @@ return [
     ],
     'voucher' => [
         'benefit_targets' => [
-            'benefit_billing'     => Contracts\Supports\Benefit\Billing::class,
+            'benefit_billing'     => Contracts\Supports\Benefit\BillingBenefit::class,
         ],
         'conditions' => [
             'maximum_usage'       => Contracts\Supports\Condition\UsageCondition::class,
@@ -39,5 +39,6 @@ return [
     'commands'  => [
         ModulePaymentCommands\InstallMakeCommand::class
     ],
-    'author' => 'User'
+    'author' => 'User',
+    'cashier' => null
 ];
