@@ -13,18 +13,6 @@ class PaymentDetail extends PackageManagement implements ContractsPaymentDetail
     protected string $__entity = 'PaymentDetail';
     public $payment_detail_model;
 
-    protected function viewUsingRelation(): array{
-        return [];
-    }
-
-    protected function showUsingRelation(): array{
-        return [];
-    }
-
-    public function getPaymentDetail(): mixed{
-        return $this->payment_detail_model;
-    }
-
     public function prepareStorePaymentDetail(PaymentDetailData $payment_detail_dto): Model{
         if (isset($payment_detail_dto->id)) {
             $guard = ['id' => $payment_detail_dto->id];
@@ -42,7 +30,6 @@ class PaymentDetail extends PackageManagement implements ContractsPaymentDetail
             foreach ($keys as $key) $add[$key] = $payment_detail_dto->{$key};
             return $add;
         }));
-
         return $this->payment_detail_model = $payment_detail;
     }
 

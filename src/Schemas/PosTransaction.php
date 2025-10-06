@@ -5,6 +5,8 @@ namespace Hanafalah\ModulePayment\Schemas;
 use Hanafalah\ModulePayment\Contracts\Data\PosTransactionData;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModulePayment\Contracts\Schemas\PosTransaction as ContractsPosTransaction;
+use Hanafalah\ModuleTransaction\Contracts\Data\TransactionData;
+use Hanafalah\ModuleTransaction\Contracts\Data\TransactionItemData;
 use Hanafalah\ModuleTransaction\Schemas\Transaction;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -35,6 +37,16 @@ class PosTransaction extends Transaction implements ContractsPosTransaction
         $this->fillingProps($transaction, $pos_transaction_dto->props);
         $transaction->save();
         return $this->pos_transaction_model = $transaction; 
+    }
+
+    protected function createTransactionItem(TransactionItemData &$transaction_item_dto, Model &$transaction){
+        $transaction_item_dto->transaction_id    = $transaction->getKey();
+        $transaction_item_dto->transaction_model = $transaction;
+        $transaction_item_dto->reference_type = $transaction->reference_type;
+        $transaction_item_dto->reference_id = $transaction->reference_id;
+        $payment_summary = $transaction->paymentSummary;
+        $transaction_item_dto->payment_summary_id = $payment_summary->getKey();
+        return $this->schemaContract('transaction_item')->prepareStoreTransactionItem($transaction_item_dto);
     }
 
     public function camelEntity(): string{
