@@ -2,11 +2,10 @@
 
 namespace Hanafalah\ModulePayment\Models\Price;
 
-use Hanafalah\LaravelSupport\Models\Unicode\Unicode;
 use Hanafalah\ModulePayment\Resources\TariffComponent\ShowTariffComponent;
 use Hanafalah\ModulePayment\Resources\TariffComponent\ViewTariffComponent;
 
-class TariffComponent extends Unicode
+class TariffComponent extends FinanceStuff
 {
     protected $table = 'unicodes';
 
