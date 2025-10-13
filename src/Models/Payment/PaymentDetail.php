@@ -128,7 +128,7 @@ class PaymentDetail extends BaseModel
     }
 
     public function paymentSummary(){return $this->belongsToModel('PaymentSummary');}
-    public function transactionItem(){return $this->belongsToModel('TransactionItem');}
+    public function transactionItem(){return $this->belongsToModel('PosTransactionItem');}
     public function paymentHistory(){return $this->belongsToModel('PaymentHistory');}
     public function recursiveParent(){return $this->parent()->with('recursiveParent');}
     public function refundItem(){return $this->hasOneModel('RefundItem');}
