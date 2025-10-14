@@ -15,7 +15,7 @@ class ShowPaymentSummary extends ViewPaymentSummary
     {
         $arr = [
             'refund'           => $this->refund,
-            'additional'       => $this->additional,
+            // 'additional'       => $this->additional,
             'tax'              => $this->tax,
             'total_tax'        => $this->total_tax,
             'transaction'      => $this->relationValidation('transaction', function () {
