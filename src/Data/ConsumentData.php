@@ -30,6 +30,10 @@ class ConsumentData extends Data implements DataConsumentData
     #[MapName('reference_type')]
     public ?string $reference_type = null;
 
+    #[MapInputName('reference_model')]
+    #[MapName('reference_model')]
+    public ?object $reference_model = null;
+
     #[MapInputName('user_wallet')]
     #[MapName('user_wallet')]
     public ?UserWalletData $user_wallet = null;

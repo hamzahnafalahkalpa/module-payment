@@ -24,31 +24,6 @@ class ViewPaymentSummary extends ApiResource
             'paid'             => $this->paid,
             'created_at'       => $this->created_at,
             'updated_at'       => $this->updated_at
-            // 'reference_type'   => $this->reference_type,
-            // 'reference'        => $this->relationValidation('reference', function () {
-            //     return $this->reference->toViewApi()->resolve();
-            // }),
-            // 'payment_details'  => $this->relationValidation('paymentDetails', function () {
-            //     $paymentDetails = $this->paymentDetails;
-            //     return $paymentDetails->transform(function ($paymentDetail) {
-            //         return $paymentDetail->toViewApi()->resolve();
-            //     });
-            // }),
-            // 'transaction'      => $this->relationValidation('transaction', function () {
-            //     $transaction = $this->transaction;
-            //     return $transaction->toViewApi()->resolve();
-            // }),
-            // 'childs'           => $this->relationValidation('childs', function () {
-            //     $childs = $this->childs;
-            //     return $childs->transform(function ($child) {
-            //         return $child->toViewApi()->resolve();
-            //     });
-            // }),
-            // 'payment_summaries' => $this->relationValidation('paymentSummaries', function () {
-            //     return $this->paymentSummaries->transform(function ($paymentSummary) {
-            //         return $paymentSummary->toViewApi()->resolve();
-            //     });
-            // })
         ];
         if (isset($this->pre_debt)) {
             $arr = $this->mergeArray($arr, [

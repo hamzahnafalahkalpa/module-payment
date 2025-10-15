@@ -21,6 +21,7 @@ trait HasConsument
 
     protected static function generateConsument(&$query): void{
         $consument = app(config('app.contracts.Consument'))->prepareStoreConsument($query->requestDTO(ConsumentData::class,[
+            'reference_model' => $query,
             'name' => $query->name,
             'phone' => $query->phone ?? null,
             'reference_id' => $query->getKey(),
