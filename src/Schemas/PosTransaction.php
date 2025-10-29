@@ -5,7 +5,6 @@ namespace Hanafalah\ModulePayment\Schemas;
 use Hanafalah\ModulePayment\Contracts\Data\PosTransactionData;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModulePayment\Contracts\Schemas\PosTransaction as ContractsPosTransaction;
-use Hanafalah\ModuleTransaction\Contracts\Data\TransactionData;
 use Hanafalah\ModuleTransaction\Contracts\Data\TransactionItemData;
 use Hanafalah\ModuleTransaction\Schemas\Transaction;
 use Illuminate\Database\Eloquent\Builder;

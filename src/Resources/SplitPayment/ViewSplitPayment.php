@@ -19,10 +19,9 @@ class ViewSplitPayment extends ApiResource
             'id'                => $this->id,
             'split_payment_code'=> $this->split_payment_code,
             'payment_method'    => $this->payment_method,
+            'money_paid'        => $this->money_paid,
             'paid'              => $this->paid,
-            'note'              => $this->note,
-            'created_at'        => $this->created_at,
-            'updated_at'        => $this->updated_at
+            'note'              => $this->note
         ];
         return $arr;
     }

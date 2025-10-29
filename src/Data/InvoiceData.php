@@ -106,7 +106,7 @@ class InvoiceData extends Data implements DataInvoiceData
         }
 
         $payer_model = $attributes['payer_model'];
-        $attributes['prop_payer'] = $payer_model->toViewApi()->resolve();
+        $attributes['prop_payer'] = $payer_model->toViewApiOnlie();
 
         $attributes['transaction'] = array_merge_recursive($attributes['transaction'] ?? [],[
             'id' => null,

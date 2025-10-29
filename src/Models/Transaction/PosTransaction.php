@@ -21,7 +21,24 @@ class PosTransaction extends Transaction
 
     public function showUsingRelation(): array{
         return $this->mergeArray(parent::showUsingRelation(),[
-            'billing',
+            'billing.invoices' => function($query){
+                $query->with([
+                    'splitPayments',
+                    'paymentHistory' => function($query){
+                        $query->with([
+                            'childs.paymentHistoryDetails'
+                        ]);
+                    },
+                    'paymentSummary' => function($query){
+                        $query->with([
+                            'paymentDetails' => function ($query) {
+                                $query->with('transactionItem')->debtNotZero();
+                            },
+                            'recursiveChilds'
+                        ]);
+                    }
+                ]);
+            },
             'paymentSummary' => function($query){
                 $query->with([
                     'paymentDetails' => function ($query) {

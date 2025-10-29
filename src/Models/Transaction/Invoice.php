@@ -48,8 +48,7 @@ class Invoice extends BaseModel
             },
             'paymentHistory' => function($query){
                 return $query->with([
-                    'paymentHistoryDetails',
-                    'childs'
+                    'childs.paymentHistoryDetails',
                 ]);
             },
             'splitPayments'
