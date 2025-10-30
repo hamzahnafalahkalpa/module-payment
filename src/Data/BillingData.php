@@ -109,8 +109,10 @@ class BillingData extends Data implements DataBillingData
         $author = $new->{$data->author_type.'Model'}()->findOrFail($data->author_id);
         $props['prop_author'] = $author->toViewApiOnlies('id','name');
 
-        $cashier = $new->{$data->cashier_type.'Model'}()->findOrFail($data->cashier_id);
-        $props['prop_cashier'] = $cashier->toViewApiOnlies('id','name');
+        if (isset($data->cashier_type) && isset($data->cashier_id)) {
+            $cashier = $new->{$data->cashier_type.'Model'}()->findOrFail($data->cashier_id);
+            $props['prop_cashier'] = $cashier->toViewApiOnlies('id','name');
+        }
 
         if (isset($data->reporting) && $data->reporting) $data->reported_at = now()->toDateTimeString();
         if (isset($data->reported_at)) $data->reporting ??= true;
