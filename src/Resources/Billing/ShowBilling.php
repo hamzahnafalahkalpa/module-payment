@@ -17,11 +17,6 @@ class ShowBilling extends ViewBilling
             'author'  => $this->relationValidation('author', function () {
                 return $this->author->toShowApi()->resolve();
             }, $this->prop_author),
-            'deferred_payments'  => $this->relationValidation('deferredPayments', function () {
-                return $this->deferredPayments->transform(function($deferredPayment){
-                    return $this->propNil($deferredPayment->toShowApi(),'billing');
-                });
-            }),
             'invoices'  => $this->relationValidation('invoices', function () {
                 return $this->invoices->transform(function($invoice){
                     return $this->propNil($invoice->toShowApi(),'billing');
