@@ -3,9 +3,7 @@
 namespace Hanafalah\ModulePayment\Database\Seeders;
 
 use Hanafalah\LaravelSupport\Concerns\Support\HasRequestData;
-use Hanafalah\ModulePayment\Contracts\Data\CoaData;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CoaSeeder extends Seeder
 {
@@ -54,10 +52,8 @@ class CoaSeeder extends Seeder
             ['name' => 'HPP', 'code' => '8', 'parent_id' => null, 'coa_type' => ['name' => 'Cost of Goods Sold'], 'balance_type' => 'DEBIT'],
             ['name' => 'HPP Barang Dagang', 'code' => '8.1', 'parent_code' => '8', 'coa_type' => ['name' => 'Cost of Goods Sold'], 'balance_type' => 'DEBIT'],
         ];
-
-
         foreach ($coas as $coa) {
-            app(config('app.contracts.Coa'))->prepareStoreCoa($this->requestDTO(CoaData::class, $coa));
+            app(config('app.contracts.Coa'))->prepareStoreCoa($this->requestDTO(config('app.contracts.CoaData'), $coa));
         }
     }
 }
