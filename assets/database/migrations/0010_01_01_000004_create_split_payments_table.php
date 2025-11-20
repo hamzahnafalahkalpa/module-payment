@@ -1,5 +1,6 @@
 <?php
 
+use Hanafalah\ModulePayment\Models\Consument\UserWallet;
 use Hanafalah\ModulePayment\Models\Payment\PaymentMethod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -30,12 +31,15 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $invoice = app(config('database.models.Invoice', Invoice::class));
                 $payment_method = app(config('database.models.PaymentMethod', PaymentMethod::class));
+                $user_wallet = app(config('database.models.UserWallet', UserWallet::class));
 
                 $table->ulid('id')->primary();
                 $table->string('payment_method', 36)->nullable(true);
                 $table->foreignIdFor($invoice::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->foreignIdFor($payment_method::class)->nullable()->index()
+                    ->constrained()->cascadeOnUpdate()->nullOnDelete();
+                $table->foreignIdFor($user_wallet::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->unsignedBigInteger('money_paid')->nullable(true)->default(0);
                 $table->unsignedBigInteger('total_paid')->nullable(true)->default(0);

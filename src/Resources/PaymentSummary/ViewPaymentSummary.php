@@ -22,6 +22,11 @@ class ViewPaymentSummary extends ApiResource
             'discount'         => $this->discount,
             'debt'             => $this->debt,            
             'paid'             => $this->paid,
+            'payment_details'  => $this->relationValidation('paymentDetails', function () {
+                return $this->paymentDetails->transform(function ($paymentDetail) {
+                    return $paymentDetail->toShowApi();
+                });
+            }),
             'created_at'       => $this->created_at,
             'updated_at'       => $this->updated_at
         ];
