@@ -45,7 +45,7 @@ class PosTransaction extends Transaction implements ContractsPosTransaction
         $transaction_item_dto->reference_id = $transaction->reference_id;
         $payment_summary = $transaction->paymentSummary;
         $transaction_item_dto->payment_summary_id = $payment_summary->getKey();
-        return $this->schemaContract('transaction_item')->prepareStoreTransactionItem($transaction_item_dto);
+        return $this->schemaContract('pos_transaction_item')->prepareStorePosTransactionItem($transaction_item_dto);
     }
 
     public function camelEntity(): string{

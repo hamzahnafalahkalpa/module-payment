@@ -4,12 +4,19 @@ namespace Hanafalah\ModulePayment\Data;
 
 use Hanafalah\ModulePayment\Contracts\Data\BillingData;
 use Hanafalah\ModulePayment\Contracts\Data\PosTransactionData as DataPosTransactionData;
+use Hanafalah\ModulePayment\Data\PosTransactionItemData;
 use Hanafalah\ModuleTransaction\Data\TransactionData as DataTransactionData;
+use Hanafalah\ModuleTransaction\Data\TransactionItemData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
 class PosTransactionData extends DataTransactionData implements DataPosTransactionData
 {
+    #[MapInputName('transaction_items')]
+    #[MapName('transaction_items')]
+    #[DataCollectionOf(PosTransactionItemData::class)]
+    public ?array $transaction_items = null;
+
     #[MapInputName('billing')]
     #[MapName('billing')]      
     public ?BillingData $billing = null;
