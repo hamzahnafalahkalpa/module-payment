@@ -32,11 +32,17 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
         }
         $create = [$guard,$add];
         $payment_summary = $this->usingEntity()->updateOrCreate(...$create);
-
         if (isset($payment_summary_dto->payment_details) && count($payment_summary_dto->payment_details) > 0) {
             foreach ($payment_summary_dto->payment_details as &$payment_detail_dto) {
                 $payment_detail_dto->payment_summary_id = $payment_summary->getKey();
                 $this->schemaContract('payment_detail')->prepareStorePaymentDetail($payment_detail_dto);
+            }
+        }else{
+            if (isset($payment_summary_dto->amount) && $payment_summary_dto->amount > 0){
+                $payment_summary->amount = $payment_summary_dto->amount;
+                $payment_summary->discount = $payment_summary_dto->discount;
+                $payment_summary->debt = $payment_summary_dto->debt;
+                $payment_summary->paid = $payment_summary_dto->paid;
             }
         }
 
