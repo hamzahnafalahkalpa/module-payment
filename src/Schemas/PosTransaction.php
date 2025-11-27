@@ -31,6 +31,7 @@ class PosTransaction extends Transaction implements ContractsPosTransaction
                 }
             }
             $billing_model = $this->schemaContract('billing')->prepareStoreBilling($billing_dto);
+            $transaction->setRelation('billing',$billing_model);
             $pos_transaction_dto->props['prop_billing'] = $billing_model->toViewApi()->resolve();
         }
         $this->fillingProps($transaction, $pos_transaction_dto->props);
