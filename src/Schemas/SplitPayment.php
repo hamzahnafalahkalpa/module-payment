@@ -13,6 +13,14 @@ class SplitPayment extends PackageManagement implements ContractsSplitPayment
     public $split_payment_model;
 
     public function prepareStoreSplitPayment(SplitPaymentData $split_payment_dto): Model{
+        if ($split_payment_dto->payment_method_model->label == 'DEPOSIT'){
+            $invoice_model = $split_payment_dto->invoice_model ?? $this->InvoiceModel()->findOrFail($split_payment_dto->invoice_id);
+            $invoice_model->load(['payer.userWallet' => fn($q) => $q->where('props->prop_wallet->label','Personal Pocket')]);
+            $user_wallet_model = $invoice_model->payer->userWallet;
+            $split_payment_dto->user_wallet_id = $user_wallet_model->getKey();
+            $split_payment_dto->user_wallet_model = $user_wallet_model;
+        }
+
         $add = [
             'payment_method_id' => $split_payment_dto->payment_method_id,
             'money_paid' => $split_payment_dto->money_paid,

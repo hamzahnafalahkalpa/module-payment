@@ -24,6 +24,7 @@ class Billing extends PackageManagement implements ContractsBilling
             'reported_at'  => $billing_dto->reported_at
         ]);
         $billing->load(['transaction','hasTransaction']);
+
         $billing_dto->props['prop_has_transaction'] = $billing->hasTransaction->toViewApi()->resolve();
         if (isset($billing_dto->transaction)){
             $transaction_dto = &$billing_dto->transaction;
@@ -32,7 +33,6 @@ class Billing extends PackageManagement implements ContractsBilling
             $transaction_dto->reference_id   = $billing->getKey();
             $this->schemaContract('transaction')->prepareStoreTransaction($transaction_dto);
         }
-
         if (isset($billing_dto->deferred_payments) && count($billing_dto->deferred_payments) > 0){
             $deferred_payment_schema = $this->schemaContract('deferred_payment');
             foreach ($billing_dto->deferred_payments as &$deferred_payment_dto) {

@@ -2,12 +2,13 @@
 
 namespace Hanafalah\ModulePayment\Models\Payment;
 
+use Hanafalah\LaravelHasProps\Concerns\HasProps;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Hanafalah\LaravelSupport\Models\BaseModel;
 
 class PaymentHasModel extends BaseModel
 {
-    use HasUlids;
+    use HasUlids, HasProps;
 
     public $incrementing   = false;
     protected $keyType     = 'string';
@@ -18,7 +19,8 @@ class PaymentHasModel extends BaseModel
         'payment_type',
         'payment_id',
         'model_type',
-        'model_id'
+        'model_id',
+        'props'
     ];
 
     public function payment(){return $this->morphTo();}

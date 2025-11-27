@@ -12,6 +12,11 @@ class PaymentHistory extends PaymentSummary implements ContractsPaymentHistory
 
     public function prepareStorePaymentHistory(PaymentHistoryData $payment_history_dto): Model{
         $payment_history = $this->prepareStorePaymentSummary($payment_history_dto);
+        if (isset($payment_history_dto->payment_has_models) && count($payment_history_dto->payment_has_models) > 0) {
+            foreach ($payment_history_dto->payment_has_models as &$payment_has_model_dto) {
+                $payment_has_model = $this->schemaContract('payment_has_model')->prepareStorePaymentHasModel($payment_has_model_dto);
+            }
+        }
         return $this->payment_history_model = $payment_history;
     }
 

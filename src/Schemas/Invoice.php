@@ -70,22 +70,28 @@ class Invoice extends PackageManagement implements ContractsInvoice
                     'name' => $payment_summary_model->name,
                     'reference_type' => $payment_summary_model->reference_type,
                     'reference_id' => $payment_summary_model->reference_id,
-                    'payment_has_model' => [
-                        'id' => null,
-                        'payment_id' => $payment_model->getKey(),
-                        'payment_type' => $payment_type,
-                        'model_type' => 'PaymentSummary',
-                        'model_id' => $payment_summary_model->getKey()
+                    'payment_has_models' => [
+                        [
+                            'id' => null,
+                            'payment_id' => $payment_model->getKey(),
+                            'payment_type' => $payment_type,
+                            'model_type' => 'PaymentSummary',
+                            'model_id' => $payment_summary_model->getKey()
+                        ]
                     ],
                     'amount' => 0,
                     'debt' => 0,
                     'payment_details' => null
                 ];
                 $new_payment_summary = $this->schemaContract(Str::snake($payment_type))
-                                            ->prepareStore(
-                                                $this->requestDTO(config('app.contracts.'.$payment_type.'Data'),
-                                                $payment_summary_data)
+                                            ->{'prepareStore'.$payment_type}(
+                                                $this->requestDTO(
+                                                    config('app.contracts.'.$payment_type.'Data'),
+                                                    $payment_summary_data
+                                                )
                                             );
+                $payment_model->form = null;
+                $payment_model->save();
             }
             
             $payment_details = &$payment_summary['payment_details'];

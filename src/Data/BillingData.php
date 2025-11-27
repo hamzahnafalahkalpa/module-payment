@@ -104,7 +104,6 @@ class BillingData extends Data implements DataBillingData
 
     public static function after(self $data): self{
         $new = self::new();
-
         $props = &$data->props;
         $author = $new->{$data->author_type.'Model'}()->findOrFail($data->author_id);
         $props['prop_author'] = $author->toViewApiOnlies('id','name');
