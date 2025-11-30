@@ -32,21 +32,11 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
         }
         $create = [$guard,$add];
         $payment_summary = $this->usingEntity()->updateOrCreate(...$create);
+
         if (isset($payment_summary_dto->payment_details) && count($payment_summary_dto->payment_details) > 0) {
             foreach ($payment_summary_dto->payment_details as &$payment_detail_dto) {
                 $payment_detail_dto->payment_summary_id = $payment_summary->getKey();
-                $payment_detail = $this->schemaContract('payment_detail')->prepareStorePaymentDetail($payment_detail_dto);
-                // $payment_summary->amount += $payment_detail->amount;
-                // $payment_summary->discount += $payment_detail->discount;
-                // $payment_summary->debt += $payment_detail->debt;
-                // $payment_summary->paid += $payment_detail->paid;
-            }
-        }else{
-            if (isset($payment_summary_dto->amount) && $payment_summary_dto->amount > 0){
-                $payment_summary->amount = $payment_summary_dto->amount;
-                $payment_summary->discount = $payment_summary_dto->discount;
-                $payment_summary->debt = $payment_summary_dto->debt;
-                $payment_summary->paid = $payment_summary_dto->paid;
+                $this->schemaContract('payment_detail')->prepareStorePaymentDetail($payment_detail_dto);
             }
         }
 
@@ -56,6 +46,7 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
                 $this->prepareStorePaymentSummary($payment_summary_dto);
             }
         }
+
         $this->fillingProps($payment_summary, $payment_summary_dto->props);
         $payment_summary->save();
         return $this->payment_summary_model = $payment_summary;

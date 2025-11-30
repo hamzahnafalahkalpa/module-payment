@@ -60,8 +60,17 @@ class SplitPaymentData extends Data implements DataSplitPaymentData
         $props['paid_money'] ??= 0;
         $props['cash_over']  ??= 0;
         $props['note']       ??= '';
+
         $data->payment_method_model = $payment_method_model = $new->PaymentMethodModel()->findOrFail($data->payment_method_id);
         $props['payment_method'] = $payment_method_model->toViewApiOnlies('id','name','flag','label');
+
+        if ($payment_method_model->label == 'DEPOSIT'){
+            $invoice_model = $data->invoice_model ?? $new->InvoiceModel()->findOrFail($data->invoice_id);
+            $invoice_model->load(['payer.userWallet' => fn($q) => $q->where('prop->prop_wallet->label','Personal Pocket')]);
+            $user_wallet_model = $invoice_model->payer->userWallet;
+            $data->user_wallet_id = $user_wallet_model->getKey();
+            $data->user_wallet_model = $user_wallet_model;
+        }
         return $data;
     }
 }

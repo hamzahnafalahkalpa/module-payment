@@ -2,12 +2,11 @@
 
 namespace Hanafalah\ModulePayment\Data;
 
-use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePayment\Contracts\Data\PaymentHasModelData as DataPaymentHasModelData;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
 
-class PaymentHasModelData extends Data implements DataPaymentHasModelData
+class PaymentHasModelData extends PaymentSummaryData implements DataPaymentHasModelData
 {
     #[MapInputName('id')]
     #[MapName('id')]
@@ -28,8 +27,4 @@ class PaymentHasModelData extends Data implements DataPaymentHasModelData
     #[MapInputName('model_id')]
     #[MapName('model_id')]
     public mixed $model_id = null;
-
-    #[MapInputName('props')]
-    #[MapName('props')]
-    public ?array $props = null;
 }

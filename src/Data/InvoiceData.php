@@ -96,6 +96,7 @@ class InvoiceData extends Data implements DataInvoiceData
         }else{
             $attributes['paid_at'] ??= now();
         }
+
         if (isset($attributes['payer_model'])){
             $attributes['payer_id']   = $attributes['payer_model']->getKey();
             $attributes['payer_type'] = $attributes['payer_model']->getMorphClass();

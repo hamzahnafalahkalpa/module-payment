@@ -1,10 +1,10 @@
 <?php
 
-use Hanafalah\ModulePayment\Models\Consument\UserWallet;
 use Hanafalah\ModulePayment\Models\Payment\PaymentMethod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Hanafalah\ModulePayment\Models\Consument\UserWallet;
 use Hanafalah\ModulePayment\Models\Transaction\Invoice;
 use Hanafalah\ModulePayment\Models\Transaction\SplitPayment;
 
@@ -31,7 +31,7 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $invoice = app(config('database.models.Invoice', Invoice::class));
                 $payment_method = app(config('database.models.PaymentMethod', PaymentMethod::class));
-                $user_wallet = app(config('database.models.UserWallet', UserWallet::class));
+                $user_wallet = app(config('database.models.UserWallet', UserWallett::class));
 
                 $table->ulid('id')->primary();
                 $table->string('payment_method', 36)->nullable(true);

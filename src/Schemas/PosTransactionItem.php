@@ -22,7 +22,7 @@ class PosTransactionItem extends TransactionItem implements ContractsPosTransact
         ]
     ];
 
-    public function prepareStorePosTransactionItem(mixed $pos_transaction_item_dto): Model{
+    public function prepareStorePosTransactionItem(PosTransactionItemData $pos_transaction_item_dto): Model{
         $this->pos_transaction_item_model = $this->prepareStoreTransactionItem($pos_transaction_item_dto);
         return $this->pos_transaction_item_model;
     }

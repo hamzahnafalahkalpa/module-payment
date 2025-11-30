@@ -55,7 +55,7 @@ class PosTransaction extends Transaction
 
     public function transactionItem(){return $this->hasOneModel('PosTransactionItem');}    
     public function transactionItems(){return $this->hasManyModel('PosTransactionItem');}    
-    public function paymentSummary(){return $this->hasOneModel("PaymentSummary",'transaction_id');}
+    public function paymentSummary(){return $this->hasOneModel("PaymentSummary");}
     public function billing(){return $this->hasOneModel("Billing",'has_transaction_id')->orderBy('created_at','desc');}
     public function billings(){return $this->hasManyModel("Billing",'has_transaction_id');}
 }

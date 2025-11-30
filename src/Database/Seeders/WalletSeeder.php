@@ -13,6 +13,7 @@ class WalletSeeder extends Seeder
 
     public function run(): void
     {
+        echo "[DEBUG] Booting ".class_basename($this)."\n";
         $wallets = [
             [
                 'name' => 'Personal Pocket',
