@@ -56,16 +56,6 @@ class Billing extends BaseModel
     public function showUsingRelation(): array{
         return [
             'hasTransaction',
-            // 'deferredPayments' => function($query){
-            //     return $query->with([
-            //         'paymentSummary' =>function($query){
-            //             return $query->with([
-            //                 'paymentDetails',
-            //                 'recursiveChilds'
-            //             ]);
-            //         }
-            //     ]);
-            // },
             'invoices' => function($query){
                 return $query->with([
                     'paymentSummary' =>function($query){
@@ -101,5 +91,6 @@ class Billing extends BaseModel
     public function author(){return $this->morphTo();}
     public function hasTransaction(){return $this->belongsToModel("Transaction",'has_transaction_id');}
     public function deferredPayments(){return $this->hasManyModel("DeferredPayment",'billing_id');}
+    public function invoice(){return $this->hasOneModel("Invoice",'billing_id');}
     public function invoices(){return $this->hasManyModel("Invoice",'billing_id');}
 }

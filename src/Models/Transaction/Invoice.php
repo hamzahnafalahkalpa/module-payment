@@ -34,12 +34,14 @@ class Invoice extends BaseModel
 
     public function viewUsingRelation(){
         return [
+            'billing.hasTransaction.reference',
             'paymentSummary', 'paymentHistory'
         ];
     }
 
     public function showUsingRelation(){
         return [
+            'billing.hasTransaction.reference',
             'paymentSummary' => function($query){
                 return $query->with([
                     'paymentDetails',
@@ -75,7 +77,7 @@ class Invoice extends BaseModel
     public function scopePaid($builder){return $builder->whereNotNull('paid_at');}
 
     public function splitPayments(){return $this->hasManyModel('SplitPayment');}
-    public function billing(){return $this->belongsToModel('billing');}
+    public function billing(){return $this->belongsToModel('Billing');}
     public function paymentHistory(){return $this->morphOneModel('PaymentHistory','reference')->where('props->is_deferred',false);}
     public function author(){return $this->morphTo();}
     public function payer(){return $this->morphTo();}
