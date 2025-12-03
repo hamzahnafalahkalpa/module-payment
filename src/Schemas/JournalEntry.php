@@ -28,6 +28,7 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
             'journal_source_id' => $journal_entry_dto->journal_source_id,
             'author_type'       => $journal_entry_dto->author_type,
             'author_id'         => $journal_entry_dto->author_id,
+            'reported_at'      => $journal_entry_dto->reported_at,
         ];
 
         if (isset($journal_entry_dto->id)){
@@ -57,6 +58,15 @@ class JournalEntry extends BaseModulePayment implements ContractsJournalEntry
             $current_balance = $debit_balance - $kredit_balance;
             $journal_entry->current_balance = $current_balance;
             $journal_entry->save();
+        }
+
+        if (isset($journal_entry_dto->journal_items) && count($journal_entry_dto->journal_items) > 0){
+            foreach ($journal_entry_dto->journal_items as $journal_item){
+                $journal_item->reference_type ??= $journal_entry->reference_type;
+                $journal_item->reference_id   ??= $journal_entry->reference_id;
+                $journal_item->parent_id   ??= $journal_entry->parent_id;
+                $this->prepareStoreJournalEntry($journal_item);
+            }
         }
 
         $this->fillingProps($journal_entry,$journal_entry_dto->props);

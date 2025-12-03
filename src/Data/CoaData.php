@@ -64,6 +64,18 @@ class CoaData extends Data implements DataCoaData
     #[DataCollectionOf(CoaData::class)]
     public ?array $childs = [];
 
+    #[MapInputName('reference_type')]
+    #[MapName('reference_type')]
+    public ?string $reference_type = null;
+
+    #[MapInputName('reference_id')]
+    #[MapName('reference_id')]
+    public mixed $reference_id = null;
+
+    #[MapInputName('coa_template_id')]
+    #[MapName('coa_template_id')]
+    public ?string $coa_template_id = null;
+
     #[MapInputName('props')]
     #[MapName('props')]
     public ?array $props = null;

@@ -19,12 +19,13 @@ class CoaEntry extends BaseModel
     protected $keyType    = 'string';
     protected $primaryKey = 'id';
     public $list = [
-        'id', 'journal_entry_id', 'coa_id', 'balance_type', 'value', 'props',
+        'id', 'journal_entry_id', 'coa_id', 'debit', 'credit', 'props',
     ];
 
     protected $casts = [
         'name' => 'string',
-        'balance_type' => 'string'
+        'debit' => 'integer',
+        'credit' => 'integer'
     ];
 
     public function viewUsingRelation(): array{

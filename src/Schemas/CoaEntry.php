@@ -25,8 +25,8 @@ class CoaEntry extends BaseModulePayment implements ContractsCoaEntry
 
     public function prepareStoreCoaEntry(CoaEntryData $coa_entry_dto): Model{
         $add = [
-            'balance_type' => $coa_entry_dto->balance_type,
-            'value' => $coa_entry_dto->value
+            'debit' => $coa_entry_dto->debit,
+            'credit' => $coa_entry_dto->credit
         ];
         if (isset($coa_entry_dto->id)){
             $guard  = ['id' => $coa_entry_dto->id];

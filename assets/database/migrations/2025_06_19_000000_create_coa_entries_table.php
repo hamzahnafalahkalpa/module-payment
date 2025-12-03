@@ -34,15 +34,12 @@ return new class extends Migration
                 $journal_entry = app(config('database.models.JournalEntry', JournalEntry::class));
 
                 $table->ulid('id')->primary();
-
                 $table->foreignIdFor($coa::class)->nullable(false)
                       ->index()->constrained()->cascadeOnUpdate()->restrictOnDelete();
-
                 $table->foreignIdFor($journal_entry::class)->nullable(false)
                       ->index()->constrained()->cascadeOnUpdate()->restrictOnDelete();
-
-                $table->string('balance_type', 10)->nullable(true)->comment('DEBIT, CREDIT');
-                $table->unsignedBigInteger('value')->nullable(false);
+                $table->unsignedBigInteger('debit')->nullable();
+                $table->unsignedBigInteger('credit')->nullable();
                 $table->json('props')->nullable();
                 $table->timestamps();
                 $table->softDeletes();

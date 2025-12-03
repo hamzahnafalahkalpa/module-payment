@@ -31,14 +31,18 @@ class Coa extends PackageManagement implements ContractsCoa
             'code'          => $coa_dto->code ?? null,
             'coa_type_id'   => $coa_dto->coa_type_id ?? null,
             'status'        => $coa_dto->status ?? 'ACTIVE',
-            'balance_type'  => $coa_dto->balance_type
+            'balance_type'  => $coa_dto->balance_type,
         ];
         if (isset($coa_dto->id)){
             $group  = ['id' => $coa_dto->id];
-            $create = [$group,$add];
         }else{
-            $create = [$add];
+            $group = [
+                'reference_type' => $coa_dto->reference_type,
+                'reference_id'   => $coa_dto->reference_id,
+                'coa_template_id' => $coa_dto->coa_template_id ?? null
+            ];
         }
+        $create = [$group,$add];
 
         if (isset($coa_dto->parent_id)){
             $model = $this->CoaModel()->updateOrCreate(...$create);

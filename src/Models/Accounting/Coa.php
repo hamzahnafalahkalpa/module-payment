@@ -17,7 +17,7 @@ class Coa extends BaseModel
     protected $keyType = 'string';
     protected $primaryKey = 'id';
     protected $list = [
-        'id', 'parent_id', 'flag', 'name', 
+        'id', 'parent_id', 'flag', 'name', 'coa_template_id', 'reference_type', 'reference_id',
         'coa_type_id', 'code', 'balance_type', 'status', 'props'
     ];
 
@@ -56,4 +56,6 @@ class Coa extends BaseModel
 
     public function childs(){return $this->hasManyModel('Coa', 'parent_id')->with('childs');}
     public function accountGroup(){return $this->belongsToModel('AccountGroup', 'parent_id');}
+    public function coaTemplate(){return $this->belongsToModel('Coa', 'coa_template_id');}
+    public function reference(){return $this->morphTo();}
 }

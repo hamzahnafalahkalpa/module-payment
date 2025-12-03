@@ -15,7 +15,7 @@ class SplitPaymentData extends Data implements DataSplitPaymentData
 
     #[MapName('payment_method_id')]
     #[MapInputName('payment_method_id')]
-    public mixed $payment_method_id;
+    public mixed $payment_method_id = null;
 
     #[MapName('payment_method_model')]
     #[MapInputName('payment_method_model')]
@@ -61,7 +61,10 @@ class SplitPaymentData extends Data implements DataSplitPaymentData
         $props['cash_over']  ??= 0;
         $props['note']       ??= '';
 
-        $data->payment_method_model = $payment_method_model = $new->PaymentMethodModel()->findOrFail($data->payment_method_id);
+        $payment_method_model = $new->PaymentMethodModel();
+        if (isset($data->payment_method_id)) {
+            $data->payment_method_model = $payment_method_model = $payment_method_model->findOrFail($data->payment_method_id);
+        }
         $props['payment_method'] = $payment_method_model->toViewApiOnlies('id','name','flag','label');
 
         if ($payment_method_model->label == 'DEPOSIT'){

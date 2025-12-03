@@ -24,7 +24,6 @@ class SplitPayment extends PackageManagement implements ContractsSplitPayment
             $guard = ['invoice_id' => $split_payment_dto->invoice_id];
         }
         $create = [$guard,$add];
-
         $split_payment = $this->usingEntity()->updateOrCreate(...$create);
         if (isset($split_payment_dto->user_wallet_model)){
             $split_payment_dto->props['prop_user_wallet'] = $split_payment_dto->user_wallet_model->toViewApi()->resolve();

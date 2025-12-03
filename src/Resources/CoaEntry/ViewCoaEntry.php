@@ -18,8 +18,8 @@ class ViewCoaEntry extends ApiResource
       'id'           => $this->id,
       'coa_id'       => $this->coa_id,
       'coa'          => $this->prop_coa,
-      'balance_type' => $this->balance_type,
-      'value'        => $this->value
+      'debit'        => $this->debit,
+      'credit'       => $this->credit
     ];
     return $arr;
   }

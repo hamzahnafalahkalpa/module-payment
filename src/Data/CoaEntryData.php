@@ -22,14 +22,13 @@ class CoaEntryData extends Data implements DataCoaEntryData
     #[MapName('journal_entry_id')]
     public mixed $journal_entry_id;
 
-    #[MapInputName('balance_type')]
-    #[MapName('balance_type')]
-    #[In('DEBIT', 'CREDIT')]
-    public string $balance_type;
+    #[MapInputName('debit')]
+    #[MapName('debit')]
+    public ?int $debit;
 
-    #[MapInputName('value')]
-    #[MapName('value')]
-    public int $value;
+    #[MapInputName('credit')]
+    #[MapName('credit')]
+    public ?int $credit;
 
     #[MapInputName('props')]
     #[MapName('props')]

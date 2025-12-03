@@ -15,6 +15,10 @@ class JournalEntryData extends Data implements DataJournalEntryData
     #[MapName('id')]
     public mixed $id = null;
 
+    #[MapInputName('parent_id')]
+    #[MapName('parent_id')]
+    public mixed $parent_id = null;
+
     #[MapInputName('reference_type')]
     #[MapName('reference_type')]
     public ?string $reference_type = null;
@@ -37,7 +41,7 @@ class JournalEntryData extends Data implements DataJournalEntryData
 
     #[MapInputName('reported_at')]
     #[MapName('reported_at')]
-    public ?Carbon $reported_at = null;
+    public ?string $reported_at = null;
 
     #[MapInputName('status')]
     #[MapName('status')]
@@ -56,12 +60,20 @@ class JournalEntryData extends Data implements DataJournalEntryData
     #[DataCollectionOf(CoaEntryData::class)]
     public ?array $coa_entries = null;
 
+    #[MapInputName('journal_items')]
+    #[MapName('journal_items')]
+    #[DataCollectionOf(JournalEntryData::class)]
+    public ?array $journal_items = null;
+
     #[MapInputName('props')]
     #[MapName('props')]
     public ?array $props = null;
 
     public static function before(array &$attributes){
         if (!isset($attributes['id'])) $attributes['status'] = app(config('database.models.JournalEntry'))::STATUS_DRAFT;
+        if (isset($attributes['reported_at'])){
+            $attributes['status'] = 'PROCESSED';
+        }
     }
 
     public static function after(self $data): self{
@@ -71,21 +83,18 @@ class JournalEntryData extends Data implements DataJournalEntryData
         $author = $new->{config('module-payment.author').'Model'}();
         $author = (isset($data->author_id)) ? $author->findOrFail($data->author_id) : $author;
         $props['prop_author'] = $author->toViewApi()->only(['id', 'name']);
-
         $journal_source = $new->JournalSourceModel();
         $journal_source = (isset($data->journal_source_id)) ? $journal_source->findOrFail($data->journal_source_id) : $journal_source;
         $props['prop_journal_source'] = $journal_source->toViewApi()->only(['id', 'name', 'flag']);
 
-        if (isset($data->id)){
-            $journal_entry = $new->JournalEntryModel()->findOrFail($data->id);
-
-            $new->fillMissingFromModel($data, $journal_entry, [
-                'reference_type', 'reference_id', 'transaction_reference_id'
-            ]);
-
-            $reference = $new->{$data->reference_type.'Model'}()->findOrFail($data->reference_id);
-            $props['prop_reference'] = $reference->toViewApi()->only(['id', 'name']);
-        }
+        // if (isset($data->id)){
+        //     $journal_entry = $new->JournalEntryModel()->findOrFail($data->id);
+        //     $new->fillMissingFromModel($data, $journal_entry, [
+        //         'reference_type', 'reference_id', 'transaction_reference_id'
+        //     ]);
+        //     $reference = $new->{$data->reference_type.'Model'}()->findOrFail($data->reference_id);
+        //     $props['prop_reference'] = $reference->toViewApi()->only(['id', 'name']);
+        // }
         return $data;
     }
 }

@@ -13,6 +13,11 @@ class ShowJournalEntry extends ViewJournalEntry
   public function toArray(\Illuminate\Http\Request $request): array
   {
     $arr = [
+      'journal_items' => $this->relationValidation('journalItems',function(){
+        return $this->journalItems->transform(function($journalItem){
+          return $journalItem->toShowApi()->resolve();
+        });
+      }),
       'reference'   => $this->relationValidation('reference',function(){
         return $this->reference->toShowApi()->resolve();
       }),

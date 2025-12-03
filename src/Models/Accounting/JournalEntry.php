@@ -23,7 +23,7 @@ class JournalEntry extends BaseModel
     protected $keyType    = 'string';
     protected $primaryKey = 'id';
     public $list = [
-        'id', 'name', 'reference_type', 'reference_id',
+        'id', 'parent_id', 'name', 'reference_type', 'reference_id',
         'transaction_reference_id', 'journal_source_id',
         'reported_at', 'status', 'current_balance',
         'author_type', 'author_id', 'props',
@@ -45,8 +45,9 @@ class JournalEntry extends BaseModel
 
     public function showUsingRelation(): array{
         return [
-            'transactionReference','journalSource',
-            'coaEntries', 'reference', 'author'
+            'transactionReference', 'journalSource',
+            'coaEntries', 'reference', 'author',
+            'journalItems'
         ];
     }
 
@@ -63,4 +64,5 @@ class JournalEntry extends BaseModel
     public function reference(){return $this->morphTo();}
     public function author(){return $this->morphTo();}
     public function coaEntries(){return $this->hasManyModel('CoaEntry');}
+    public function journalItems(){return $this->hasManyModel('JournalEntry','parent_id')->with(['journalSource','coaEntries']);}
 }
