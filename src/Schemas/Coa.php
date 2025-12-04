@@ -64,6 +64,7 @@ class Coa extends PackageManagement implements ContractsCoa
         if (isset($coa_dto->childs) && count($coa_dto->childs) > 0){
             foreach ($coa_dto->childs as $coa_dto){
                 $coa_dto->parent_id     = $model->getKey();
+                $coa_dto->parent_model  = $model;
                 $coa_dto->coa_type_id ??= $coa_dto->coa_type_id ?? null;
                 $this->prepareStoreCoa($coa_dto);
             }

@@ -22,6 +22,10 @@ class CoaData extends Data implements DataCoaData
     #[MapName('parent_id')]
     public mixed $parent_id = null;
 
+    #[MapInputName('parent_model')]
+    #[MapName('parent_model')]
+    public ?object $parent_model = null;
+
     #[MapInputName('account_group_id')]
     #[MapName('account_group_id')]
     public mixed $account_group_id = null;
@@ -98,8 +102,8 @@ class CoaData extends Data implements DataCoaData
         }
 
         if (isset($data->parent_code)){
-            $parent = $new->CoaModel()->where('code', $data->parent_code)->firstOrFail();
-            $data->parent_id = $parent->id;
+            $parent = $data->parent_model ?? $new->CoaModel()->where('code', $data->parent_code)->first();
+            if (isset($parent)) $data->parent_id = $parent->id;
         }
 
         $data->props['prop_parent'] = [
@@ -108,7 +112,7 @@ class CoaData extends Data implements DataCoaData
         ];
 
         if (!isset($data->props['prop_parent']['name']) && isset($data->parent_id)){
-            $parent = $new->CoaModel()->findOrFail($data->parent_id);
+            $parent = $data->parent_model ?? $new->CoaModel()->findOrFail($data->parent_id);
             $data->props['prop_parent']['name'] = $parent->name;
         }        
 
