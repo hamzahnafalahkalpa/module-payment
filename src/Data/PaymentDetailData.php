@@ -18,6 +18,10 @@ class PaymentDetailData extends Data implements DataPaymentDetailData
     #[MapName('parent_id')]
     public mixed $parent_id = null;
 
+    #[MapInputName('name')]
+    #[MapName('name')]
+    public ?string $name = null;
+
     #[MapInputName('payment_summary_id')]
     #[MapName('payment_summary_id')]
     public mixed $payment_summary_id;
@@ -47,6 +51,10 @@ class PaymentDetailData extends Data implements DataPaymentDetailData
     #[MapName('debt')]
     public ?int $debt = null;
 
+    #[MapInputName('discount')]
+    #[MapName('discount')]
+    public ?int $discount = null;
+
     #[MapInputName('paid')]
     #[MapName('paid')]
     public ?int $paid = 0;
@@ -62,10 +70,15 @@ class PaymentDetailData extends Data implements DataPaymentDetailData
     #[MapInputName('additional')]
     #[MapName('additional')]
     public ?int $additional = 0;
+
+    #[MapInputName('props')]
+    #[MapName('props')]
+    public ?array $props = null;
     
     public static function after (PaymentDetailData $data): PaymentDetailData{
         $data->amount ??= (($data->price * $data->qty) + $data->additional + $data->tax);
         $data->debt   ??= $data->amount;
+        $data->discount ??= 0;
         return $data;
     }
 }

@@ -41,7 +41,6 @@ class Billing extends PackageManagement implements ContractsBilling
                 $deferred_payment_schema->prepareStoreDeferredPayment($deferred_payment_dto);
             }
         }
-
         if (isset($billing_dto->invoices) && count($billing_dto->invoices) > 0){
             foreach ($billing_dto->invoices as &$invoice_dto) {
                 $invoice_dto->billing_id = $billing->getKey();

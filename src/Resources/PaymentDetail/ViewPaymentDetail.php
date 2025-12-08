@@ -18,6 +18,7 @@ class ViewPaymentDetail extends ApiResource
             'additional'        => $this->additional,
             'discount'          => $this->discount,
             'paid'              => $this->paid,
+            'note'              => $this->note,
             'created_at'        => $this->created_at,
             'transaction_item_type' => $this->transaciton_item_type,
             'transaction_item_id' => $this->transaciton_item_id,

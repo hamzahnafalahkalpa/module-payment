@@ -32,7 +32,9 @@ class ViewBilling extends ApiResource
             },$this->prop_has_transaction),
             'debt'           => $this->debt ?? 0,
             'amount'         => $this->amount ?? 0,
+            'discount'       => $this->discount ?? 0,
             'money_paid'     => $this->money_paid ?? 0,
+            'note'          => $this->note,
             'reported_at'    => $this->reported_at,
             'created_at'     => $this->created_at,
             'updated_at'     => $this->updated_at

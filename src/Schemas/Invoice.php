@@ -35,7 +35,6 @@ class Invoice extends PackageManagement implements ContractsInvoice
             $invoice->paid_at = $invoice_dto->paid_at;
             $invoice_dto->generated_at = now();
         }
-
         $this->generateTransaction($invoice_dto, $invoice)
              ->generatePaymentSummary($invoice_dto, $invoice)
              ->generatePaymentHistory($invoice_dto, $invoice);    
@@ -95,6 +94,8 @@ class Invoice extends PackageManagement implements ContractsInvoice
                     if ($invoice_dto->is_deferred){
                         $payment_detail_model->payment_summary_id = $new_payment_summary->getKey();
                     }else{
+                        $payment_detail_model->paid ??= 0;
+                        $payment_detail_model->paid += $payment_detail_model->debt;
                         $payment_detail_model->debt = 0;
                         $payment_detail_model->payment_history_id = $new_payment_summary->getKey();
                     }
