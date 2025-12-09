@@ -106,8 +106,10 @@ class BillingData extends Data implements DataBillingData
         $new = self::new();
 
         $props = &$data->props;
-        $author = $new->{$data->author_type.'Model'}()->findOrFail($data->author_id);
-        $props['prop_author'] = $author->toViewApiOnlies('id','name');
+        if (isset($data->author_type) && isset($data->author_id)){
+            $author = $new->{$data->author_type.'Model'}()->findOrFail($data->author_id);
+            $props['prop_author'] = $author->toViewApiOnlies('id','name');
+        }
 
         if (isset($data->cashier_type) && isset($data->cashier_id)) {
             $cashier = $new->{$data->cashier_type.'Model'}()->findOrFail($data->cashier_id);

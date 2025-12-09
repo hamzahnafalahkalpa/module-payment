@@ -101,12 +101,16 @@ class InvoiceData extends Data implements DataInvoiceData
             $attributes['payer_id']   = $attributes['payer_model']->getKey();
             $attributes['payer_type'] = $attributes['payer_model']->getMorphClass();
         }else{
-            $payer = $new->{$attributes['payer_type'].'Model'}()->findOrFail($attributes['payer_id']);
-            $attributes['payer_model'] = $payer;
+            if (isset($attributes['payer_type']) && isset($attributes['payer_id'])){
+                $payer = $new->{$attributes['payer_type'].'Model'}()->findOrFail($attributes['payer_id']);
+                $attributes['payer_model'] = $payer;
+            }
         }
 
-        $payer_model = $attributes['payer_model'];
-        $attributes['prop_payer'] = $payer_model->toViewApi()->resolve();
+        if (isset($attributes['payer_model'])){
+            $payer_model = $attributes['payer_model'];
+            $attributes['prop_payer'] = $payer_model->toViewApi()->resolve();
+        }
 
         $attributes['transaction'] = array_merge_recursive($attributes['transaction'] ?? [],[
             'id' => null,
