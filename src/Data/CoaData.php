@@ -101,9 +101,9 @@ class CoaData extends Data implements DataCoaData
             $data->props['prop_coa_type']['name'] = $coa_type->name;
         }
 
-        if (isset($data->parent_code)){
-            $parent = $data->parent_model ?? $new->CoaModel()->where('code', $data->parent_code)->first();
-            if (isset($parent)) $data->parent_id = $parent->id;
+        if (isset($data->parent_model)){
+            $parent = $data->parent_model;
+            $data->parent_id = $parent->id;
         }
 
         $data->props['prop_parent'] = [

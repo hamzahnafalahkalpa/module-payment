@@ -26,7 +26,7 @@ class PaymentDetail extends PackageManagement implements ContractsPaymentDetail
 
         $payment_detail = $this->PaymentDetailModel()->firstOrCreate($guard,\call_user_func(function() use ($payment_detail_dto){
             $add  = [];
-            $keys = ['name', 'is_loan','qty','amount','debt','price','discount','paid','cogs','tax','additional'];
+            $keys = ['name','is_loan','qty','amount','debt','price','discount','paid','cogs','tax','additional'];
             foreach ($keys as $key) $add[$key] = $payment_detail_dto->{$key};
             return $add;
         }));

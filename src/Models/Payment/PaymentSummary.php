@@ -70,7 +70,7 @@ class PaymentSummary extends BaseModel
         }
         $parent_payment_summary = $query->parent;
         if (isset($parent_payment_summary)) {
-            $rate_names = ['debt', 'amount', 'total_tax', 'additional', 'discount', 'cogs', 'paid', 'refund'];
+            $rate_names = ['debt', 'amount', 'total_tax', 'additional', 'discount', 'cogs' , 'paid', 'refund'];
             foreach ($rate_names as $rate_name) {
                 $parent_payment_summary->{$rate_name} += (!$is_update_parent) 
                     ? $query->{$rate_name} 

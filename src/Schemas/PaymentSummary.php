@@ -21,6 +21,12 @@ class PaymentSummary extends PackageManagement implements ContractsPaymentSummar
             'parent_id'      => $payment_summary_dto->parent_id,
             'transaction_id' => $payment_summary_dto->transaction_id
         ];
+        if (isset($payment_summary_dto->amount)){
+            $add['amount'] = $payment_summary_dto->amount;
+        }
+        if (isset($payment_summary_dto->debt)){
+            $add['debt'] = $payment_summary_dto->debt;
+        }
         if (isset($payment_summary_dto->id)){
             $guard  = ['id' => $payment_summary_dto->id];
         }else{

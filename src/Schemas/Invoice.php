@@ -35,6 +35,7 @@ class Invoice extends PackageManagement implements ContractsInvoice
             $invoice->paid_at = $invoice_dto->paid_at;
             $invoice_dto->generated_at = now();
         }
+
         $this->generateTransaction($invoice_dto, $invoice)
              ->generatePaymentSummary($invoice_dto, $invoice)
              ->generatePaymentHistory($invoice_dto, $invoice);    
@@ -44,7 +45,6 @@ class Invoice extends PackageManagement implements ContractsInvoice
                 $this->generateSplitPayment($split_payment_dto, $invoice);    
             }
         }
-
         if ($invoice_dto->is_deferred){
             $payment_model = &$invoice->paymentSummary;
         }else{
@@ -52,56 +52,66 @@ class Invoice extends PackageManagement implements ContractsInvoice
         }
         $this->fillingProps($invoice, $props);
         $invoice->save();
+
         $this->reporting($invoice_dto,$invoice,$payment_model);
+
         return $invoice;
     }
 
     protected function reporting(InvoiceData &$invoice_dto, Model &$invoice, Model &$payment_model){
         $form = $payment_model->form;
         $reporting = $invoice_dto->reporting;
-        foreach ($form['payment_summaries'] as &$payment_summary) {
-            if ($reporting) {
-                $payment_summary_model = $this->PaymentSummaryModel()->findOrFail($payment_summary['id']);
-                $payment_type = $payment_model->getMorphClass();
-                $payment_summary_data = [
-                    'id' => null,
-                    'parent_id' => $payment_model->getKey(),
-                    'name' => $payment_summary_model->name,
-                    'reference_type' => $payment_summary_model->reference_type,
-                    'reference_id' => $payment_summary_model->reference_id,
-                    'payment_has_model' => [
+        if (isset($form) && isset($form['payment_summaries']) && count($form['payment_summaries']) > 0){
+            foreach ($form['payment_summaries'] as &$payment_summary) {
+                if ($reporting) {
+                    $payment_summary_model = $this->PaymentSummaryModel()->findOrFail($payment_summary['id']);
+                    $payment_type = $payment_model->getMorphClass();
+                    $payment_summary_data = [
                         'id' => null,
-                        'payment_id' => $payment_model->getKey(),
-                        'payment_type' => $payment_type,
-                        'model_type' => 'PaymentSummary',
-                        'model_id' => $payment_summary_model->getKey()
-                    ],
-                    'amount' => 0,
-                    'debt' => 0,
-                    'payment_details' => null
-                ];
-                $new_payment_summary = $this->schemaContract(Str::snake($payment_type))
-                                            ->prepareStore(
-                                                $this->requestDTO(config('app.contracts.'.$payment_type.'Data'),
-                                                $payment_summary_data)
-                                            );
-            }
-            
-            $payment_details = &$payment_summary['payment_details'];
-            foreach ($payment_details as &$payment_detail) {
-                $payment_detail_model = $this->PaymentDetailModel()->findOrFail($payment_detail['id']);
-                if ($reporting){
-                    if ($invoice_dto->is_deferred){
-                        $payment_detail_model->payment_summary_id = $new_payment_summary->getKey();
-                    }else{
-                        $payment_detail_model->paid ??= 0;
-                        $payment_detail_model->paid += $payment_detail_model->debt;
-                        $payment_detail_model->debt = 0;
-                        $payment_detail_model->payment_history_id = $new_payment_summary->getKey();
+                        'parent_id' => $payment_model->getKey(),
+                        'name' => $payment_summary_model->name,
+                        'reference_type' => $payment_summary_model->reference_type,
+                        'reference_id' => $payment_summary_model->reference_id,
+                        'payment_has_model' => [
+                            'id' => null,
+                            'payment_id' => $payment_model->getKey(),
+                            'payment_type' => $payment_type,
+                            'model_type' => 'PaymentSummary',
+                            'model_id' => $payment_summary_model->getKey()
+                        ],
+                        'payment_details' => null
+                    ];                    
+                    if (!isset($payment_summary['payment_details']) || count($payment_summary['payment_details']) == 0){
+                        $payment_summary_data['debt'] ??= $payment_summary['debt'] ?? 0;
+                        $payment_summary_data['amount'] ??= $payment_summary['amount'] ?? 0;
+                        $payment_summary_model->debt -= $payment_summary_data['amount'];
+                        $payment_summary_model->save();
+                    }
+                    $new_payment_summary = $this->schemaContract(Str::snake($payment_type))
+                                                ->prepareStore(
+                                                    $this->requestDTO(config('app.contracts.'.$payment_type.'Data'),
+                                                    $payment_summary_data)
+                                                );
+                }
+                
+                if (isset($payment_summary['payment_details']) && count($payment_summary['payment_details']) > 0){
+                    $payment_details = &$payment_summary['payment_details'];
+                    foreach ($payment_details as &$payment_detail) {
+                        $payment_detail_model = $this->PaymentDetailModel()->findOrFail($payment_detail['id']);
+                        if ($reporting){
+                            if ($invoice_dto->is_deferred){
+                                $payment_detail_model->payment_summary_id = $new_payment_summary->getKey();
+                            }else{
+                                $payment_detail_model->paid ??= 0;
+                                $payment_detail_model->paid += $payment_detail_model->debt;
+                                $payment_detail_model->debt = 0;
+                                $payment_detail_model->payment_history_id = $new_payment_summary->getKey();
+                            }
+                        }
+                        $payment_detail_model->invoice_id = $invoice->getKey();
+                        $payment_detail_model->save();
                     }
                 }
-                $payment_detail_model->invoice_id = $invoice->getKey();
-                $payment_detail_model->save();
             }
         }
         $payment_model->refresh();

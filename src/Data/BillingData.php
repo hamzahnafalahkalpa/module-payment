@@ -62,6 +62,10 @@ class BillingData extends Data implements DataBillingData
     #[DataCollectionOf(DeferredPaymentData::class)]
     public ?array $deferred_payments = null;
 
+    #[MapInputName('invoice')]
+    #[MapName('invoice')]      
+    public ?InvoiceData $invoice = null;
+
     #[MapInputName('invoices')]
     #[MapName('invoices')]      
     #[DataCollectionOf(InvoiceData::class)]
@@ -88,6 +92,11 @@ class BillingData extends Data implements DataBillingData
         if (isset($attributes['id'])){
             $billing = $new->BillingModel()->load('hasTransaction.consument')->findOrFail($attributes['id']);
             $attributes['has_transaction_model'] = $billing->hasTransaction;
+        }
+
+        if (isset($attributes['invoice'])){
+            $attributes['invoices'] = [$attributes['invoice']];
+            unset($attributes['invoice']);
         }
 
         if (isset($attributes['has_transaction_id']) && isset($attributes['invoices']) && count($attributes['invoices']) > 0){

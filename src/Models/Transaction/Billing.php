@@ -37,8 +37,11 @@ class Billing extends BaseModel
 
     protected $casts = [
         'billing_code' => 'string',
+        'has_transaction_id' => 'string',
         'author_type' => 'string',
-        'author_id' => 'string'
+        'author_id' => 'string',
+        'cashier_type' => 'string',
+        'cashier_id' => 'string'
     ];
 
     protected static function booted(): void

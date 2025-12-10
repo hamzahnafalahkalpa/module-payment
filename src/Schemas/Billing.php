@@ -51,6 +51,7 @@ class Billing extends PackageManagement implements ContractsBilling
                 $this->schemaContract('invoice')->prepareStoreInvoice($invoice_dto);
             }
         }
+
         $this->fillingProps($billing, $billing_dto->props);
         $billing->save();
         return $this->billing_model = $billing;
