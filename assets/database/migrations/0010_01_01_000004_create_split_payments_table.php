@@ -13,7 +13,7 @@ return new class extends Migration
 {
     use NowYouSeeMe;
 
-    
+    private $__table;
 
     public function __construct()
     {
@@ -32,7 +32,7 @@ return new class extends Migration
             Schema::create($table_name, function (Blueprint $table) {
                 $invoice = app(config('database.models.Invoice', Invoice::class));
                 $payment_method = app(config('database.models.PaymentMethod', PaymentMethod::class));
-                $user_wallet = app(config('database.models.UserWallet', UserWallet::class));
+                $user_wallet = app(config('database.models.UserWallet', UserWallett::class));
 
                 $table->ulid('id')->primary();
                 $table->foreignIdFor($invoice::class)->nullable()->index()

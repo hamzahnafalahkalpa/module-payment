@@ -11,8 +11,6 @@ return new class extends Migration
 {
     use Hanafalah\LaravelSupport\Concerns\NowYouSeeMe;
 
-    
-
     public function __construct()
     {
         $this->__table = app(config('database.models.JournalEntry', JournalEntry::class));
@@ -36,6 +34,7 @@ return new class extends Migration
                 $table->string('reference_id', 36)->nullable();
                 $table->foreignIdFor($transaction::class,'transaction_reference_id')->nullable()
                       ->index('jr_trx')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+
                 $table->foreignIdFor($journal_source::class)->nullable()
                       ->index()->constrained()->restrictOnDelete()->cascadeOnUpdate();
                 $table->string('name', 255)->nullable();
@@ -51,7 +50,7 @@ return new class extends Migration
                 $table->unique(['reference_type', 'reference_id'], 'ref_joue');
                 $table->index(['author_type','author_id'],'author_joue');
             });
-
+            
             Schema::table($table_name, function (Blueprint $table) use ($table_name) {
                 $table->foreignIdFor($this->__table, 'parent_id')
                     ->nullable()->after('id')
