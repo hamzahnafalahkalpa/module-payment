@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Hanafalah\ModulePayment\Enums\Coa\Status;
 use Hanafalah\ModulePayment\Models\Accounting\Coa;
 use Hanafalah\ModulePayment\Models\Accounting\CoaType;
+use Hanafalah\ModulePayment\Models\CoaTemplate;
 
 return new class extends Migration
 {
@@ -29,14 +30,19 @@ return new class extends Migration
         if (!$this->isTableExists()) {
             Schema::create($table_name, function (Blueprint $table) {
                 $coa_type = app(config('database.models.CoaType', CoaType::class));
+                $coa_template = app(config('database.models.CoaTemplate', CoaTemplate::class));
 
                 $table->ulid('id')->primary();
                 $table->string('name', 100)->nullable();
                 $table->string('code', 60)->nullable();
+                $table->string('reference_type', 50)->nullable();
+                $table->string('reference_id', 36)->nullable();
                 $table->string('flag', 100)->nullable(false);
                 $table->string('status', 10)->nullable(false)->default(Status::ACTIVE->value);
                 $table->string('balance_type', 10)->nullable(true)->comment('DEBIT, CREDIT');
                 $table->foreignIdFor($coa_type::class)->nullable()->index()
+                    ->constrained()->cascadeOnUpdate()->nullOnDelete();
+                $table->foreignIdFor($coa_template::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->json('props')->nullable();
                 $table->timestamps();

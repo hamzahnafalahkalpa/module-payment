@@ -7,6 +7,7 @@ use Hanafalah\ModulePayment\Contracts\Data\CoaTemplateData;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Hanafalah\LaravelSupport\Contracts\Schemas\Unicode;
 
 /**
  * @see \Hanafalah\ModulePayment\Schemas\CoaTemplate
@@ -28,7 +29,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method array storeMultipleCoaTemplate(array $datas)
  */
 
-interface CoaTemplate extends DataManagement
+interface CoaTemplate extends Unicode
 {
     public function prepareStoreCoaTemplate(CoaTemplateData $coa_template_dto): Model;
+    public function coaTemplate(mixed $conditionals = null): Builder;
 }

@@ -2,4 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Contracts\Data;
 
-interface CoaTemplateData {}
+use Hanafalah\LaravelSupport\Contracts\Data\UnicodeData;
+
+interface CoaTemplateData extends UnicodeData{}

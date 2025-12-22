@@ -4,13 +4,11 @@ namespace Hanafalah\ModulePayment\Schemas;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Hanafalah\ModulePayment\{
-    Supports\BaseModulePayment
-};
+use Hanafalah\LaravelSupport\Schemas\Unicode;
 use Hanafalah\ModulePayment\Contracts\Schemas\CoaTemplate as ContractsCoaTemplate;
 use Hanafalah\ModulePayment\Contracts\Data\CoaTemplateData;
 
-class CoaTemplate extends BaseModulePayment implements ContractsCoaTemplate
+class CoaTemplate extends Unicode implements ContractsCoaTemplate
 {
     protected string $__entity = 'CoaTemplate';
     public $coa_template_model;
@@ -25,21 +23,13 @@ class CoaTemplate extends BaseModulePayment implements ContractsCoaTemplate
     ];
 
     public function prepareStoreCoaTemplate(CoaTemplateData $coa_template_dto): Model{
-        $add = [
-            'name' => $coa_template_dto->name
-        ];
-        $guard  = ['id' => $coa_template_dto->id];
-        $create = [$guard, $add];
-        // if (isset($coa_template_dto->id)){
-        //     $guard  = ['id' => $coa_template_dto->id];
-        //     $create = [$guard, $add];
-        // }else{
-        //     $create = [$add];
-        // }
-
-        $coa_template = $this->usingEntity()->updateOrCreate(...$create);
+        $coa_template = $this->prepareStoreUnicode($coa_template_dto);
         $this->fillingProps($coa_template,$coa_template_dto->props);
         $coa_template->save();
         return $this->coa_template_model = $coa_template;
+    }
+
+    public function coaTemplate(mixed $conditionals = null): Builder{
+        return $this->unicode($conditionals);
     }
 }
