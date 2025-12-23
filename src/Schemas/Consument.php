@@ -27,6 +27,7 @@ class Consument extends PackageManagement implements ContractsConsument
         }
         $create = [$group,$add];
         $consument = $this->usingEntity()->updateOrCreate(...$create);
+        $consument->generatePaymentSummaryDeferred();
 
         if (isset($consument_dto->reference_type) && isset($consument_dto->reference_id)) {
             $reference = $consument_dto->reference_model ?? $this->{$consument_dto->reference_type.'Model'}()->findOrFail($consument_dto->reference_id);

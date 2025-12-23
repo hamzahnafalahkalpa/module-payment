@@ -12,27 +12,27 @@ trait HasPaymentSummaryDeferred
 
     public static function bootHasPaymentSummaryDeferred()
     {
-        static::created(function ($model) {
-            $model->generatePaymentSummaryDeferred($model);
-        });
+        // static::created(function ($model) {
+        //     $model->generatePaymentSummaryDeferred($model);
+        // });
     }
 
-    public function generatePaymentSummaryDeferred(Model $model){
-        if (\method_exists($model, 'transaction')) {
+    public function generatePaymentSummaryDeferred(){
+        if (\method_exists($this, 'transaction')) {
             $transaction = app(config('app.contracts.Transaction'))->prepareStoreTransaction(
-                $model->requestDTO(config('app.contracts.TransactionData'),[
-                    'reference_id'   => $model->getKey(),
-                    'reference_type' => $model->getMorphClass()
+                $this->requestDTO(config('app.contracts.TransactionData'),[
+                    'reference_id'   => $this->getKey(),
+                    'reference_type' => $this->getMorphClass()
                 ])
             );
             $transaction_id = $transaction->getKey();
         }
         return app(config('app.contracts.PaymentSummary'))->prepareStorePaymentSummary(
-            $model->requestDTO(config('app.contracts.PaymentSummaryData'),[
-                'name'           => $model->name ?? null,
+            $this->requestDTO(config('app.contracts.PaymentSummaryData'),[
+                'name'           => $this->name ?? null,
                 'transaction_id' => $transaction_id ?? null,
-                'reference_id'   => $model->getKey(),
-                'reference_type' => $model->getMorphClass()
+                'reference_id'   => $this->getKey(),
+                'reference_type' => $this->getMorphClass()
             ])
         );
     }
