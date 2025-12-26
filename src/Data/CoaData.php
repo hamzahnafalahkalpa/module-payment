@@ -59,6 +59,10 @@ class CoaData extends Data implements DataCoaData
     #[MapName('coa_type')]
     public ?CoaTypeData $coa_type = null;
 
+    #[MapInputName('coa_type_model')]
+    #[MapName('coa_type_model')]
+    public ?object $coa_type_model = null;
+
     #[MapInputName('status')]
     #[MapName('status')]
     public ?string $status = Status::ACTIVE->value;

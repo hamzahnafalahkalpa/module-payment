@@ -9,6 +9,23 @@ class PosTransaction extends Transaction
 {
     protected $table = 'transactions';
 
+    protected $casts = [
+        'reference_type' => 'string',
+        'reference_id' => 'string',
+        'journal_reported_at' => 'datetime',
+        'reported_at' => 'datetime',
+        'canceled_at' => 'datetime',
+        'name'        => 'string',
+        'consument_name' => 'string'
+    ];
+
+    public function getPropsQuery(): array{
+        return [
+            'name' => 'props->prop_reference->name',
+            'consument_name' => 'props->prop_consument->name'
+        ];
+    }
+
     public function getForeignKey(){
         return 'transaction_id';
     }

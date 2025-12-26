@@ -61,10 +61,16 @@ class Invoice extends PackageManagement implements ContractsInvoice
     protected function reporting(InvoiceData &$invoice_dto, Model &$invoice, Model &$payment_model){
         $form = $payment_model->form;
         $reporting = $invoice_dto->reporting;
+        $billing_model = $invoice_dto->billing_model ?? $this->BillingModel()->findOrFail($invoice_dto->billing_id);
+        if (!isset($billing_model->reported_at)){
+            $billing_model->debt = 0;
+            $billing_model->amount = 0;
+            $billing_model->discount = 0;
+        }
         if (isset($form) && isset($form['payment_summaries']) && count($form['payment_summaries']) > 0){
             foreach ($form['payment_summaries'] as &$payment_summary) {
+                $payment_summary_model = $this->PaymentSummaryModel()->findOrFail($payment_summary['id']);
                 if ($reporting) {
-                    $payment_summary_model = $this->PaymentSummaryModel()->findOrFail($payment_summary['id']);
                     $payment_type = $payment_model->getMorphClass();
                     $payment_summary_data = [
                         'id' => null,
@@ -107,6 +113,10 @@ class Invoice extends PackageManagement implements ContractsInvoice
                                 $payment_detail_model->debt = 0;
                                 $payment_detail_model->payment_history_id = $new_payment_summary->getKey();
                             }
+                        }else{
+                            $billing_model->debt += $payment_detail_model->debt ?? 0;
+                            $billing_model->amount += $payment_detail_model->amount ?? 0;
+                            $billing_model->discount += $payment_detail_model->discount ?? 0;
                         }
                         $payment_detail_model->invoice_id = $invoice->getKey();
                         $payment_detail_model->save();
@@ -114,6 +124,8 @@ class Invoice extends PackageManagement implements ContractsInvoice
                 }
             }
         }
+        $billing_model->save();
+        $invoice_dto->billing_model = $billing_model;
         $payment_model->refresh();
         if ($reporting){
             $payment_model->form = null;

@@ -2,8 +2,6 @@
 
 namespace Hanafalah\ModulePayment\Resources\Coa;
 
-use Hanafalah\LaravelSupport\Resources\ApiResource;
-
 class ShowCoa extends ViewCoa
 {
 

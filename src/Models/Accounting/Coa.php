@@ -29,7 +29,7 @@ class Coa extends BaseModel
     protected static function booted(): void{
         parent::booted();
         static::addGlobalScope('coa-status', function ($query) {
-            $query->flagIn(['Coa'])
+            $query->where('flag', 'Coa')
                   ->where('status', Status::ACTIVE->value);
         });
         static::creating(function ($query) {
@@ -54,7 +54,8 @@ class Coa extends BaseModel
         return ShowCoa::class;
     }
 
-    public function childs(){return $this->hasManyModel('Coa', 'parent_id')->with('childs');}
+    public function parent(){return $this->belongsToModel('Coa', 'parent_id','id');}
+    public function childs(){return $this->hasManyModel('Coa', 'parent_id','id')->with('childs');}
     public function accountGroup(){return $this->belongsToModel('AccountGroup', 'parent_id');}
     public function coaTemplate(){return $this->belongsToModel('Coa', 'coa_template_id');}
     public function reference(){return $this->morphTo();}
