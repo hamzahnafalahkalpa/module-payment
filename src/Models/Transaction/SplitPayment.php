@@ -21,6 +21,7 @@ class SplitPayment extends BaseModel
     protected $primaryKey = 'id';
     protected $list      = [
         'id',
+        'split_payment_code',
         'payment_method_id',
         'invoice_id',
         'money_paid',
@@ -33,9 +34,7 @@ class SplitPayment extends BaseModel
     {
         parent::booted();
         static::creating(function ($query) {
-            if (!isset($query->split_payment_code)) {
-                $query->split_payment_code = static::hasEncoding('SPLIT_PAYMENT');
-            }
+            $query->split_payment_code ??= static::hasEncoding('SPLIT_PAYMENT');
         });
     }
 

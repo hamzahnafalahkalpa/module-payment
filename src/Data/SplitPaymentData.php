@@ -21,6 +21,10 @@ class SplitPaymentData extends Data implements DataSplitPaymentData
     #[MapInputName('payment_method_model')]
     public ?object $payment_method_model;
 
+    #[MapName('split_payment_code')]
+    #[MapInputName('split_payment_code')]
+    public ?string $split_payment_code = null;
+
     #[MapName('invoice_id')]
     #[MapInputName('invoice_id')]
     public mixed $invoice_id = null;
@@ -65,8 +69,7 @@ class SplitPaymentData extends Data implements DataSplitPaymentData
         if (isset($data->payment_method_id)) {
             $data->payment_method_model = $payment_method_model = $payment_method_model->findOrFail($data->payment_method_id);
         }
-        $props['payment_method'] = $payment_method_model->toViewApiOnlies('id','name','flag','label');
-
+        $props['prop_payment_method'] = $payment_method_model->toViewApiOnlies('id','name','flag','label');
         if ($payment_method_model->label == 'DEPOSIT'){
             $invoice_model = $data->invoice_model ?? $new->InvoiceModel()->findOrFail($data->invoice_id);
             $invoice_model->load(['payer.userWallet' => fn($q) => $q->where('prop->prop_wallet->label','Personal Pocket')]);

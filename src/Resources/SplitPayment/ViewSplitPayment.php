@@ -18,10 +18,14 @@ class ViewSplitPayment extends ApiResource
         $arr = [
             'id'                => $this->id,
             'split_payment_code'=> $this->split_payment_code,
-            'payment_method'    => $this->payment_method,
+            'payment_method'    => $this->relationValidation('paymentMethod',function(){
+                return $this->paymentMethod->toViewApi()->resolve();
+            },$this->prop_payment_method),
             'money_paid'        => $this->money_paid,
             'paid'              => $this->paid,
-            'note'              => $this->note
+            'note'              => $this->note,
+            'created_at'        => $this->created_at,
+            'updated_at'        => $this->updated_at
         ];
         return $arr;
     }

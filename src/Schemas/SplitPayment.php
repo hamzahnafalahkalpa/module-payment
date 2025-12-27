@@ -16,12 +16,18 @@ class SplitPayment extends PackageManagement implements ContractsSplitPayment
         $add = [
             'payment_method_id' => $split_payment_dto->payment_method_id,
             'money_paid' => $split_payment_dto->money_paid,
-            'user_wallet_id' => $split_payment_dto->user_wallet_id
+            'user_wallet_id' => $split_payment_dto->user_wallet_id 
         ];
+        if (isset($split_payment_dto->split_payment_code)){
+            $add['split_payment_code'] = $split_payment_dto->split_payment_code;
+        }
         if (isset($split_payment_dto->id)){
             $guard = ['id' => $split_payment_dto->id];
         }else{
-            $guard = ['invoice_id' => $split_payment_dto->invoice_id];
+            $guard = [
+                'id' => null,
+                'invoice_id' => $split_payment_dto->invoice_id
+            ];
         }
         $create = [$guard,$add];
         $split_payment = $this->usingEntity()->updateOrCreate(...$create);
@@ -30,7 +36,7 @@ class SplitPayment extends PackageManagement implements ContractsSplitPayment
             $this->schemaContract('user_wallet')->pepareBalanceAdjustment();
         }
         $this->fillingProps($split_payment, $split_payment_dto->props);
-        $this->save();
+        $split_payment->save();
         return $this->split_payment_model = $split_payment;
     }
 }

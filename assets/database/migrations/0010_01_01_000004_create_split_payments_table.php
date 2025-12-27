@@ -35,6 +35,7 @@ return new class extends Migration
                 $user_wallet = app(config('database.models.UserWallet', UserWallett::class));
 
                 $table->ulid('id')->primary();
+                $table->string('split_payment_code', 50)->nullable(true);
                 $table->foreignIdFor($invoice::class)->nullable()->index()
                     ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->foreignIdFor($payment_method::class)->nullable()->index()
