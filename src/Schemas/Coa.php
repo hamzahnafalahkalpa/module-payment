@@ -42,6 +42,9 @@ class Coa extends PackageManagement implements ContractsCoa
                 'reference_id'   => $coa_dto->reference_id,
                 'coa_template_id' => $coa_dto->coa_template_id ?? null
             ];
+            if (!config('app.is_seeding',false)){
+                $group['id'] = null;
+            }
         }
         $create = [$group,$add];
 
