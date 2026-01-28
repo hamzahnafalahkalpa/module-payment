@@ -9,6 +9,10 @@ class TariffComponent extends FinanceStuff
 {
     protected $table = 'unicodes';
 
+    public function viewUsingRelation(): array{
+        return ['componentDetails'];
+    }
+
     public function showUsingRelation(): array{
         return ['componentDetails'];
     }
