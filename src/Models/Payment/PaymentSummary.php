@@ -18,6 +18,7 @@ class PaymentSummary extends BaseModel
     protected $primaryKey = 'id';
     protected $list       = ['id', 'transaction_id', 'reference_type', 'amount', 'cogs', 'discount', 'debt', 'props'];
     protected $show       = ['parent_id', 'reference_id', 'refund', 'tax', 'paid', 'additional'];
+    public static bool $skipCreatedEvent = false;
 
     protected $casts = [
         'generated_at' => 'datetime',
@@ -34,16 +35,28 @@ class PaymentSummary extends BaseModel
     {
         parent::booted();
         static::created(function ($query) {
-            static::recalculating($query);
+            if (!$query->getSkipCreatedEvent()){
+                static::recalculating($query);
+            }
         });
         static::updated(function ($query) {
-            if ($query->isDirty('debt') || $query->isDirty('amount') || $query->isDirty('parent_id')) {
-                static::recalculating($query);
+            if (!$query->getSkipCreatedEvent()){
+                if ($query->isDirty('debt') || $query->isDirty('amount') || $query->isDirty('parent_id')) {
+                    static::recalculating($query);
+                }
             }
         });
         static::deleted(function ($query) {
             static::recalculating($query, true);
         });
+    }
+
+    public function getSkipCreatedEvent(){
+        return config('module-payment.setting.payment_summary.skip_event_created',false);
+    }
+
+    public function setSkipCreatedEvent(?bool $is_skip){
+        config(['module-payment.setting.payment_summary.skip_event_created' => $is_skip]);
     }
 
     private static function calculateCurrent($query, $field, $is_deleting = false)

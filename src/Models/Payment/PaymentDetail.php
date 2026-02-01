@@ -27,7 +27,7 @@ class PaymentDetail extends BaseModel
     {
         parent::booted();
         static::created(function ($query) {
-            if (!$query->isDirty('payment_history_id')) {
+            if (!$query->getSkipCreatedEvent() && !$query->isDirty('payment_history_id')){
                 static::recalculating($query);
             }
             static::setSettled($query);
@@ -41,6 +41,14 @@ class PaymentDetail extends BaseModel
         static::deleted(function ($query) {
             static::recalculating($query, true);
         });
+    }
+
+    public function getSkipCreatedEvent(){
+        return config('module-payment.setting.payment_detail.skip_event_created',false);
+    }
+
+    public function setSkipCreatedEvent(?bool $is_skip){
+        config(['module-payment.setting.payment_detail.skip_event_created' => $is_skip]);
     }
 
     private static function setSettled($query)
