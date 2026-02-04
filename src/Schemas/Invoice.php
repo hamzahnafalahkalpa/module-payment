@@ -84,7 +84,6 @@ class Invoice extends PackageManagement implements ContractsInvoice
         if (isset($invoice_dto->payment_history) && isset($invoice_dto->payment_history->discount)) {
             $payment_history_discount = $invoice_dto->payment_history->discount ?? 0;
         }
-
         if (isset($form) && isset($form['payment_summaries']) && count($form['payment_summaries']) > 0){
             foreach ($form['payment_summaries'] as &$payment_summary) {
                 $payment_summary_model = $this->PaymentSummaryModel()->findOrFail($payment_summary['id']);
@@ -106,7 +105,6 @@ class Invoice extends PackageManagement implements ContractsInvoice
                         ],
                         'payment_details' => null
                     ];
-
                     if (!isset($payment_summary['payment_details']) || count($payment_summary['payment_details']) == 0){
                         $payment_summary_data['debt'] ??= $payment_summary['debt'] ?? 0;
                         $payment_summary_data['amount'] ??= $payment_summary['amount'] ?? 0;
@@ -120,14 +118,12 @@ class Invoice extends PackageManagement implements ContractsInvoice
                         $payment_summary_model->paid = ($payment_summary_model->paid ?? 0) + $payment_summary_data['amount'];
                         $payment_summary_model->save();
                     }
-
                     $new_payment_summary = $this->schemaContract(Str::snake($payment_type))
                                                 ->prepareStore(
                                                     $this->requestDTO(config('app.contracts.'.$payment_type.'Data'),
                                                     $payment_summary_data)
                                                 );
                 }
-
                 if (isset($payment_summary['payment_details']) && count($payment_summary['payment_details']) > 0){
                     $payment_details = &$payment_summary['payment_details'];
                     foreach ($payment_details as &$payment_detail) {
@@ -148,7 +144,6 @@ class Invoice extends PackageManagement implements ContractsInvoice
                                 $payment_detail_model->debt = 0;
                                 $payment_detail_model->payment_history_id = $new_payment_summary->getKey();
                             }
-
                             // Update billing with paid amounts
                             $billing_model->amount += $detail_amount;
                             $billing_model->paid = ($billing_model->paid ?? 0) + $detail_debt;
