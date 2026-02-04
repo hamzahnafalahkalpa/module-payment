@@ -60,7 +60,7 @@ class Billing extends BaseModel
 
     public function showUsingRelation(): array{
         return [
-            'hasTransaction',
+            'hasTransaction.consument.reference.reference',
             'invoices' => function($query){
                 return $query->with([
                     'paymentSummary' =>function($query){
