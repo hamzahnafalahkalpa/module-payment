@@ -89,7 +89,6 @@ class PaymentSummary extends BaseModel
                     ? $query->{$rate_name} 
                     : static::calculateCurrent($query, $rate_name, $is_deleting);
             }
-            // if ($query->reference_type == 'VisitRegistration') dd($query);
 
             $parent_payment_summary->save();
         }
