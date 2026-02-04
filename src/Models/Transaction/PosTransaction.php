@@ -32,12 +32,13 @@ class PosTransaction extends Transaction
 
     public function viewUsingRelation(): array{
         return $this->mergeArray(parent::viewUsingRelation(),[
-            'paymentSummary'
+            'paymentSummary','reference'
         ]);
     }
 
     public function showUsingRelation(): array{
         return $this->mergeArray(parent::showUsingRelation(),[
+            'reference',
             'billing.invoices' => function($query){
                 $query->with([
                     'splitPayments',
