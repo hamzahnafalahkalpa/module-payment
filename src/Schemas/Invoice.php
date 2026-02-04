@@ -62,14 +62,33 @@ class Invoice extends PackageManagement implements ContractsInvoice
         $form = $payment_model->form;
         $reporting = $invoice_dto->reporting;
         $billing_model = $invoice_dto->billing_model ?? $this->BillingModel()->findOrFail($invoice_dto->billing_id);
+
+        // Initialize billing amounts if not reported yet
         if (!isset($billing_model->reported_at)){
             $billing_model->debt = 0;
             $billing_model->amount = 0;
             $billing_model->discount = 0;
+            $billing_model->paid = 0;
         }
+
+        // Calculate total money paid from split payments
+        $total_money_paid = 0;
+        if (isset($invoice_dto->split_payments) && count($invoice_dto->split_payments) > 0) {
+            foreach ($invoice_dto->split_payments as $split_payment) {
+                $total_money_paid += $split_payment->money_paid ?? 0;
+            }
+        }
+
+        // Get discount from payment_history if available
+        $payment_history_discount = 0;
+        if (isset($invoice_dto->payment_history) && isset($invoice_dto->payment_history->discount)) {
+            $payment_history_discount = $invoice_dto->payment_history->discount ?? 0;
+        }
+
         if (isset($form) && isset($form['payment_summaries']) && count($form['payment_summaries']) > 0){
             foreach ($form['payment_summaries'] as &$payment_summary) {
                 $payment_summary_model = $this->PaymentSummaryModel()->findOrFail($payment_summary['id']);
+
                 if ($reporting) {
                     $payment_type = $payment_model->getMorphClass();
                     $payment_summary_data = [
@@ -86,44 +105,84 @@ class Invoice extends PackageManagement implements ContractsInvoice
                             'model_id' => $payment_summary_model->getKey()
                         ],
                         'payment_details' => null
-                    ];                    
+                    ];
+
                     if (!isset($payment_summary['payment_details']) || count($payment_summary['payment_details']) == 0){
                         $payment_summary_data['debt'] ??= $payment_summary['debt'] ?? 0;
                         $payment_summary_data['amount'] ??= $payment_summary['amount'] ?? 0;
+
+                        // Update billing with paid amounts (no payment_details means pay the whole summary)
+                        $billing_model->amount += $payment_summary_data['amount'];
+                        $billing_model->paid = ($billing_model->paid ?? 0) + $payment_summary_data['amount'];
+
+                        // Reduce debt on the original payment summary
                         $payment_summary_model->debt -= $payment_summary_data['amount'];
+                        $payment_summary_model->paid = ($payment_summary_model->paid ?? 0) + $payment_summary_data['amount'];
                         $payment_summary_model->save();
                     }
+
                     $new_payment_summary = $this->schemaContract(Str::snake($payment_type))
                                                 ->prepareStore(
                                                     $this->requestDTO(config('app.contracts.'.$payment_type.'Data'),
                                                     $payment_summary_data)
                                                 );
                 }
-                
+
                 if (isset($payment_summary['payment_details']) && count($payment_summary['payment_details']) > 0){
                     $payment_details = &$payment_summary['payment_details'];
                     foreach ($payment_details as &$payment_detail) {
                         $payment_detail_model = $this->PaymentDetailModel()->findOrFail($payment_detail['id']);
+
+                        // Track amounts for billing before the debt changes
+                        $detail_amount = $payment_detail_model->amount ?? 0;
+                        $detail_debt = $payment_detail_model->debt ?? 0;
+                        $detail_discount = $payment_detail_model->discount ?? 0;
+
                         if ($reporting){
                             if ($invoice_dto->is_deferred){
                                 $payment_detail_model->payment_summary_id = $new_payment_summary->getKey();
                             }else{
-                                $payment_detail_model->paid ??= 0;
-                                $payment_detail_model->paid += $payment_detail_model->debt;
+                                // Mark payment detail as paid
+                                // Note: PaymentDetail model events will automatically recalculate PaymentSummary
+                                $payment_detail_model->paid = ($payment_detail_model->paid ?? 0) + $detail_debt;
                                 $payment_detail_model->debt = 0;
                                 $payment_detail_model->payment_history_id = $new_payment_summary->getKey();
                             }
+
+                            // Update billing with paid amounts
+                            $billing_model->amount += $detail_amount;
+                            $billing_model->paid = ($billing_model->paid ?? 0) + $detail_debt;
+                            $billing_model->discount += $detail_discount;
                         }else{
-                            $billing_model->debt += $payment_detail_model->debt ?? 0;
-                            $billing_model->amount += $payment_detail_model->amount ?? 0;
-                            $billing_model->discount += $payment_detail_model->discount ?? 0;
+                            // Not reporting - just accumulate debt
+                            $billing_model->debt += $detail_debt;
+                            $billing_model->amount += $detail_amount;
+                            $billing_model->discount += $detail_discount;
                         }
+
                         $payment_detail_model->invoice_id = $invoice->getKey();
                         $payment_detail_model->save();
+                        // PaymentDetail::updated event will auto-recalculate PaymentSummary.debt
                     }
                 }
             }
         }
+
+        // Set money_paid from split payments
+        if ($reporting && $total_money_paid > 0) {
+            $billing_model->money_paid = ($billing_model->money_paid ?? 0) + $total_money_paid;
+        }
+
+        // Apply payment history discount to billing
+        if ($reporting && $payment_history_discount > 0) {
+            $billing_model->discount = ($billing_model->discount ?? 0) + $payment_history_discount;
+            // Discount reduces the paid amount needed
+            $billing_model->paid = ($billing_model->paid ?? 0) - $payment_history_discount;
+            if ($billing_model->paid < 0) {
+                $billing_model->paid = 0;
+            }
+        }
+
         $billing_model->save();
         $invoice_dto->billing_model = $billing_model;
         $payment_model->refresh();
