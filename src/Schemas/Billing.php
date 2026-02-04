@@ -11,6 +11,8 @@ class Billing extends PackageManagement implements ContractsBilling
 {
     protected string $__entity = 'Billing';
     public $billing_model;
+    public $is_recently_created = false;
+    public $is_reporting = false;
 
     public function prepareStoreBilling(BillingData $billing_dto): Model{
         $billing = $this->usingEntity()->updateOrCreate([
@@ -45,15 +47,28 @@ class Billing extends PackageManagement implements ContractsBilling
             foreach ($billing_dto->invoices as &$invoice_dto) {
                 $invoice_dto->billing_id = $billing->getKey();
                 $invoice_dto->billing_model = $billing;
-                // ($invoice_dto->is_deferred) 
-                //     ? $this->schemaContract('deferred_payment')->prepareStoreDeferredPayment($invoice_dto)
-                    // : $this->schemaContract('invoice')->prepareStoreInvoice($invoice_dto);
                 $this->schemaContract('invoice')->prepareStoreInvoice($invoice_dto);
             }
         }
 
         $this->fillingProps($billing, $billing_dto->props);
         $billing->save();
+        if ($billing->wasRecentlyCreated){
+            $this->is_recently_created = true;
+            $this->afterBillingCreated($billing,$billing_dto);
+        }
+        if ($billing_dto->reporting){
+            $this->is_reporting = true;
+            $this->afterBillingReported($billing,$billing_dto);
+        }
         return $this->billing_model = $billing;
+    }
+
+    protected function afterBillingCreated(Model &$billing, BillingData &$billing_dto): self{
+        return $this;
+    }
+
+    protected function afterBillingReported(Model &$billing, BillingData &$billing_dto): self{
+        return $this;
     }
 }
