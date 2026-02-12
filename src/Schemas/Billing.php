@@ -12,7 +12,7 @@ class Billing extends PackageManagement implements ContractsBilling
     protected string $__entity = 'Billing';
     public $billing_model;
     public bool $is_recently_created = false;
-    public $is_reporting = false;
+    public bool $is_reporting = false;
 
     public function prepareStoreBilling(BillingData $billing_dto): Model{
         $billing = $this->usingEntity()->updateOrCreate([

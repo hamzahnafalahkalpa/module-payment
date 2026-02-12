@@ -31,7 +31,7 @@ class Consument extends PackageManagement implements ContractsConsument
 
         if (isset($consument_dto->reference_type) && isset($consument_dto->reference_id)) {
             $reference = $consument_dto->reference_model ?? $this->{$consument_dto->reference_type.'Model'}()->findOrFail($consument_dto->reference_id);
-            $consument_dto->props['prop_reference'] = $reference->toViewApi()->resolve();
+            // $consument_dto->props['prop_reference'] = $reference->toViewApi()->resolve();
         }
 
         if (isset($consument_dto->user_wallet)) {
